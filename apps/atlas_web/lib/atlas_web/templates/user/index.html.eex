@@ -1,0 +1,70 @@
+<div id="content-header">
+  <header>
+    <h1>Listing Users</h1>
+
+    <div class="actions">
+      <%= if has?(@conn, "users:create") do %>
+        <%= action "New", to: Routes.user_path(@conn, :new), color: "blue" %>
+      <% end %>
+    </div>
+  </header>
+</div>
+
+<div id="content-navigation">
+  <nav id="secondary-nav">
+    <ul>
+      <li>
+        <a class="active" href="#">
+          Details
+        </a>
+      </li>
+      <li>
+        <a href="#">
+          Services
+        </a>
+      </li>
+      <li>
+        <a href="#">
+          Support Tickets
+        </a>
+      </li>
+      <li>
+        <a href="#">
+          Comments
+        </a>
+      </li>
+    </ul>
+  </nav>
+  <%= render_breadcrumbs @conn %>
+</div>
+
+<div id="content">
+  <%= render_flash_notifications @conn %>
+
+  <table class="ui table selectable">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= for user <- @users do %>
+        <tr>
+          <td><%= user.name %></td>
+          <td>
+            <%= if has?(@conn, "users:show") do %>
+              <%= link "Show", to: Routes.user_path(@conn, :show, user) %>
+            <% end %>
+            <%= if has?(@conn, "users:edit") do %>
+              <%= link "Edit", to: Routes.user_path(@conn, :edit, user) %>
+            <% end %>
+            <%= if has?(@conn, "users:delete") do %>
+              <%= link "Delete", to: Routes.user_path(@conn, :delete, user), method: :delete, data: [confirm: "Are you sure?"] %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,17 @@
+<div id="content-header">
+  <header>
+    <h1>Log In</h1>
+  </header>
+</div>
+
+<div id="content-navigation">
+  <%= render_breadcrumbs @conn %>
+</div>
+
+<div id="content">
+  <%= render_flash_notifications @conn %>
+  <h3>Log In with Provider</h3>
+  <%= for provider <- @providers do %>
+    <%= action provider.title, to: provider.link, color: get_provider_color(provider) %>
+  <% end %>
+</div>

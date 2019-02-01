@@ -5,6 +5,10 @@ defmodule AtlasWeb.ErrorHelpers do
 
   use Phoenix.HTML
 
+  def label_with_errors(form, field) do
+    Phoenix.View.render(AtlasWeb.LayoutView, "label_with_errors.html", field: field, form: form)
+  end
+
   @doc """
   Generates tag for inlined form input errors.
   """

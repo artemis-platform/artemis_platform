@@ -1,0 +1,37 @@
+<%= form_for @changeset, @action, [class: "ui form"], fn f -> %>
+  <div class="field">
+    <%= label_with_errors f, :name %>
+    <%= text_input f, :name, placeholder: "Name" %>
+  </div>
+
+  <div class="field">
+    <%= label_with_errors f, :slug %>
+    <%= text_input f, :slug, placeholder: "Slug" %>
+  </div>
+
+  <ul>
+    <%= for permission <- @permissions do %>
+      <% is_checked = find_permission(permission.id, f, @role) %>
+      <li>
+        <input
+          <%= if is_checked, do: "checked=\"checked\"" %>
+          id="role_permissions_<%= permission.id %>"
+          name="role[permissions][][id]"
+          type="checkbox"
+          value="<%= permission.id %>"
+        />
+        <label for="role_permissions_<%= permission.id %>">
+          <%= permission.name %>
+        </label>
+      </li>
+    <% end %>
+  </ul>
+
+  <div>
+    <%= if @changeset.action do %>
+      <%= render_notification :error, body: "Error Submitting Form" %>
+    <% end %>
+
+    <%= submit "Save", class: "ui button primary" %>
+  </div>
+<% end %>

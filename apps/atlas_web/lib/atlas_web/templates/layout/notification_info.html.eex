@@ -1,0 +1,9 @@
+<div class="ui icon message">
+  <i class="info circle icon"></i>
+  <div class="content">
+    <div class="header">
+      Notice
+    </div>
+    <p><%= @body %></p>
+  </div>
+</div>

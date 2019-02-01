@@ -1,0 +1,46 @@
+<div id="content-header">
+  <header>
+    <h1>Listing Roles</h1>
+
+    <div class="actions">
+      <%= if has?(@conn, "roles:create") do %>
+        <%= action "New", to: Routes.role_path(@conn, :new), color: "blue" %>
+      <% end %>
+    </div>
+  </header>
+</div>
+
+<div id="content-navigation">
+  <%= render_breadcrumbs @conn %>
+</div>
+
+<div id="content">
+  <%= render_flash_notifications @conn %>
+
+  <table class="ui table selectable">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= for role <- @roles do %>
+        <tr>
+          <td><%= role.name %></td>
+          <td>
+            <%= if has?(@conn, "roles:show") do %>
+              <%= link "Show", to: Routes.role_path(@conn, :show, role) %>
+            <% end %>
+            <%= if has?(@conn, "roles:update") do %>
+              <%= link "Edit", to: Routes.role_path(@conn, :edit, role) %>
+            <% end %>
+            <%= if has?(@conn, "roles:delete") do %>
+              <%= link "Delete", to: Routes.role_path(@conn, :delete, role), method: :delete, data: [confirm: "Are you sure?"] %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

@@ -45,7 +45,10 @@ defmodule AtlasWeb.MixProject do
       {:gettext, "~> 0.11"},
       {:atlas, in_umbrella: true},
       {:jason, "~> 1.0"},
-      {:plug_cowboy, "~> 2.0"}
+      {:poison, "~> 3.1"},
+      {:plug_cowboy, "~> 2.0"},
+      {:guardian, "~> 1.2"},
+      {:oauth2, "~> 0.9"}
     ]
   end
 

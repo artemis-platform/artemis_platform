@@ -19,7 +19,7 @@ if [ -z "${NAME}" ]; then
 fi
 
 if [ -n "${PORT}" ]; then
-  ARTEMIS_PORT="${PORT}"
+  ATLAS_PORT="${PORT}"
 fi
 
-mix ecto.migrate && ARTEMIS_PORT="${ARTEMIS_PORT}" iex --name "${NAME}" -S mix phx.server
+source .env && mix ecto.migrate && ATLAS_PORT="${ATLAS_PORT}" iex --name "${NAME}" -S mix phx.server

@@ -5,4 +5,6 @@ rm -rf ./_build && \
 mix deps.get && \
 mix deps.compile && \
 ./bin/reset-database && \
-./bin/reset-tests
+./bin/reset-tests && \
+cd apps/atlas_web/assets && \
+npm install

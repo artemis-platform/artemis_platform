@@ -1,0 +1,42 @@
+<%= form_for @changeset, @action, [class: "ui form"], fn f -> %>
+  <div class="field">
+    <%= label_with_errors f, :name %>
+    <%= text_input f, :name, placeholder: "Name" %>
+  </div>
+
+  <div class="field">
+    <%= label_with_errors f, :email %>
+    <%= text_input f, :email, placeholder: "Email" %>
+  </div>
+
+  <ul>
+    <%= for role <- @roles do %>
+      <% user_role = find_user_role(role.id, f, @user) %>
+      <li>
+        <%= if user_role && user_role.id do %>
+          <input name="user[user_roles][<%= role.id %>][id]" value="<%= user_role.id %>" type="hidden" />
+        <% end %>
+        <input name="user[user_roles][<%= role.id %>][role_id]" value="<%= role.id %>" type="hidden" />
+        <input name="user[user_roles][<%= role.id %>][user_id]" value="<%= @user.id %>" type="hidden" />
+        <input
+          <%= if user_role, do: "checked=\"checked\"" %>
+          id="user_user_roles_<%= role.id %>"
+          name="user[user_roles][<%= role.id %>][checked]"
+          type="checkbox"
+          value="true"
+        />
+        <label for="user_user_roles_<%= role.id %>">
+          <%= role.name %>
+        </label>
+      </li>
+    <% end %>
+  </ul>
+
+  <div>
+    <%= if @changeset.action do %>
+      <%= render_notification :error, body: "Error Submitting Form" %>
+    <% end %>
+
+    <%= submit "Save", class: "ui button primary" %>
+  </div>
+<% end %>

@@ -1,17 +1,17 @@
-# Since configuration is shared in umbrella projects, this file
-# should only configure the :atlas_web application itself
-# and only for organization purposes. All other config goes to
-# the umbrella root.
 use Mix.Config
 
-# For development, we disable any cache and enable
-# debugging and code reloading.
+# Set the log level
 #
-# The watchers configuration can be used to run external
-# watchers to your application. For example, we use it
-# with webpack to recompile .js and .css sources.
+# The order from most information to least:
+#
+#   :debug
+#   :info
+#   :warn
+#
+config :logger, level: :info
+
 config :atlas_web, AtlasWeb.Endpoint,
-  http: [port: 4000],
+  http: [port: System.get_env("ATLAS_PORT")],
   debug_errors: true,
   code_reloader: true,
   check_origin: false,

@@ -1,0 +1,74 @@
+<header id="primary-header">
+  <section>
+    <a href="/" id="logo">
+      Atlas
+    </a>
+    <nav id="primary-navigation" role="navigation">
+      <ul>
+        <li>
+          <a href="<%= Routes.user_path(@conn, :index) %>">
+            Users
+          </a>
+        </li>
+        <li>
+          <a href="<%= Routes.role_path(@conn, :index) %>">
+            Roles
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <div id="quick-search">
+      <%= if current_user?(@conn) do %>
+        <form>
+          <div class="ui icon input">
+            <i class="search link icon"></i>
+            <input type="text" placeholder="">
+          </div>
+        </form>
+      <% end %>
+    </div>
+
+    <%= if current_user?(@conn) do %>
+      <nav id="icon-navigation">
+        <ul>
+          <li>
+            <a href="#">
+              <i class="wizard icon"></i>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <i class="bell icon"></i>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    <% end %>
+
+    <nav id="user-navigation">
+      <ul>
+        <li>
+          <%= if current_user?(@conn) do %>
+            <a href="<%= Routes.user_path(@conn, :show, current_user(@conn)) %>">
+              <span>
+                <i class="user icon"></i>
+                <%= current_user(@conn).name %>
+              </span>
+            </a>
+          <% else %>
+            <a href="<%= Routes.session_path(@conn, :new) %>">
+              <span>
+                <i class="sign-in icon"></i>
+                Log In
+              </span>
+            </a>
+          <% end %>
+        </li>
+      </ul>
+    </nav>
+  </section>
+  <footer>
+
+  </footer>
+</header>

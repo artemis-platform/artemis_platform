@@ -20,9 +20,39 @@ defmodule AtlasWeb do
   def controller do
     quote do
       use Phoenix.Controller, namespace: AtlasWeb
+
       import Plug.Conn
+      import AtlasWeb.Controller.Helpers
       import AtlasWeb.Gettext
+      import AtlasWeb.Guardian.Helpers
+      import AtlasWeb.UserAccess
+
       alias AtlasWeb.Router.Helpers, as: Routes
+
+      defp render_format(conn, filename, params) do
+        render(conn, "#{filename}.#{conn.private.phoenix_format}", params)
+      end
+
+      defp authorize(conn, permission, render_controller) do
+        case has?(conn, permission) do
+          true -> render_controller.()
+          false -> render_forbidden(conn)
+        end
+      end
+
+      defp authorize_any(conn, permissions, render_controller) do
+        case has_any?(conn, permissions) do
+          true -> render_controller.()
+          false -> render_forbidden(conn)
+        end
+      end
+
+      defp authorize_all(conn, permissions, render_controller) do
+        case has_all?(conn, permissions) do
+          true -> render_controller.()
+          false -> render_forbidden(conn)
+        end
+      end
     end
   end
 
@@ -40,6 +70,10 @@ defmodule AtlasWeb do
 
       import AtlasWeb.ErrorHelpers
       import AtlasWeb.Gettext
+      import AtlasWeb.Guardian.Helpers
+      import AtlasWeb.LayoutHelpers
+      import AtlasWeb.UserAccess
+
       alias AtlasWeb.Router.Helpers, as: Routes
     end
   end

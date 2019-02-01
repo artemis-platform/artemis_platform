@@ -1,7 +1,11 @@
-# Since configuration is shared in umbrella projects, this file
-# should only configure the :atlas application itself
-# and only for organization purposes. All other config goes to
-# the umbrella root.
 use Mix.Config
 
-import_config "prod.secret.exs"
+# Set the log level
+#
+# The order from most information to least:
+#
+#   :debug
+#   :info
+#   :warn
+#
+config :logger, level: :info

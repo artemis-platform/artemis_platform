@@ -1,0 +1,38 @@
+<div id="content-header">
+  <header>
+    <h1>
+      <%= @role.name %>
+    </h1>
+
+    <div class="actions">
+      <%= if has?(@conn, "roles:delete") do %>
+        <%= action "Delete", method: "delete", to: Routes.role_path(@conn, :delete, @role), data: [confirm: "Confirm Delete"] %>
+      <% end %>
+      <%= if has?(@conn, "roles:update") do %>
+        <%= action "Edit", to: Routes.role_path(@conn, :edit, @role), color: "green" %>
+      <% end %>
+    </div>
+  </header>
+</div>
+
+<div id="content-navigation">
+  <%= render_breadcrumbs @conn %>
+</div>
+
+<div id="content">
+  <%= render_flash_notifications @conn %>
+
+  <ul>
+
+    <li>
+      <strong>Name:</strong>
+      <%= @role.name %>
+    </li>
+
+    <li>
+      <strong>Slug:</strong>
+      <%= @role.slug %>
+    </li>
+
+  </ul>
+</div>

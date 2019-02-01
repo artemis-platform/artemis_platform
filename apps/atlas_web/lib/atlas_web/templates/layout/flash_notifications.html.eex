@@ -1,0 +1,11 @@
+<%= if get_flash(@conn, :info) do %>
+
+  <%= render_notification :info, body: get_flash(@conn, :info) %>
+
+<% end %>
+
+<%= if get_flash(@conn, :error) do %>
+
+  <%= render_notification :error, body: get_flash(@conn, :error) %>
+
+<% end %>

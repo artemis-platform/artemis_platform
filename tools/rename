@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-DIRS="apps config"
+DIRS="apps bin config"
 
 capitalize() {
   FIRST=$(echo ${1:0:1} | tr '[:lower:]' '[:upper:]')

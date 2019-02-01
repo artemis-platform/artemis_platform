@@ -1,0 +1,7 @@
+<ul class="breadcrumbs">
+ <%= for [title, key] <- @breadcrumbs do %>
+    <li>
+      <%= link title, to: key, class: "section" %>
+    </li>
+  <% end %>
+</ul>

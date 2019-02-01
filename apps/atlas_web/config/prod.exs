@@ -1,8 +1,14 @@
-# Since configuration is shared in umbrella projects, this file
-# should only configure the :atlas_web application itself
-# and only for organization purposes. All other config goes to
-# the umbrella root.
 use Mix.Config
+
+# Set the log level
+#
+# The order from most information to least:
+#
+#   :debug
+#   :info
+#   :warn
+#
+config :logger, level: :info
 
 # For production, don't forget to configure the url host
 # to something meaningful, Phoenix uses this information
@@ -14,7 +20,7 @@ use Mix.Config
 # which you should run after static files are built and
 # before starting your production server.
 config :atlas_web, AtlasWeb.Endpoint,
-  http: [:inet6, port: System.get_env("PORT") || 4000],
+  http: [:inet6, port: System.get_env("ATLAS_PORT") || 4000],
   url: [host: "example.com", port: 80],
   cache_static_manifest: "priv/static/cache_manifest.json"
 
@@ -66,7 +72,3 @@ config :atlas_web, AtlasWeb.Endpoint,
 #
 # Note you can't rely on `System.get_env/1` when using releases.
 # See the releases documentation accordingly.
-
-# Finally import the config/prod.secret.exs which should be versioned
-# separately.
-import_config "prod.secret.exs"

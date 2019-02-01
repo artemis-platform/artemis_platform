@@ -1,0 +1,9 @@
+<div class="ui icon message">
+  <i class="warning sign icon"></i>
+  <div class="content">
+    <div class="header">
+      Error
+    </div>
+    <p><%= @body %></p>
+  </div>
+</div>

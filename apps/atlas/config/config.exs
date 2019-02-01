@@ -1,10 +1,10 @@
-# Since configuration is shared in umbrella projects, this file
-# should only configure the :atlas application itself
-# and only for organization purposes. All other config goes to
-# the umbrella root.
 use Mix.Config
 
 config :atlas,
-  ecto_repos: [Atlas.Repo]
+  ecto_repos: [Atlas.Repo],
+  root_user: %{
+    name: System.get_env("ATLAS_ROOT_USER"),
+    email: System.get_env("ATLAS_ROOT_EMAIL")
+  }
 
 import_config "#{Mix.env()}.exs"
