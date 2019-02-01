@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+source .env && \
+rm -rf ./_build && \
+mix deps.get && \
+mix deps.compile

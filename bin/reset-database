@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+source .env && \
+mix do ecto.drop, ecto.create, ecto.migrate && \
+mix run apps/artemis/priv/repo/seeds.exs && \
+mix run apps/artemis/priv/repo/seeds.dev.exs

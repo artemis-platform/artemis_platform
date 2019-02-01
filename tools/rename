@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+
+DIRS="apps config"
+
+capitalize() {
+  FIRST=$(echo ${1:0:1} | tr '[:lower:]' '[:upper:]')
+
+  echo ${FIRST}${1:1}
+}
+
+uppercase() {
+  echo ${1} | tr a-z A-Z
+}
+
+lowercase() {
+  echo ${1} | tr A-Z a-z
+}
+
+replace() {
+  find ${DIRS} -type f | xargs sed -i'' -e "s/${1}/${2}/g"
+}
+
+move() {
+  find ${DIRS} -type d | grep "${1}" | while read DIR ; do
+    NEW_DIR=`echo ${DIR} | sed -e "s/${1}/${2}/g"`
+    mv -n "${DIR}/" "${NEW_DIR}"
+  done
+
+  find ${DIRS} -type f | grep "${1}" | while read FILE ; do
+    NEW_FILE=`echo ${FILE} | sed -e "s/${1}/${2}/g"`
+    mv "${FILE}" "${NEW_FILE}"
+  done
+}
+
+move $(capitalize $1) $(capitalize $2)
+move $(uppercase $1) $(uppercase $2)
+move $(lowercase $1) $(lowercase $2)
+
+replace $(capitalize $1) $(capitalize $2)
+replace $(uppercase $1) $(uppercase $2)
+replace $(lowercase $1) $(lowercase $2)
