@@ -55,4 +55,17 @@ defmodule Atlas.DeleteUserTest do
       assert Repo.get(User, record.id) == nil
     end
   end
+
+  describe "broadcasts" do
+    test "publishes event and record" do
+      AtlasPubSub.subscribe(Atlas.Context.broadcast_topic())
+
+      {:ok, user} = DeleteUser.call(insert(:user))
+
+      assert_received %Phoenix.Socket.Broadcast{
+        event: "user:deleted",
+        payload: ^user
+      }
+    end
+  end
 end

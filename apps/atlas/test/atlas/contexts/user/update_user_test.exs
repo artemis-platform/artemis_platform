@@ -137,4 +137,20 @@ defmodule Atlas.UpdateUserTest do
       assert length(updated.user_roles) == 0
     end
   end
+
+  describe "broadcast" do
+    test "publishes event and record" do
+      AtlasPubSub.subscribe(Atlas.Context.broadcast_topic())
+
+      user = insert(:user)
+      params = params_for(:user)
+
+      {:ok, updated} = UpdateUser.call(user, params)
+
+      assert_received %Phoenix.Socket.Broadcast{
+        event: "user:updated",
+        payload: ^updated
+      }
+    end
+  end
 end

@@ -47,4 +47,17 @@ defmodule Atlas.CreateRoleTest do
       assert length(role.permissions) == 2
     end
   end
+
+  describe "broadcasts" do
+    test "publishes event and record" do
+      AtlasPubSub.subscribe(Atlas.Context.broadcast_topic())
+
+      {:ok, role} = CreateRole.call(params_for(:role))
+
+      assert_received %Phoenix.Socket.Broadcast{
+        event: "role:created",
+        payload: ^role
+      }
+    end
+  end
 end

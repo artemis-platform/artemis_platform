@@ -19,6 +19,7 @@ defmodule Atlas.CreateUser do
       params
       |> insert_record
       |> update_associations(params)
+      |> broadcast_result("user:created")
     end)
   end
 

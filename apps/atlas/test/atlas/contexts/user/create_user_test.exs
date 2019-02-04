@@ -47,4 +47,17 @@ defmodule Atlas.CreateUserTest do
       assert length(user.user_roles) == 2
     end
   end
+
+  describe "broadcasts" do
+    test "publishes event and record" do
+      AtlasPubSub.subscribe(Atlas.Context.broadcast_topic())
+
+      {:ok, user} = CreateUser.call(params_for(:user))
+
+      assert_received %Phoenix.Socket.Broadcast{
+        event: "user:created",
+        payload: ^user
+      }
+    end
+  end
 end

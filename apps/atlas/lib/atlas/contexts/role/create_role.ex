@@ -19,6 +19,7 @@ defmodule Atlas.CreateRole do
       params
       |> insert_record
       |> update_associations(params)
+      |> broadcast_result("role:created")
     end)
   end
 

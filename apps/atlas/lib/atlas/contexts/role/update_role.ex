@@ -20,6 +20,7 @@ defmodule Atlas.UpdateRole do
       |> get_record
       |> update_record(params)
       |> update_associations(params)
+      |> broadcast_result("role:updated")
     end)
   end
 

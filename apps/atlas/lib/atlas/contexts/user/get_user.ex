@@ -1,20 +1,25 @@
 defmodule Atlas.GetUser do
   import Ecto.Query
 
-  alias Atlas.User
   alias Atlas.Repo
+  alias Atlas.User
 
+  @default_by :id
   @default_preload []
 
-  def call(id, options \\ []) do
-    User
-    |> preload(^Keyword.get(options, :preload, @default_preload))
-    |> Repo.get(id)
+  def call!(value, options \\ []) do
+    get_record(value, options, &Repo.get_by!/2)
   end
 
-  def call!(id, options \\ []) do
+  def call(value, options \\ []) do
+    get_record(value, options, &Repo.get_by/2)
+  end
+
+  defp get_record(value, options, get_by) do
+    key = Keyword.get(options, :by, @default_by)
+
     User
     |> preload(^Keyword.get(options, :preload, @default_preload))
-    |> Repo.get!(id)
+    |> get_by.([{key, value}])
   end
 end

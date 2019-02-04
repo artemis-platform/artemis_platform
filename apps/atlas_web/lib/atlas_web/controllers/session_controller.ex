@@ -6,10 +6,10 @@ defmodule AtlasWeb.SessionController do
   import AtlasWeb.Guardian.Plug
 
   alias Atlas.CreateAuditLog
-  alias Atlas.CreateSession
-  alias Atlas.DeleteSession
-  alias Atlas.GetUserByAuthProvider
-  alias Atlas.ListSessionAuthProviders
+  alias AtlasWeb.CreateSession
+  alias AtlasWeb.DeleteSession
+  alias AtlasWeb.GetUserByAuthProvider
+  alias AtlasWeb.ListSessionAuthProviders
 
   def new(conn, _params) do
     render(conn, "new.html", providers: ListSessionAuthProviders.call(conn))

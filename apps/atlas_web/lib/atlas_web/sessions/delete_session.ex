@@ -1,4 +1,4 @@
-defmodule Atlas.DeleteSession do
+defmodule AtlasWeb.DeleteSession do
   def call() do
     {:ok, true}
   end

@@ -20,6 +20,7 @@ defmodule Atlas.UpdateUser do
       |> get_record
       |> update_record(params)
       |> update_associations(params)
+      |> broadcast_result("user:updated")
     end)
   end
 

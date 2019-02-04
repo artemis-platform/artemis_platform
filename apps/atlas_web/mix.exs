@@ -43,12 +43,13 @@ defmodule AtlasWeb.MixProject do
       {:phoenix_html, "~> 2.11"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:gettext, "~> 0.11"},
-      {:atlas, in_umbrella: true},
       {:jason, "~> 1.0"},
       {:poison, "~> 3.1"},
       {:plug_cowboy, "~> 2.0"},
       {:guardian, "~> 1.2"},
-      {:oauth2, "~> 0.9"}
+      {:oauth2, "~> 0.9"},
+      {:atlas_pubsub, in_umbrella: true},
+      {:atlas, in_umbrella: true}
     ]
   end
 

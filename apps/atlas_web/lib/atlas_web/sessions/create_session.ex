@@ -1,4 +1,4 @@
-defmodule Atlas.CreateSession do
+defmodule AtlasWeb.CreateSession do
   alias AtlasWeb.Guardian
 
   def call(user) do

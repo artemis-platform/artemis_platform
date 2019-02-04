@@ -55,4 +55,17 @@ defmodule Atlas.DeleteRoleTest do
       assert Repo.get(Role, record.id) == nil
     end
   end
+
+  describe "broadcasts" do
+    test "publishes event and record" do
+      AtlasPubSub.subscribe(Atlas.Context.broadcast_topic())
+
+      {:ok, role} = DeleteRole.call(insert(:role))
+
+      assert_received %Phoenix.Socket.Broadcast{
+        event: "role:deleted",
+        payload: ^role
+      }
+    end
+  end
 end

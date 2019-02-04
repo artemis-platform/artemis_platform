@@ -1,4 +1,4 @@
-defmodule Atlas.ListSessionAuthProviders do
+defmodule AtlasWeb.ListSessionAuthProviders do
   alias AtlasWeb.Router.Helpers, as: Routes
 
   def call(conn) do

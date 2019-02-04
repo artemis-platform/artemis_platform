@@ -232,4 +232,23 @@ defmodule Util do
     end
   end
   def keys_to_strings(value, _), do: value
+
+  @doc """
+  Serialize process id (pid) number to string
+  """
+  def serialize_pid(pid) when is_pid(pid) do
+    pid
+    |> :erlang.pid_to_list
+    |> :erlang.list_to_binary
+  end
+
+  @doc """
+  Deserialize process id (pid) string to pid
+  """
+  def deserialize_pid("#PID" <> string), do: deserialize_pid(string)
+  def deserialize_pid(string) do
+    string
+    |> :erlang.binary_to_list
+    |> :erlang.list_to_pid
+  end
 end

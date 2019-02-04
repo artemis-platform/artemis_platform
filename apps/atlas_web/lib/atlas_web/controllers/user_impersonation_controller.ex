@@ -4,8 +4,8 @@ defmodule AtlasWeb.UserImpersonationController do
   import AtlasWeb.Guardian.Plug
 
   alias Atlas.CreateAuditLog
-  alias Atlas.CreateSession
   alias Atlas.GetUser
+  alias AtlasWeb.CreateSession
 
   def create(conn, %{"user_id" => id}) do
     authorize(conn, "user-impersonations:create", fn () ->

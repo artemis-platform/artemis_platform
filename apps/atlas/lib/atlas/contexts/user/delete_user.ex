@@ -15,6 +15,7 @@ defmodule Atlas.DeleteUser do
     id
     |> get_record
     |> delete_record
+    |> broadcast_result("user:deleted")
   end
 
   def get_record(record) when is_map(record), do: record
