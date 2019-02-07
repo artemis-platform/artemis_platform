@@ -11,14 +11,14 @@ defmodule Atlas.DeleteUserTest do
       invalid_id = 50000000
 
       assert_raise Atlas.Context.Error, fn () ->
-        DeleteUser.call!(invalid_id)
+        DeleteUser.call!(invalid_id, Mock.root_user())
       end
     end
 
     test "updates a record when passed valid params" do
       record = insert(:user)
 
-      %User{} = DeleteUser.call!(record)
+      %User{} = DeleteUser.call!(record, Mock.root_user())
 
       assert Repo.get(User, record.id) == nil
     end
@@ -26,7 +26,7 @@ defmodule Atlas.DeleteUserTest do
     test "updates a record when passed an id and valid params" do
       record = insert(:user)
 
-      %User{} = DeleteUser.call!(record.id)
+      %User{} = DeleteUser.call!(record.id, Mock.root_user())
 
       assert Repo.get(User, record.id) == nil
     end
@@ -36,13 +36,13 @@ defmodule Atlas.DeleteUserTest do
     test "returns an error when record not found" do
       invalid_id = 50000000
 
-      {:error, _} = DeleteUser.call(invalid_id)
+      {:error, _} = DeleteUser.call(invalid_id, Mock.root_user())
     end
 
     test "updates a record when passed valid params" do
       record = insert(:user)
 
-      {:ok, _} = DeleteUser.call(record)
+      {:ok, _} = DeleteUser.call(record, Mock.root_user())
 
       assert Repo.get(User, record.id) == nil
     end
@@ -50,7 +50,7 @@ defmodule Atlas.DeleteUserTest do
     test "updates a record when passed an id and valid params" do
       record = insert(:user)
 
-      {:ok, _} = DeleteUser.call(record.id)
+      {:ok, _} = DeleteUser.call(record.id, Mock.root_user())
 
       assert Repo.get(User, record.id) == nil
     end
@@ -58,13 +58,15 @@ defmodule Atlas.DeleteUserTest do
 
   describe "broadcasts" do
     test "publishes event and record" do
-      AtlasPubSub.subscribe(Atlas.Context.broadcast_topic())
+      AtlasPubSub.subscribe(Atlas.Event.get_broadcast_topic())
 
-      {:ok, user} = DeleteUser.call(insert(:user))
+      {:ok, user} = DeleteUser.call(insert(:user), Mock.root_user())
 
       assert_received %Phoenix.Socket.Broadcast{
         event: "user:deleted",
-        payload: ^user
+        payload: %{
+          data: ^user
+        }
       }
     end
   end

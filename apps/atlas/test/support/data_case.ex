@@ -16,12 +16,13 @@ defmodule Atlas.DataCase do
 
   using do
     quote do
-      alias Atlas.Repo
-
       import Ecto
       import Ecto.Changeset
       import Ecto.Query
       import Atlas.DataCase
+
+      alias Atlas.Mock
+      alias Atlas.Repo
     end
   end
 

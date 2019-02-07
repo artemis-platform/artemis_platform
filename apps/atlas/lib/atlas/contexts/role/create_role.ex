@@ -7,19 +7,19 @@ defmodule Atlas.CreateRole do
   alias Atlas.Repo
   alias Atlas.Role
 
-  def call!(params) do
-    case call(params) do
+  def call!(params, user) do
+    case call(params, user) do
       {:error, _} -> raise(Atlas.Context.Error, "Error creating role")
       {:ok, result} -> result
     end
   end
 
-  def call(params) do
+  def call(params, user) do
     with_transaction(fn () ->
       params
       |> insert_record
       |> update_associations(params)
-      |> broadcast_result("role:created")
+      |> Event.broadcast("role:created", user)
     end)
   end
 

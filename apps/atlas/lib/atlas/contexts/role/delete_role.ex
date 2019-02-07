@@ -4,18 +4,18 @@ defmodule Atlas.DeleteRole do
   alias Atlas.Repo
   alias Atlas.Role
 
-  def call!(id) do
-    case call(id) do
+  def call!(id, user) do
+    case call(id, user) do
       {:error, _} -> raise(Atlas.Context.Error, "Error deleting role")
       {:ok, result} -> result
     end
   end
 
-  def call(id) do
+  def call(id, user) do
     id
     |> get_record
     |> delete_record
-    |> broadcast_result("role:deleted")
+    |> Event.broadcast("role:deleted", user)
   end
 
   def get_record(record) when is_map(record), do: record

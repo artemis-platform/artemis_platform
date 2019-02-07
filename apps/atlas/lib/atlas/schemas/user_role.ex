@@ -19,6 +19,8 @@ defmodule Atlas.UserRole do
 
   def required_fields, do: []
 
+  def event_log_fields, do: []
+
   # Changesets
 
   def changeset(struct, params \\ %{}) do

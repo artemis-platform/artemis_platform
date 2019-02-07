@@ -7,20 +7,20 @@ defmodule Atlas.UpdateRole do
   alias Atlas.Repo
   alias Atlas.Role
 
-  def call!(id, params) do
-    case call(id, params) do
+  def call!(id, params, user) do
+    case call(id, params, user) do
       {:error, _} -> raise(Atlas.Context.Error, "Error updating role")
       {:ok, result} -> result
     end
   end
 
-  def call(id, params) do
+  def call(id, params, user) do
     with_transaction(fn () ->
       id
       |> get_record
       |> update_record(params)
       |> update_associations(params)
-      |> broadcast_result("role:updated")
+      |> Event.broadcast("role:updated", user)
     end)
   end
 

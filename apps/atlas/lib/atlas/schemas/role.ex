@@ -17,12 +17,24 @@ defmodule Atlas.Role do
 
   # Callbacks
 
-  def updatable_fields, do: [:description, :name, :slug]
+  def updatable_fields, do: [
+    :description,
+    :name,
+    :slug
+  ]
 
-  def required_fields, do: [:name, :slug]
+  def required_fields, do: [
+    :name,
+    :slug
+  ]
 
   def updatable_associations, do: [
     permissions: Atlas.Permission
+  ]
+
+  def event_log_fields, do: [
+    :id,
+    :slug
   ]
 
   # Changesets

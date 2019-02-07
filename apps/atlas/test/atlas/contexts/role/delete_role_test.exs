@@ -11,14 +11,14 @@ defmodule Atlas.DeleteRoleTest do
       invalid_id = 50000000
 
       assert_raise Atlas.Context.Error, fn () ->
-        DeleteRole.call!(invalid_id)
+        DeleteRole.call!(invalid_id, Mock.root_user())
       end
     end
 
     test "updates a record when passed valid params" do
       record = insert(:role)
 
-      %Role{} = DeleteRole.call!(record)
+      %Role{} = DeleteRole.call!(record, Mock.root_user())
 
       assert Repo.get(Role, record.id) == nil
     end
@@ -26,7 +26,7 @@ defmodule Atlas.DeleteRoleTest do
     test "updates a record when passed an id and valid params" do
       record = insert(:role)
 
-      %Role{} = DeleteRole.call!(record.id)
+      %Role{} = DeleteRole.call!(record.id, Mock.root_user())
 
       assert Repo.get(Role, record.id) == nil
     end
@@ -36,13 +36,13 @@ defmodule Atlas.DeleteRoleTest do
     test "returns an error when record not found" do
       invalid_id = 50000000
 
-      {:error, _} = DeleteRole.call(invalid_id)
+      {:error, _} = DeleteRole.call(invalid_id, Mock.root_user())
     end
 
     test "updates a record when passed valid params" do
       record = insert(:role)
 
-      {:ok, _} = DeleteRole.call(record)
+      {:ok, _} = DeleteRole.call(record, Mock.root_user())
 
       assert Repo.get(Role, record.id) == nil
     end
@@ -50,7 +50,7 @@ defmodule Atlas.DeleteRoleTest do
     test "updates a record when passed an id and valid params" do
       record = insert(:role)
 
-      {:ok, _} = DeleteRole.call(record.id)
+      {:ok, _} = DeleteRole.call(record.id, Mock.root_user())
 
       assert Repo.get(Role, record.id) == nil
     end
@@ -58,13 +58,15 @@ defmodule Atlas.DeleteRoleTest do
 
   describe "broadcasts" do
     test "publishes event and record" do
-      AtlasPubSub.subscribe(Atlas.Context.broadcast_topic())
+      AtlasPubSub.subscribe(Atlas.Event.get_broadcast_topic())
 
-      {:ok, role} = DeleteRole.call(insert(:role))
+      {:ok, role} = DeleteRole.call(insert(:role), Mock.root_user())
 
       assert_received %Phoenix.Socket.Broadcast{
         event: "role:deleted",
-        payload: ^role
+        payload: %{
+          data: ^role
+        }
       }
     end
   end

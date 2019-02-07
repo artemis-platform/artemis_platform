@@ -11,7 +11,7 @@ defmodule Atlas.UpdateUserTest do
       params = params_for(:user)
 
       assert_raise Atlas.Context.Error, fn () ->
-        UpdateUser.call!(invalid_id, params)
+        UpdateUser.call!(invalid_id, params, Mock.root_user())
       end
     end
 
@@ -19,7 +19,7 @@ defmodule Atlas.UpdateUserTest do
       user = insert(:user)
       params = %{}
 
-      updated = UpdateUser.call!(user, params)
+      updated = UpdateUser.call!(user, params, Mock.root_user())
 
       assert updated.name == user.name
     end
@@ -28,7 +28,7 @@ defmodule Atlas.UpdateUserTest do
       user = insert(:user)
       params = params_for(:user)
 
-      updated = UpdateUser.call!(user, params)
+      updated = UpdateUser.call!(user, params, Mock.root_user())
 
       assert updated.name == params.name
     end
@@ -37,7 +37,7 @@ defmodule Atlas.UpdateUserTest do
       user = insert(:user)
       params = params_for(:user)
 
-      updated = UpdateUser.call!(user.id, params)
+      updated = UpdateUser.call!(user.id, params, Mock.root_user())
 
       assert updated.name == params.name
     end
@@ -48,14 +48,14 @@ defmodule Atlas.UpdateUserTest do
       invalid_id = 50000000
       params = params_for(:user)
 
-      {:error, _} = UpdateUser.call(invalid_id, params)
+      {:error, _} = UpdateUser.call(invalid_id, params, Mock.root_user())
     end
 
     test "returns successfully when params are empty" do
       user = insert(:user)
       params = %{}
 
-      {:ok, updated} = UpdateUser.call(user, params)
+      {:ok, updated} = UpdateUser.call(user, params, Mock.root_user())
 
       assert updated.name == user.name
     end
@@ -64,7 +64,7 @@ defmodule Atlas.UpdateUserTest do
       user = insert(:user)
       params = params_for(:user)
 
-      {:ok, updated} = UpdateUser.call(user, params)
+      {:ok, updated} = UpdateUser.call(user, params, Mock.root_user())
 
       assert updated.name == params.name
     end
@@ -73,7 +73,7 @@ defmodule Atlas.UpdateUserTest do
       user = insert(:user)
       params = params_for(:user)
 
-      {:ok, updated} = UpdateUser.call(user.id, params)
+      {:ok, updated} = UpdateUser.call(user.id, params, Mock.root_user())
 
       assert updated.name == params.name
     end
@@ -99,7 +99,7 @@ defmodule Atlas.UpdateUserTest do
         ]
       }
 
-      {:ok, updated} = UpdateUser.call(user.id, params)
+      {:ok, updated} = UpdateUser.call(user.id, params, Mock.root_user())
 
       assert updated.user_roles != []
       assert updated.name == "Updated Name"
@@ -121,7 +121,7 @@ defmodule Atlas.UpdateUserTest do
         name: "New Name"
       }
 
-      {:ok, updated} = UpdateUser.call(user.id, params)
+      {:ok, updated} = UpdateUser.call(user.id, params, Mock.root_user())
 
       assert length(updated.user_roles) == 3
 
@@ -132,7 +132,7 @@ defmodule Atlas.UpdateUserTest do
         user_roles: []
       }
 
-      {:ok, updated} = UpdateUser.call(user.id, params)
+      {:ok, updated} = UpdateUser.call(user.id, params, Mock.root_user())
 
       assert length(updated.user_roles) == 0
     end
@@ -140,16 +140,18 @@ defmodule Atlas.UpdateUserTest do
 
   describe "broadcast" do
     test "publishes event and record" do
-      AtlasPubSub.subscribe(Atlas.Context.broadcast_topic())
+      AtlasPubSub.subscribe(Atlas.Event.get_broadcast_topic())
 
       user = insert(:user)
       params = params_for(:user)
 
-      {:ok, updated} = UpdateUser.call(user, params)
+      {:ok, updated} = UpdateUser.call(user, params, Mock.root_user())
 
       assert_received %Phoenix.Socket.Broadcast{
         event: "user:updated",
-        payload: ^updated
+        payload: %{
+          data: ^updated
+        }
       }
     end
   end

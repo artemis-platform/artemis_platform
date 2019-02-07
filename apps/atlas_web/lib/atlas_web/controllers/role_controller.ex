@@ -33,7 +33,7 @@ defmodule AtlasWeb.RoleController do
     authorize(conn, "roles:create", fn () ->
       params = Map.put_new(params, "permissions", [])
 
-      case CreateRole.call(params) do
+      case CreateRole.call(params, current_user(conn)) do
         {:ok, role} ->
           conn
           |> put_flash(:info, "Role created successfully.")
@@ -70,7 +70,7 @@ defmodule AtlasWeb.RoleController do
     authorize(conn, "roles:update", fn () ->
       params = Map.put_new(params, "permissions", [])
 
-      case UpdateRole.call(id, params) do
+      case UpdateRole.call(id, params, current_user(conn)) do
         {:ok, role} ->
           conn
           |> put_flash(:info, "Role updated successfully.")
@@ -87,7 +87,7 @@ defmodule AtlasWeb.RoleController do
 
   def delete(conn, %{"id" => id}) do
     authorize(conn, "roles:delete", fn () ->
-      {:ok, _role} = DeleteRole.call(id)
+      {:ok, _role} = DeleteRole.call(id, current_user(conn))
 
       conn
       |> put_flash(:info, "Role deleted successfully.")

@@ -17,6 +17,8 @@ defmodule Atlas.Permission do
 
   def required_fields, do: [:name, :slug]
 
+  def event_log_fields, do: [:id, :slug]
+
   # Changesets
 
   def changeset(struct, params \\ %{}) do

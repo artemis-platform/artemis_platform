@@ -48,8 +48,8 @@ defmodule AtlasWeb.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:guardian, "~> 1.2"},
       {:oauth2, "~> 0.9"},
-      {:atlas_pubsub, in_umbrella: true},
-      {:atlas, in_umbrella: true}
+      {:atlas, in_umbrella: true},
+      {:atlas_pubsub, in_umbrella: true}
     ]
   end
 

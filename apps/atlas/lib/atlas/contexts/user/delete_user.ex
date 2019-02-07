@@ -4,18 +4,18 @@ defmodule Atlas.DeleteUser do
   alias Atlas.Repo
   alias Atlas.User
 
-  def call!(id) do
-    case call(id) do
+  def call!(id, user) do
+    case call(id, user) do
       {:error, _} -> raise(Atlas.Context.Error, "Error deleting user")
       {:ok, result} -> result
     end
   end
 
-  def call(id) do
+  def call(id, user) do
     id
     |> get_record
     |> delete_record
-    |> broadcast_result("user:deleted")
+    |> Event.broadcast("user:deleted", user)
   end
 
   def get_record(record) when is_map(record), do: record

@@ -36,6 +36,11 @@ defmodule Atlas.User do
     user_roles: Atlas.UserRole
   ]
 
+  def event_log_fields, do: [
+    :id,
+    :name
+  ]
+
   # Changesets
 
   def changeset(struct, params \\ %{}) do

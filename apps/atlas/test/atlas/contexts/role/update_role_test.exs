@@ -11,7 +11,7 @@ defmodule Atlas.UpdateRoleTest do
       params = params_for(:role)
 
       assert_raise Atlas.Context.Error, fn () ->
-        UpdateRole.call!(invalid_id, params)
+        UpdateRole.call!(invalid_id, params, Mock.root_user())
       end
     end
 
@@ -19,7 +19,7 @@ defmodule Atlas.UpdateRoleTest do
       role = insert(:role)
       params = %{}
 
-      updated = UpdateRole.call!(role, params)
+      updated = UpdateRole.call!(role, params, Mock.root_user())
 
       assert updated.name == role.name
     end
@@ -28,7 +28,7 @@ defmodule Atlas.UpdateRoleTest do
       role = insert(:role)
       params = params_for(:role)
 
-      updated = UpdateRole.call!(role, params)
+      updated = UpdateRole.call!(role, params, Mock.root_user())
 
       assert updated.name == params.name
     end
@@ -37,7 +37,7 @@ defmodule Atlas.UpdateRoleTest do
       role = insert(:role)
       params = params_for(:role)
 
-      updated = UpdateRole.call!(role.id, params)
+      updated = UpdateRole.call!(role.id, params, Mock.root_user())
 
       assert updated.name == params.name
     end
@@ -48,14 +48,14 @@ defmodule Atlas.UpdateRoleTest do
       invalid_id = 50000000
       params = params_for(:role)
 
-      {:error, _} = UpdateRole.call(invalid_id, params)
+      {:error, _} = UpdateRole.call(invalid_id, params, Mock.root_user())
     end
 
     test "returns successfully when params are empty" do
       role = insert(:role)
       params = %{}
 
-      {:ok, updated} = UpdateRole.call(role, params)
+      {:ok, updated} = UpdateRole.call(role, params, Mock.root_user())
 
       assert updated.name == role.name
     end
@@ -64,7 +64,7 @@ defmodule Atlas.UpdateRoleTest do
       role = insert(:role)
       params = params_for(:role)
 
-      {:ok, updated} = UpdateRole.call(role, params)
+      {:ok, updated} = UpdateRole.call(role, params, Mock.root_user())
 
       assert updated.name == params.name
     end
@@ -73,7 +73,7 @@ defmodule Atlas.UpdateRoleTest do
       role = insert(:role)
       params = params_for(:role)
 
-      {:ok, updated} = UpdateRole.call(role.id, params)
+      {:ok, updated} = UpdateRole.call(role.id, params, Mock.root_user())
 
       assert updated.name == params.name
     end
@@ -98,7 +98,7 @@ defmodule Atlas.UpdateRoleTest do
         ]
       }
 
-      {:ok, updated} = UpdateRole.call(role.id, params)
+      {:ok, updated} = UpdateRole.call(role.id, params, Mock.root_user())
 
       assert updated.permissions != []
       assert updated.name == "Updated Name"
@@ -120,7 +120,7 @@ defmodule Atlas.UpdateRoleTest do
         name: "New Name"
       }
 
-      {:ok, updated} = UpdateRole.call(role.id, params)
+      {:ok, updated} = UpdateRole.call(role.id, params, Mock.root_user())
 
       assert length(updated.permissions) == 3
 
@@ -131,7 +131,7 @@ defmodule Atlas.UpdateRoleTest do
         permissions: []
       }
 
-      {:ok, updated} = UpdateRole.call(role.id, params)
+      {:ok, updated} = UpdateRole.call(role.id, params, Mock.root_user())
 
       assert length(updated.permissions) == 0
     end
@@ -139,16 +139,18 @@ defmodule Atlas.UpdateRoleTest do
 
   describe "broadcast" do
     test "publishes event and record" do
-      AtlasPubSub.subscribe(Atlas.Context.broadcast_topic())
+      AtlasPubSub.subscribe(Atlas.Event.get_broadcast_topic())
 
       role = insert(:role)
       params = params_for(:role)
 
-      {:ok, updated} = UpdateRole.call(role, params)
+      {:ok, updated} = UpdateRole.call(role, params, Mock.root_user())
 
       assert_received %Phoenix.Socket.Broadcast{
         event: "role:updated",
-        payload: ^updated
+        payload: %{
+          data: ^updated
+        }
       }
     end
   end

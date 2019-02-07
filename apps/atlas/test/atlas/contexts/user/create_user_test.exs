@@ -8,14 +8,14 @@ defmodule Atlas.CreateUserTest do
   describe "call!" do
     test "returns error when params are empty" do
       assert_raise Atlas.Context.Error, fn () ->
-        CreateUser.call!(%{})
+        CreateUser.call!(%{}, Mock.root_user())
       end
     end
 
     test "creates a user when passed valid params" do
       params = params_for(:user)
 
-      user = CreateUser.call!(params)
+      user = CreateUser.call!(params, Mock.root_user())
 
       assert user.email == params.email
     end
@@ -23,7 +23,7 @@ defmodule Atlas.CreateUserTest do
 
   describe "call" do
     test "returns error when params are empty" do
-      {:error, changeset} = CreateUser.call(%{})
+      {:error, changeset} = CreateUser.call(%{}, Mock.root_user())
 
       assert errors_on(changeset).email == ["can't be blank"]
     end
@@ -31,7 +31,7 @@ defmodule Atlas.CreateUserTest do
     test "creates a user when passed valid params" do
       params = params_for(:user)
 
-      {:ok, user} = CreateUser.call(params)
+      {:ok, user} = CreateUser.call(params, Mock.root_user())
 
       assert user.email == params.email
     end
@@ -41,7 +41,7 @@ defmodule Atlas.CreateUserTest do
         |> params_for
         |> Map.put(:user_roles, [params_for(:user_role), params_for(:user_role)])
 
-      {:ok, user} = CreateUser.call(params)
+      {:ok, user} = CreateUser.call(params, Mock.root_user())
 
       assert user.email == params.email
       assert length(user.user_roles) == 2
@@ -50,13 +50,15 @@ defmodule Atlas.CreateUserTest do
 
   describe "broadcasts" do
     test "publishes event and record" do
-      AtlasPubSub.subscribe(Atlas.Context.broadcast_topic())
+      AtlasPubSub.subscribe(Atlas.Event.get_broadcast_topic())
 
-      {:ok, user} = CreateUser.call(params_for(:user))
+      {:ok, user} = CreateUser.call(params_for(:user), Mock.root_user())
 
       assert_received %Phoenix.Socket.Broadcast{
         event: "user:created",
-        payload: ^user
+        payload: %{
+          data: ^user
+        }
       }
     end
   end

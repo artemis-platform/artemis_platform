@@ -33,7 +33,7 @@ defmodule AtlasWeb.UserController do
     authorize(conn, "users:create", fn () ->
       params = checkbox_to_params(params, "user_roles")
 
-      case CreateUser.call(params) do
+      case CreateUser.call(params, current_user(conn)) do
         {:ok, user} ->
           conn
           |> put_flash(:info, "User created successfully.")
@@ -70,7 +70,7 @@ defmodule AtlasWeb.UserController do
     authorize(conn, "users:update", fn () ->
       params = checkbox_to_params(params, "user_roles")
 
-      case UpdateUser.call(id, params) do
+      case UpdateUser.call(id, params, current_user(conn)) do
         {:ok, user} ->
           conn
           |> put_flash(:info, "User updated successfully.")
@@ -87,7 +87,7 @@ defmodule AtlasWeb.UserController do
 
   def delete(conn, %{"id" => id}) do
     authorize(conn, "users:delete", fn () ->
-      {:ok, _user} = DeleteUser.call(id)
+      {:ok, _user} = DeleteUser.call(id, current_user(conn))
 
       conn
       |> put_flash(:info, "User deleted successfully.")
