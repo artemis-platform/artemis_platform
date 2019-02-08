@@ -3,6 +3,8 @@ defmodule Atlas.User do
   use Assoc.Schema, repo: Atlas.Repo
 
   schema "users" do
+    field :client_key, :string
+    field :client_secret, :string
     field :email, :string
     field :first_name, :string
     field :last_name, :string
@@ -20,6 +22,8 @@ defmodule Atlas.User do
   # Callbacks
 
   def updatable_fields, do: [
+    :client_key,
+    :client_secret,
     :email,
     :name,
     :first_name,

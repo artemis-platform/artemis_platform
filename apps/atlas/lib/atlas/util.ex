@@ -1,4 +1,4 @@
-defmodule Util do
+defmodule Atlas.Helpers do
   @doc """
   Generate a random string
   """

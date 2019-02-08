@@ -32,10 +32,12 @@ move() {
   done
 }
 
+move $1 $2
 move $(capitalize $1) $(capitalize $2)
 move $(uppercase $1) $(uppercase $2)
 move $(lowercase $1) $(lowercase $2)
 
+replace $1 $2
 replace $(capitalize $1) $(capitalize $2)
 replace $(uppercase $1) $(uppercase $2)
 replace $(lowercase $1) $(lowercase $2)

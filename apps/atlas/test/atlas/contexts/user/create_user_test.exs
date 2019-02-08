@@ -36,6 +36,15 @@ defmodule Atlas.CreateUserTest do
       assert user.email == params.email
     end
 
+    test "generates a client key and client secret" do
+      params = params_for(:user)
+
+      {:ok, user} = CreateUser.call(params, Mock.root_user())
+
+      assert byte_size(user.client_key) == 30
+      assert byte_size(user.client_secret) == 100
+    end
+
     test "creates user with associations" do
       params = :user
         |> params_for

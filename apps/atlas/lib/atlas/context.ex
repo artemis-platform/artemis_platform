@@ -6,6 +6,7 @@ defmodule Atlas.Context do
   defmacro __using__(_opts) do
     quote do
       import Atlas.Context
+      import Atlas.Repo.Helpers
 
       alias Atlas.Event
     end

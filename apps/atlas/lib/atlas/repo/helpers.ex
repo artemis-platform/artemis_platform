@@ -1,4 +1,4 @@
-defmodule Atlas.Repo.Util do
+defmodule Atlas.Repo.Helpers do
   alias Atlas.Repo
 
   require Logger

@@ -3,21 +3,20 @@ defmodule AtlasWeb.UserImpersonationController do
 
   import AtlasWeb.Guardian.Plug
 
-  alias Atlas.CreateAuditLog
+  alias Atlas.Event
   alias Atlas.GetUser
   alias AtlasWeb.CreateSession
 
   def create(conn, %{"user_id" => id}) do
     authorize(conn, "user-impersonations:create", fn () ->
-      current_user = current_user(conn)
       user = GetUser.call!(id)
 
       with {:ok, _} <- CreateSession.call(user),
-           {:ok, _} <- CreateAuditLog.call(action: "User Impersonation Created", user: current_user) do
-          conn
-          |> sign_in(user)
-          |> put_flash(:info, "User impersonation created")
-          |> redirect(to: "/")
+           {:ok, _} <- Event.broadcast(user, "user-impersonation:created", current_user(conn)) do
+        conn
+        |> sign_in(user)
+        |> put_flash(:info, "User impersonation created")
+        |> redirect(to: "/")
       else
         {:error, _} ->
           conn

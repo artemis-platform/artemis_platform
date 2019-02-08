@@ -3,9 +3,12 @@ defmodule AtlasLog.Filter do
   Filter the fields for any struct that implements the filter behaviour. All
   other values pass-through and are logged without filtering.
   """
+
+  import Atlas.Helpers, only: [deep_take: 2]
+
   def call(%{__struct__: struct} = data) do
     case defined_log_fields?(struct) do
-      true -> Util.deep_take(data, struct.event_log_fields())
+      true -> deep_take(data, struct.event_log_fields())
       false -> data
     end
   end

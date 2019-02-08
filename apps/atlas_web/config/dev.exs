@@ -11,7 +11,7 @@ use Mix.Config
 config :logger, level: :info
 
 config :atlas_web, AtlasWeb.Endpoint,
-  http: [port: System.get_env("ATLAS_PORT")],
+  http: [port: System.get_env("ATLAS_WEB_PORT")],
   debug_errors: true,
   code_reloader: true,
   check_origin: false,

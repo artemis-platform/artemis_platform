@@ -2,7 +2,6 @@ defmodule AtlasWeb.UserControllerTest do
   use AtlasWeb.ConnCase
 
   import Atlas.Factories
-  import AtlasWeb.ConnHelpers
 
   @create_attrs %{email: "some@email", name: "some name"}
   @update_attrs %{email: "some_updated@email", name: "some updated name"}

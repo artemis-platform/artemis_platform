@@ -22,6 +22,10 @@ defmodule Atlas.GetRoleTest do
     test "finds role by id", %{role: role} do
       assert GetRole.call(role.id) == role
     end
+
+    test "finds user keyword list", %{role: role} do
+      assert GetRole.call(name: role.name, slug: role.slug) == role
+    end
   end
 
   describe "call - options" do
@@ -31,11 +35,16 @@ defmodule Atlas.GetRoleTest do
       assert !is_list(role.permissions)
       assert role.permissions.__struct__ == Ecto.Association.NotLoaded
 
+      values = [
+        name: role.name,
+        slug: role.slug
+      ]
+
       options = [
         preload: [:permissions]
       ]
 
-      role = GetRole.call(role.id, options)
+      role = GetRole.call(values, options)
 
       assert is_list(role.permissions)
     end

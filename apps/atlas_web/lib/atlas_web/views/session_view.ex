@@ -3,7 +3,8 @@ defmodule AtlasWeb.SessionView do
 
   def get_provider_color(%{title: title}) do
     case title do
-      "IBM W3ID" -> "blue"
+      "Facebook" -> "blue"
+      "Google" -> "teal"
       _ -> "gray"
     end
   end

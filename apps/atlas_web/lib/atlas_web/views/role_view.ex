@@ -1,6 +1,8 @@
 defmodule AtlasWeb.RoleView do
   use AtlasWeb, :view
 
+  import Atlas.Helpers, only: [keys_to_atoms: 2]
+
   alias Atlas.Permission
 
   @doc """
@@ -20,7 +22,7 @@ defmodule AtlasWeb.RoleView do
     existing_permissions = record.permissions
     submitted_permissions = case form.params["permissions"] do
       nil -> nil
-      values -> Enum.map(values, &struct(Permission, Util.keys_to_atoms(&1)))
+      values -> Enum.map(values, &struct(Permission, keys_to_atoms(&1, [])))
     end
 
     permissions = submitted_permissions || existing_permissions

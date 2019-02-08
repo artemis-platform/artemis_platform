@@ -79,6 +79,10 @@ defmodule Atlas.Repo.Seeds do
     Enum.map(users, fn (params) ->
       case Repo.get_by(User, email: params.email) do
         nil ->
+          params = params
+            |> Map.put(:client_key, Atlas.Helpers.random_string(30))
+            |> Map.put(:client_secret, Atlas.Helpers.random_string(100))
+
           %User{}
           |> User.changeset(params)
           |> Repo.insert!

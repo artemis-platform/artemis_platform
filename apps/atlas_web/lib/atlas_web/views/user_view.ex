@@ -1,6 +1,8 @@
 defmodule AtlasWeb.UserView do
   use AtlasWeb, :view
 
+  import Atlas.Helpers, only: [keys_to_atoms: 2]
+
   alias Atlas.UserRole
 
   @doc """
@@ -20,7 +22,7 @@ defmodule AtlasWeb.UserView do
     existing_user_roles = record.user_roles
     submitted_user_roles = case form.params["user_roles"] do
       nil -> nil
-      values -> Enum.map(values, &struct(UserRole, Util.keys_to_atoms(&1)))
+      values -> Enum.map(values, &struct(UserRole, keys_to_atoms(&1, [])))
     end
 
     user_roles = submitted_user_roles || existing_user_roles

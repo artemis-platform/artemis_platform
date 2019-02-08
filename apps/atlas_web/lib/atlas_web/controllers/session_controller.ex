@@ -5,9 +5,8 @@ defmodule AtlasWeb.SessionController do
 
   import AtlasWeb.Guardian.Plug
 
-  alias Atlas.CreateAuditLog
+  alias Atlas.Event
   alias AtlasWeb.CreateSession
-  alias AtlasWeb.DeleteSession
   alias AtlasWeb.GetUserByAuthProvider
   alias AtlasWeb.ListSessionAuthProviders
 
@@ -18,7 +17,7 @@ defmodule AtlasWeb.SessionController do
   def show(conn, params) do
     with {:ok, user} <- GetUserByAuthProvider.call(params),
          {:ok, session} <- CreateSession.call(user),
-         {:ok, _} <- CreateAuditLog.call(action: "User Logged In", user: user) do
+         {:ok, _} <- Event.broadcast(session, "session:created:web", user) do
       Logger.debug "Log In With Provider Session: " <> inspect(session)
 
       conn
@@ -33,8 +32,6 @@ defmodule AtlasWeb.SessionController do
   end
 
   def delete(conn, _params) do
-    {:ok, _} = DeleteSession.call()
-
     conn
     |> sign_out()
     |> put_flash(:info, "Successfully logged out")

@@ -2,7 +2,7 @@ defmodule Atlas.CreateUser do
   use Atlas.Context
   use Assoc.Updater, repo: Atlas.Repo
 
-  import Atlas.Repo.Util
+  import Atlas.Helpers, only: [keys_to_strings: 2, random_string: 1]
 
   alias Atlas.Repo
   alias Atlas.User
@@ -17,13 +17,18 @@ defmodule Atlas.CreateUser do
   def call(params, user) do
     with_transaction(fn () ->
       params
-      |> insert_record
+      |> insert_record()
       |> update_associations(params)
       |> Event.broadcast("user:created", user)
     end)
   end
 
   defp insert_record(params) do
+    params = params
+      |> Map.put("client_key", random_string(30))
+      |> Map.put("client_secret", random_string(100))
+      |> keys_to_strings([])
+
     %User{}
     |> User.changeset(params)
     |> Repo.insert

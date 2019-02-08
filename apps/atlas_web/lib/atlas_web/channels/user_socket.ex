@@ -15,8 +15,23 @@ defmodule AtlasWeb.UserSocket do
   #
   # See `Phoenix.Token` documentation for examples in
   # performing token verification on connect.
-  def connect(_params, socket, _connect_info) do
-    {:ok, socket}
+  def connect(params, socket, _connect_info) do
+    case get_user(params) do
+      {:ok, user} -> {:ok, assign(socket, :user, user)}
+      _ -> :error
+    end
+  end
+
+  defp get_user(%{"token" => token}) do
+    case decode_token(token) do
+      {:ok, claims} -> AtlasApi.Guardian.resource_from_claims(claims)
+      {:error, _} -> {:error, "Error decoding user token"}
+    end
+  end
+  defp get_user(_), do: :error
+
+  defp decode_token(token) do
+    Guardian.decode_and_verify(AtlasApi.Guardian, token, %{}, [])
   end
 
   # Socket id's are topics that allow you to identify all sockets for a given user:

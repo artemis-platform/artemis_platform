@@ -22,6 +22,10 @@ defmodule Atlas.GetUserTest do
     test "finds user by id", %{user: user} do
       assert GetUser.call(user.id) == user
     end
+
+    test "finds user keyword list", %{user: user} do
+      assert GetUser.call(email: user.email, name: user.name) == user
+    end
   end
 
   describe "call - options" do
@@ -31,11 +35,16 @@ defmodule Atlas.GetUserTest do
       assert !is_list(user.user_roles)
       assert user.user_roles.__struct__ == Ecto.Association.NotLoaded
 
+      values = [
+        email: user.email,
+        name: user.name
+      ]
+
       options = [
         preload: [:user_roles]
       ]
 
-      user = GetUser.call(user.id, options)
+      user = GetUser.call(values, options)
 
       assert is_list(user.user_roles)
     end

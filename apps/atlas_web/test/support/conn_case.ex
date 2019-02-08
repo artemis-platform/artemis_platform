@@ -17,11 +17,13 @@ defmodule AtlasWeb.ConnCase do
 
   using do
     quote do
-      # Import conveniences for testing with connections
       use Phoenix.ConnTest
+
+      import AtlasWeb.ConnHelpers
+
+      alias AtlasWeb.Mock
       alias AtlasWeb.Router.Helpers, as: Routes
 
-      # The default endpoint for testing
       @endpoint AtlasWeb.Endpoint
     end
   end

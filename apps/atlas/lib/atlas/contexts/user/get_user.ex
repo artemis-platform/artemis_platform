@@ -4,7 +4,6 @@ defmodule Atlas.GetUser do
   alias Atlas.Repo
   alias Atlas.User
 
-  @default_by :id
   @default_preload []
 
   def call!(value, options \\ []) do
@@ -15,11 +14,12 @@ defmodule Atlas.GetUser do
     get_record(value, options, &Repo.get_by/2)
   end
 
+  defp get_record(value, options, get_by) when not is_list(value) do
+    get_record([id: value], options, get_by)
+  end
   defp get_record(value, options, get_by) do
-    key = Keyword.get(options, :by, @default_by)
-
     User
     |> preload(^Keyword.get(options, :preload, @default_preload))
-    |> get_by.([{key, value}])
+    |> get_by.(value)
   end
 end

@@ -2,8 +2,6 @@ defmodule Atlas.UpdateRole do
   use Atlas.Context
   use Assoc.Updater, repo: Atlas.Repo
 
-  import Atlas.Repo.Util
-
   alias Atlas.Repo
   alias Atlas.Role
 
