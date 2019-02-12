@@ -21,7 +21,7 @@ defmodule AtlasWeb.GetUserByAuthProvider do
   defp create_or_update_user(email, data) do
     root_user = GetRootUser.call()
 
-    case GetUser.call(email, by: :email) do
+    case GetUser.call(email: email) do
       nil -> CreateUser.call(data, root_user)
       user -> UpdateUser.call(user.id, data, root_user)
     end

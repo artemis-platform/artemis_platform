@@ -17,6 +17,6 @@ defmodule Atlas.GetRootUser do
   defp get_record(options, get_by) do
     User
     |> preload(^Keyword.get(options, :preload, @default_preload))
-    |> get_by.(emai: Application.fetch_env!(:atlas, :root_user).email)
+    |> get_by.(email: Application.fetch_env!(:atlas, :root_user).email)
   end
 end

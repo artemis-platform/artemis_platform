@@ -1,0 +1,48 @@
+<div id="content-header">
+  <header>
+    <h1>Listing Features</h1>
+
+    <div class="actions">
+      <%= if has?(@conn, "features:create") do %>
+        <%= action "New", to: Routes.feature_path(@conn, :new), color: "blue" %>
+      <% end %>
+    </div>
+  </header>
+</div>
+
+<div id="content-navigation">
+  <%= render_breadcrumbs @conn %>
+</div>
+
+<div id="content">
+  <%= render_flash_notifications @conn %>
+
+  <table class="ui table selectable">
+    <thead>
+      <tr>
+        <th>Slug</th>
+        <th>Name</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= for feature <- @features do %>
+        <tr>
+          <td><%= feature.slug %></td>
+          <td><%= feature.name %></td>
+          <td>
+            <%= if has?(@conn, "features:show") do %>
+              <%= link "Show", to: Routes.feature_path(@conn, :show, feature) %>
+            <% end %>
+            <%= if has?(@conn, "features:update") do %>
+              <%= link "Edit", to: Routes.feature_path(@conn, :edit, feature) %>
+            <% end %>
+            <%= if has?(@conn, "features:delete") do %>
+              <%= link "Delete", to: Routes.feature_path(@conn, :delete, feature), method: :delete, data: [confirm: "Are you sure?"] %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

@@ -49,8 +49,8 @@ defmodule AtlasApi.Mixfile do
       {:timex, "~> 3.1"},
       {:cors_plug, "~> 1.4"},
       {:oauth2, "~> 0.9"},
-      {:atlas_pubsub, in_umbrella: true},
-      {:atlas, in_umbrella: true}
+      {:atlas, in_umbrella: true},
+      {:atlas_pubsub, in_umbrella: true}
     ]
   end
 

@@ -24,14 +24,14 @@ defmodule AtlasWeb.UserSocket do
 
   defp get_user(%{"token" => token}) do
     case decode_token(token) do
-      {:ok, claims} -> AtlasApi.Guardian.resource_from_claims(claims)
+      {:ok, claims} -> AtlasWeb.Guardian.resource_from_claims(claims)
       {:error, _} -> {:error, "Error decoding user token"}
     end
   end
   defp get_user(_), do: :error
 
   defp decode_token(token) do
-    Guardian.decode_and_verify(AtlasApi.Guardian, token, %{}, [])
+    Guardian.decode_and_verify(AtlasWeb.Guardian, token, %{}, [])
   end
 
   # Socket id's are topics that allow you to identify all sockets for a given user:

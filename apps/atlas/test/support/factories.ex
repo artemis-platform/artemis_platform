@@ -3,6 +3,14 @@ defmodule Atlas.Factories do
 
   # Factories
 
+  def feature_factory do
+    %Atlas.Feature{
+      active: false,
+      name: sequence(:name, &"#{Faker.Name.name()}-#{&1}"),
+      slug: sequence(:slug, &"#{Faker.Internet.slug()}-#{&1}")
+    }
+  end
+
   def permission_factory do
     %Atlas.Permission{
       name: sequence(:name, &"#{Faker.Name.name()}-#{&1}"),

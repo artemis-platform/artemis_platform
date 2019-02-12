@@ -1,10 +1,7 @@
 <% error_class = if Keyword.get_values(@form.errors, @field) != [], do: "error" %>
 
-<%# <%= IO.inspect(@form) %1> %>
-<%# <%= IO.inspect(Keyword.get_values(@form.errors, @field)) %1> %>
-
-<span class="label-with-errors <%= error_class %>">
+<label for="<%= "#{@form.id}_#{@field}" %>" class="label-with-errors <%= error_class %>">
   <i class="ui icon warning circle red"></i>
   <%= humanize(@field) %>
   <%= error_tag(@form, @field) %>
-</span>
+</label>

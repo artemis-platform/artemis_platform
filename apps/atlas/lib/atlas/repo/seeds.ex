@@ -29,6 +29,13 @@ defmodule Atlas.Repo.Seeds do
     # Permissions
 
     permissions = [
+      %{slug: "features:access:all", name: "Features - Access All"},
+      %{slug: "features:create", name: "Features - Create"},
+      %{slug: "features:delete", name: "Features - Delete"},
+      %{slug: "features:list", name: "Features - List"},
+      %{slug: "features:show", name: "Features - Show"},
+      %{slug: "features:update", name: "Features - Update"},
+
       %{slug: "roles:access:all", name: "Roles - Access All"},
       %{slug: "roles:create", name: "Roles - Create"},
       %{slug: "roles:delete", name: "Roles - Delete"},

@@ -1,0 +1,43 @@
+<div id="content-header">
+  <header>
+    <h1>
+      <%= @feature.name %>
+    </h1>
+
+    <div class="actions">
+      <%= if has?(@conn, "features:delete") do %>
+        <%= action "Delete", method: "delete", to: Routes.feature_path(@conn, :delete, @feature), data: [confirm: "Confirm Delete"] %>
+      <% end %>
+      <%= if has?(@conn, "features:update") do %>
+        <%= action "Edit", to: Routes.feature_path(@conn, :edit, @feature), color: "green" %>
+      <% end %>
+    </div>
+  </header>
+</div>
+
+<div id="content-navigation">
+  <%= render_breadcrumbs @conn %>
+</div>
+
+<div id="content">
+  <%= render_flash_notifications @conn %>
+
+  <ul>
+
+    <li>
+      <strong>Name:</strong>
+      <%= @feature.name %>
+    </li>
+
+    <li>
+      <strong>Slug:</strong>
+      <%= @feature.slug %>
+    </li>
+
+    <li>
+      <strong>Active:</strong>
+      <%= @feature.active %>
+    </li>
+
+  </ul>
+</div>

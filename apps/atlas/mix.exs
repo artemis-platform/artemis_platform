@@ -41,6 +41,7 @@ defmodule Atlas.MixProject do
       {:jason, "~> 1.0"},
       {:assoc, "~> 0.1"},
       {:atlas_pubsub, in_umbrella: true},
+      {:atlas_log, in_umbrella: true},
       {:ex_machina, "~> 2.2", only: :test},
       {:faker, "~> 0.11", only: :test}
     ]

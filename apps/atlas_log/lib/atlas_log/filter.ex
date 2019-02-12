@@ -4,7 +4,7 @@ defmodule AtlasLog.Filter do
   other values pass-through and are logged without filtering.
   """
 
-  import Atlas.Helpers, only: [deep_take: 2]
+  import AtlasLog.Helpers, only: [deep_take: 2]
 
   def call(%{__struct__: struct} = data) do
     case defined_log_fields?(struct) do

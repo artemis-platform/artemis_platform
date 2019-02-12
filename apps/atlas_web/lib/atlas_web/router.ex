@@ -35,6 +35,7 @@ defmodule AtlasWeb.Router do
     scope "/" do
       pipe_through :require_auth
 
+      resources "/features", FeatureController
       resources "/roles", RoleController
       resources "/users", UserController do
         resources "/impersonation", UserImpersonationController, as: "impersonation", only: [:create]

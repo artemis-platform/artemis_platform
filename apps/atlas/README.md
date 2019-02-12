@@ -1,3 +1,0 @@
-# Atlas
-
-**TODO: Add description**
