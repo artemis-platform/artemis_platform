@@ -3,7 +3,7 @@ defmodule Atlas.Event do
   
   """
 
-  @broadcast_topic "private:atlas"
+  @broadcast_topic "private:atlas:events"
 
   def get_broadcast_topic, do: @broadcast_topic
 

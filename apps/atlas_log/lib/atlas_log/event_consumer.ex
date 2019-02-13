@@ -1,11 +1,11 @@
-defmodule AtlasLog.Worker do
+defmodule AtlasLog.EventConsumer do
   use GenServer
 
   import AtlasPubSub
   
   alias AtlasLog.CreateEventLog
 
-  @topic "private:atlas"
+  @topic "private:atlas:events"
 
   def start_link() do
     initial_state = %{}
