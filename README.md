@@ -1,5 +1,7 @@
 # Atlas
 
+[![Build Status](https://travis-ci.com/chrislaskey/atlas.svg?branch=master)](https://travis-ci.com/chrislaskey/atlas)
+
 ## Developer Environment Setup
 
 #### Elixir
