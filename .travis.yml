@@ -1,0 +1,37 @@
+language: elixir
+
+elixir: 1.8
+otp_release: 21.0
+
+notifications:
+  email:
+    on_success: never
+    on_failure: never
+
+addons:
+  postgresql: "9.6"
+
+cache:
+  directories:
+    - _build
+    - deps
+
+env:
+  global:
+    - MIX_ENV=test
+
+# matrix:
+#   include:
+#     - elixir: 1.7
+#       otp_release: 20.0
+#   allow_failures:
+#     - elixir: 1.6
+#       otp_release: 20.0
+
+before_install:
+  - cp .env.travis .env
+  - source .env
+  - mix local.rebar --force
+
+before_script:
+  - mix do ecto.create, ecto.migrate
