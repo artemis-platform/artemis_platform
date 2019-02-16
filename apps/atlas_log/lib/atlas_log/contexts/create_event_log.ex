@@ -7,8 +7,8 @@ defmodule AtlasLog.CreateEventLog do
     params = %{
       action: event,
       meta: Filter.call(data),
-      user_id: user.id,
-      user_name: user.name
+      user_id: Map.get(user, :id),
+      user_name: Map.get(user, :name)
     }
 
     %EventLog{}

@@ -25,7 +25,7 @@
       </tr>
     </thead>
     <tbody>
-      <%= for role <- @roles do %>
+      <%= for role <- @roles.entries do %>
         <tr>
           <td><%= role.name %></td>
           <td>
@@ -43,4 +43,6 @@
       <% end %>
     </tbody>
   </table>
+
+  <%= pagination_links @roles %>
 </div>

@@ -14,6 +14,7 @@ defmodule Atlas.ListUsersTest do
   end
 
   describe "call" do
+
     test "returns empty list when no users exist" do
       assert ListUsers.call() == []
     end
@@ -21,22 +22,44 @@ defmodule Atlas.ListUsersTest do
     test "returns existing user" do
       user = insert(:user)
 
-      assert ListUsers.call() == [user]
+      assert ListUsers.call()  == [user]
     end
 
-    test "returns list of users" do
+    test "returns a list of users" do
       count = 3
       insert_list(count, :user)
 
-      assert length(ListUsers.call()) == count
+      users = ListUsers.call()
+
+      assert length(users) == count
     end
   end
 
-  describe "call - options" do
+  describe "call - params" do
     setup do
       user = insert(:user)
 
       {:ok, user: user}
+    end
+
+    test "paginate" do
+      params = %{
+        paginate: true
+      }
+
+      response_keys = ListUsers.call(params)
+        |> Map.from_struct()
+        |> Map.keys()
+
+      pagination_keys = [
+        :entries,
+        :page_number,
+        :page_size,
+        :total_entries,
+        :total_pages
+      ]
+
+      assert response_keys == pagination_keys
     end
 
     test "preload" do
@@ -46,11 +69,11 @@ defmodule Atlas.ListUsersTest do
       assert !is_list(user.user_roles)
       assert user.user_roles.__struct__ == Ecto.Association.NotLoaded
 
-      options = [
+      params = %{
         preload: [:user_roles]
-      ]
+      }
 
-      users = ListUsers.call(options)
+      users = ListUsers.call(params)
       user = hd(users)
 
       assert is_list(user.user_roles)

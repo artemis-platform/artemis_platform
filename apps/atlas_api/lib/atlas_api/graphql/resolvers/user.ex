@@ -9,9 +9,11 @@ defmodule AtlasApi.GraphQL.Resolver.User do
 
   # Queries
 
-  def list(_params, context) do
+  def list(params, context) do
     require_permission context, "users:list", fn () ->
-      {:ok, ListUsers.call()}
+      params = Map.put(params, :paginate, true)
+
+      {:ok, ListUsers.call(params)}
     end
   end
 

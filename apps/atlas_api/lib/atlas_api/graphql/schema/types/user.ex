@@ -13,8 +13,10 @@ defmodule AtlasApi.GraphQL.Schema.Types.User do
   end
 
   object :user_queries do
-    field :list_users, list_of(:user) do
+    field :list_users, :paginated_users do
       arg :filters, :user_filter_params
+      arg :page_number, :string
+      arg :page_size, :string
 
       resolve &Resolver.User.list/2
     end

@@ -14,6 +14,7 @@ defmodule Atlas.ListPermissionsTest do
   end
 
   describe "call" do
+
     test "returns empty list when no permissions exist" do
       assert ListPermissions.call() == []
     end
@@ -21,22 +22,44 @@ defmodule Atlas.ListPermissionsTest do
     test "returns existing permission" do
       permission = insert(:permission)
 
-      assert ListPermissions.call() == [permission]
+      assert ListPermissions.call()  == [permission]
     end
 
-    test "returns list of permissions" do
+    test "returns a list of permissions" do
       count = 3
       insert_list(count, :permission)
 
-      assert length(ListPermissions.call()) == count
+      permissions = ListPermissions.call()
+
+      assert length(permissions) == count
     end
   end
 
-  describe "call - options" do
+  describe "call - params" do
     setup do
       permission = insert(:permission)
 
       {:ok, permission: permission}
+    end
+
+    test "paginate" do
+      params = %{
+        paginate: true
+      }
+
+      response_keys = ListPermissions.call(params)
+        |> Map.from_struct()
+        |> Map.keys()
+
+      pagination_keys = [
+        :entries,
+        :page_number,
+        :page_size,
+        :total_entries,
+        :total_pages
+      ]
+
+      assert response_keys == pagination_keys
     end
 
     test "preload" do

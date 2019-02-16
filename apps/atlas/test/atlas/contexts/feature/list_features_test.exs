@@ -14,6 +14,7 @@ defmodule Atlas.ListFeaturesTest do
   end
 
   describe "call" do
+
     test "returns empty list when no features exist" do
       assert ListFeatures.call() == []
     end
@@ -21,14 +22,44 @@ defmodule Atlas.ListFeaturesTest do
     test "returns existing feature" do
       feature = insert(:feature)
 
-      assert ListFeatures.call() == [feature]
+      assert ListFeatures.call()  == [feature]
     end
 
-    test "returns list of features" do
+    test "returns a list of features" do
       count = 3
       insert_list(count, :feature)
 
-      assert length(ListFeatures.call()) == count
+      features = ListFeatures.call()
+
+      assert length(features) == count
+    end
+  end
+
+  describe "call - params" do
+    setup do
+      feature = insert(:feature)
+
+      {:ok, feature: feature}
+    end
+
+    test "paginate" do
+      params = %{
+        paginate: true
+      }
+
+      response_keys = ListFeatures.call(params)
+        |> Map.from_struct()
+        |> Map.keys()
+
+      pagination_keys = [
+        :entries,
+        :page_number,
+        :page_size,
+        :total_entries,
+        :total_pages
+      ]
+
+      assert response_keys == pagination_keys
     end
   end
 end

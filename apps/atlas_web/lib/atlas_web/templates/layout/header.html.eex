@@ -6,6 +6,11 @@
     <nav id="primary-navigation" role="navigation">
       <ul>
         <li>
+          <a href="<%= Routes.feature_path(@conn, :index) %>">
+            Features
+          </a>
+        </li>
+        <li>
           <a href="<%= Routes.user_path(@conn, :index) %>">
             Users
           </a>
@@ -17,17 +22,6 @@
         </li>
       </ul>
     </nav>
-
-    <div id="quick-search">
-      <%= if current_user?(@conn) do %>
-        <form>
-          <div class="ui icon input">
-            <i class="search link icon"></i>
-            <input type="text" placeholder="">
-          </div>
-        </form>
-      <% end %>
-    </div>
 
     <%= if current_user?(@conn) do %>
       <nav id="icon-navigation">
@@ -68,7 +62,4 @@
       </ul>
     </nav>
   </section>
-  <footer>
-
-  </footer>
 </header>

@@ -190,6 +190,7 @@ defmodule Atlas.Helpers do
     %{nested: %{example: "value"}}
   """
   def keys_to_atoms(map, options \\ [])
+  def keys_to_atoms(%_{} = struct, _options), do: struct
   def keys_to_atoms(map, options) when is_map(map) do
     for {key, value} <- map, into: %{} do
       key = case is_bitstring(key) do
@@ -221,6 +222,7 @@ defmodule Atlas.Helpers do
 
   """
   def keys_to_strings(map, options \\ [])
+  def keys_to_strings(%_{} = struct, _options), do: struct
   def keys_to_strings(map, options) when is_map(map) do
     for {key, value} <- map, into: %{} do
       key = case is_atom(key) do

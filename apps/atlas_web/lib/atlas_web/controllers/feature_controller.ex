@@ -10,9 +10,10 @@ defmodule AtlasWeb.FeatureController do
 
   @preload []
 
-  def index(conn, _params) do
+  def index(conn, params) do
     authorize(conn, "features:list", fn () ->
-      features = ListFeatures.call()
+      params = Map.put(params, :paginate, true)
+      features = ListFeatures.call(params)
 
       render(conn, "index.html", features: features)
     end)

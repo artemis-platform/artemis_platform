@@ -2,6 +2,7 @@ defmodule AtlasWeb.UserView do
   use AtlasWeb, :view
 
   import Atlas.Helpers, only: [keys_to_atoms: 2]
+  import Scrivener.HTML
 
   alias Atlas.UserRole
 

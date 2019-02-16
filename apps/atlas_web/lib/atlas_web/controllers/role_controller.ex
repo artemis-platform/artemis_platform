@@ -11,9 +11,10 @@ defmodule AtlasWeb.RoleController do
 
   @preload [:permissions]
 
-  def index(conn, _params) do
+  def index(conn, params) do
     authorize(conn, "roles:list", fn () ->
-      roles = ListRoles.call()
+      params = Map.put(params, :paginate, true)
+      roles = ListRoles.call(params)
 
       render(conn, "index.html", roles: roles)
     end)

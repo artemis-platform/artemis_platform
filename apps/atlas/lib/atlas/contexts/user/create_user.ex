@@ -2,8 +2,6 @@ defmodule Atlas.CreateUser do
   use Atlas.Context
   use Assoc.Updater, repo: Atlas.Repo
 
-  import Atlas.Helpers, only: [keys_to_strings: 2, random_string: 1]
-
   alias Atlas.Repo
   alias Atlas.User
 
@@ -15,6 +13,8 @@ defmodule Atlas.CreateUser do
   end
 
   def call(params, user) do
+    params = default_params(params)
+
     with_transaction(fn () ->
       params
       |> insert_record()
@@ -23,12 +23,14 @@ defmodule Atlas.CreateUser do
     end)
   end
 
-  defp insert_record(params) do
-    params = params
-      |> Map.put("client_key", random_string(30))
-      |> Map.put("client_secret", random_string(100))
-      |> keys_to_strings([])
+  defp default_params(params) do
+    params
+    |> Atlas.Helpers.keys_to_strings()
+    |> Map.put("client_key", Atlas.Helpers.random_string(30))
+    |> Map.put("client_secret", Atlas.Helpers.random_string(100))
+  end
 
+  defp insert_record(params) do
     %User{}
     |> User.changeset(params)
     |> Repo.insert

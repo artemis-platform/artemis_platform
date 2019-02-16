@@ -17,4 +17,8 @@ config :atlas_web, AtlasWeb.Guardian,
   verify_issuer: true,
   secret_key: System.get_env("ATLAS_GUARDIAN_KEY")
 
+config :scrivener_html,
+  routes_helper: AtlasWeb.Router.Helpers,
+  view_style: :bootstrap
+
 import_config "#{Mix.env()}.exs"

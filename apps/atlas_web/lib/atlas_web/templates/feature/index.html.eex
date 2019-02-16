@@ -26,7 +26,7 @@
       </tr>
     </thead>
     <tbody>
-      <%= for feature <- @features do %>
+      <%= for feature <- @features.entries do %>
         <tr>
           <td><%= feature.slug %></td>
           <td><%= feature.name %></td>
@@ -45,4 +45,6 @@
       <% end %>
     </tbody>
   </table>
+
+  <%= pagination_links @features %>
 </div>

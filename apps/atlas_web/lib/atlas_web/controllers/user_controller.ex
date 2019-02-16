@@ -11,9 +11,10 @@ defmodule AtlasWeb.UserController do
 
   @preload [:user_roles]
 
-  def index(conn, _params) do
+  def index(conn, params) do
     authorize(conn, "users:list", fn () ->
-      users = ListUsers.call()
+      params = Map.put(params, :paginate, true)
+      users = ListUsers.call(params)
 
       render(conn, "index.html", users: users)
     end)

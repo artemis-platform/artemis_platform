@@ -38,6 +38,7 @@ defmodule Atlas.MixProject do
     [
       {:ecto_sql, "~> 3.0"},
       {:postgrex, ">= 0.0.0"},
+      {:scrivener_ecto, "~> 2.0"},
       {:jason, "~> 1.0"},
       {:assoc, "~> 0.1"},
       {:atlas_pubsub, in_umbrella: true},

@@ -11,30 +11,6 @@
 </div>
 
 <div id="content-navigation">
-  <nav id="secondary-nav">
-    <ul>
-      <li>
-        <a class="active" href="#">
-          Details
-        </a>
-      </li>
-      <li>
-        <a href="#">
-          Services
-        </a>
-      </li>
-      <li>
-        <a href="#">
-          Support Tickets
-        </a>
-      </li>
-      <li>
-        <a href="#">
-          Comments
-        </a>
-      </li>
-    </ul>
-  </nav>
   <%= render_breadcrumbs @conn %>
 </div>
 
@@ -49,7 +25,7 @@
       </tr>
     </thead>
     <tbody>
-      <%= for user <- @users do %>
+      <%= for user <- @users.entries do %>
         <tr>
           <td><%= user.name %></td>
           <td>
@@ -67,4 +43,6 @@
       <% end %>
     </tbody>
   </table>
+
+  <%= pagination_links @users %>
 </div>

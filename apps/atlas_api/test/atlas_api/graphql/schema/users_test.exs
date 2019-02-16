@@ -28,7 +28,13 @@ defmodule AtlasApi.UsersTest do
       query = """
         query listUsers{
           listUsers{
-            id
+            entries {
+              id
+            }
+            page_number
+            page_size
+            total_entries
+            total_pages
           }
         }
       """
@@ -45,7 +51,8 @@ defmodule AtlasApi.UsersTest do
       assert conn.status == 200
     end
 
-    test "returns users", %{conn: conn, query: query} do
+    test "returns paginated data", %{conn: conn, query: query} do
+      user = Mock.root_user()
       conn = post(conn, "/data", %{query: query})
 
       payload = conn.resp_body
@@ -53,7 +60,15 @@ defmodule AtlasApi.UsersTest do
         |> Map.get("data")
         |> Map.get("listUsers")
 
-      assert length(payload) > 0
+      entry_ids = payload
+        |> Map.get("entries")
+        |> Enum.map(&Map.get(&1, "id"))
+
+      assert Enum.member?(entry_ids, "#{user.id}")
+      assert payload["page_number"] == 1
+      assert payload["page_size"] == 25
+      assert payload["total_entries"] > 0
+      assert payload["total_pages"] == 1
     end
   end
 

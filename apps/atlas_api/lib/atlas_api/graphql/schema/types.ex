@@ -2,6 +2,18 @@ defmodule AtlasApi.GraphQL.Schema.Types do
   use Absinthe.Schema.Notation
   use AtlasApi.GraphQL.Schema.Scalars
 
+  # Paginated Objects
+
+  object :paginated_users do
+    field :entries, list_of(:user)
+    field :page_number, :integer
+    field :page_size, :integer
+    field :total_entries, :integer
+    field :total_pages, :integer
+  end
+
+  # Schema Objects
+
   object :info do
     field :release_branch, :string
     field :release_hash, :string

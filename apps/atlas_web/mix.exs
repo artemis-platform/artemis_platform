@@ -48,6 +48,7 @@ defmodule AtlasWeb.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:guardian, "~> 1.2"},
       {:oauth2, "~> 0.9"},
+      {:scrivener_html, "~> 1.8"},
       {:atlas, in_umbrella: true},
       {:atlas_pubsub, in_umbrella: true}
     ]

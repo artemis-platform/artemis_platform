@@ -24,10 +24,4 @@ config :logger, :console,
   format: "$time $metadata[$level] $levelpad$message\n",
   metadata: [:request_id]
 
-config :oauth2,
-  warn_missing_serializer: false,
-  serializers: %{
-    "application/vnd.api+json" => Poison
-  }
-
 import_config "#{Mix.env}.exs"
