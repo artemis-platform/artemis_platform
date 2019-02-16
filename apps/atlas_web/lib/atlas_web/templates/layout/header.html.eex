@@ -1,8 +1,9 @@
 <header id="primary-header">
-  <section>
+  <div class="container">
     <a href="/" id="logo">
       Atlas
     </a>
+
     <nav id="primary-navigation" role="navigation">
       <ul>
         <li>
@@ -22,23 +23,6 @@
         </li>
       </ul>
     </nav>
-
-    <%= if current_user?(@conn) do %>
-      <nav id="icon-navigation">
-        <ul>
-          <li>
-            <a href="#">
-              <i class="wizard icon"></i>
-            </a>
-          </li>
-          <li>
-            <a href="#">
-              <i class="bell icon"></i>
-            </a>
-          </li>
-        </ul>
-      </nav>
-    <% end %>
 
     <nav id="user-navigation">
       <ul>
@@ -61,5 +45,5 @@
         </li>
       </ul>
     </nav>
-  </section>
+  </div>
 </header>
