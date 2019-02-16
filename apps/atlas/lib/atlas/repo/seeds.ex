@@ -29,6 +29,11 @@ defmodule Atlas.Repo.Seeds do
     # Permissions
 
     permissions = [
+      %{slug: "event-logs:access:all", name: "Event Logs - Access All"},
+      %{slug: "event-logs:access:self", name: "Event Logs - Access Self"},
+      %{slug: "event-logs:list", name: "Event Logs - List"},
+      %{slug: "event-logs:show", name: "Event Logs - Show"},
+
       %{slug: "features:access:all", name: "Features - Access All"},
       %{slug: "features:create", name: "Features - Create"},
       %{slug: "features:delete", name: "Features - Delete"},

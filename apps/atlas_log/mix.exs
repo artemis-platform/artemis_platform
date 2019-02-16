@@ -33,6 +33,7 @@ defmodule AtlasLog.MixProject do
       {:ecto_sql, "~> 3.0"},
       {:postgrex, ">= 0.0.0"},
       {:jason, "~> 1.0"},
+      {:scrivener_ecto, "~> 2.0"},
       {:atlas_pubsub, in_umbrella: true},
       {:ex_machina, "~> 2.2", only: :test},
       {:faker, "~> 0.11", only: :test}

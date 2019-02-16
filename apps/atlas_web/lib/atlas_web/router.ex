@@ -35,6 +35,7 @@ defmodule AtlasWeb.Router do
     scope "/" do
       pipe_through :require_auth
 
+      resources "/event-logs", EventLogController, only: [:index, :show]
       resources "/features", FeatureController
       resources "/roles", RoleController
       resources "/users", UserController do

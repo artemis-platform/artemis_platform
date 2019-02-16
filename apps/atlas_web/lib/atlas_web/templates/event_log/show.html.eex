@@ -1,0 +1,48 @@
+<div id="content-header">
+  <header>
+    <h1>
+      <%= @event_log.action %>
+    </h1>
+
+    <div class="actions">
+      <%= if has?(@conn, "event-logs:delete") do %>
+        <%= action "Delete", method: "delete", to: Routes.event_log_path(@conn, :delete, @event_log), data: [confirm: "Confirm Delete"] %>
+      <% end %>
+      <%= if has?(@conn, "event-logs:update") do %>
+        <%= action "Edit", to: Routes.event_log_path(@conn, :edit, @event_log), color: "green" %>
+      <% end %>
+    </div>
+  </header>
+</div>
+
+<div id="content-navigation">
+  <%= render_breadcrumbs @conn %>
+</div>
+
+<div id="content">
+  <%= render_flash_notifications @conn %>
+
+  <ul>
+
+    <li>
+      <strong>Action:</strong>
+      <%= @event_log.action %>
+    </li>
+
+    <li>
+      <strong>User ID:</strong>
+      <%= @event_log.user_id %>
+    </li>
+
+    <li>
+      <strong>User Name:</strong>
+      <%= @event_log.user_name %>
+    </li>
+
+    <li>
+      <strong>Timestamp</strong>
+      <%= @event_log.updated_at %>
+    </li>
+
+  </ul>
+</div>

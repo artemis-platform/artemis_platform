@@ -7,18 +7,23 @@
     <nav id="primary-navigation" role="navigation">
       <ul>
         <li>
+          <a href="<%= Routes.event_log_path(@conn, :index) %>">
+            Event Log
+          </a>
+        </li>
+        <li>
           <a href="<%= Routes.feature_path(@conn, :index) %>">
             Features
           </a>
         </li>
         <li>
-          <a href="<%= Routes.user_path(@conn, :index) %>">
-            Users
+          <a href="<%= Routes.role_path(@conn, :index) %>">
+            Roles
           </a>
         </li>
         <li>
-          <a href="<%= Routes.role_path(@conn, :index) %>">
-            Roles
+          <a href="<%= Routes.user_path(@conn, :index) %>">
+            Users
           </a>
         </li>
       </ul>

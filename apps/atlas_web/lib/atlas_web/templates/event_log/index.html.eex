@@ -1,0 +1,44 @@
+<div id="content-header">
+  <header>
+    <h1>Listing Event Logs</h1>
+
+    <div class="actions">
+      <%= if has?(@conn, "event-logs:create") do %>
+        <%= action "New", to: Routes.event_log_path(@conn, :new), color: "blue" %>
+      <% end %>
+    </div>
+  </header>
+</div>
+
+<div id="content-navigation">
+  <%= render_breadcrumbs @conn %>
+</div>
+
+<div id="content">
+  <%= render_flash_notifications @conn %>
+
+  <table class="ui table selectable">
+    <thead>
+      <tr>
+        <th>Action</th>
+        <th>User Name</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= for event_log <- @event_logs.entries do %>
+        <tr>
+          <td><%= event_log.action %></td>
+          <td><%= event_log.user_name %></td>
+          <td>
+            <%= if has?(@conn, "event-logs:show") do %>
+              <%= link "Show", to: Routes.event_log_path(@conn, :show, event_log) %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <%= pagination_links @event_logs %>
+</div>
