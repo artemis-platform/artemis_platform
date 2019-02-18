@@ -34,14 +34,12 @@ defmodule Atlas.Repo.Seeds do
       %{slug: "event-logs:list", name: "Event Logs - List"},
       %{slug: "event-logs:show", name: "Event Logs - Show"},
 
-      %{slug: "features:access:all", name: "Features - Access All"},
       %{slug: "features:create", name: "Features - Create"},
       %{slug: "features:delete", name: "Features - Delete"},
       %{slug: "features:list", name: "Features - List"},
       %{slug: "features:show", name: "Features - Show"},
       %{slug: "features:update", name: "Features - Update"},
 
-      %{slug: "roles:access:all", name: "Roles - Access All"},
       %{slug: "roles:create", name: "Roles - Create"},
       %{slug: "roles:delete", name: "Roles - Delete"},
       %{slug: "roles:list", name: "Roles - List"},
@@ -85,7 +83,8 @@ defmodule Atlas.Repo.Seeds do
     # Users
 
     users = [
-      Application.fetch_env!(:atlas, :root_user)
+      Application.fetch_env!(:atlas, :root_user),
+      Application.fetch_env!(:atlas, :system_user)
     ]
 
     Enum.map(users, fn (params) ->
@@ -109,6 +108,7 @@ defmodule Atlas.Repo.Seeds do
 
     user_emails = [
       Application.fetch_env!(:atlas, :root_user).email,
+      Application.fetch_env!(:atlas, :system_user).email
     ]
     users = Enum.map(user_emails, &Repo.get_by!(User, email: &1))
 

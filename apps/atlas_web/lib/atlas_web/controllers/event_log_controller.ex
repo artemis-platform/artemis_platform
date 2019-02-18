@@ -14,7 +14,7 @@ defmodule AtlasWeb.EventLogController do
 
   def show(conn, %{"id" => id}) do
     authorize(conn, "event-logs:show", fn () ->
-      event_log = GetEventLog.call!(id)
+      event_log = GetEventLog.call!(id, current_user(conn))
 
       render(conn, "show.html", event_log: event_log)
     end)

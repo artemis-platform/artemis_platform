@@ -11,14 +11,14 @@ defmodule Atlas.DeleteFeatureTest do
       invalid_id = 50000000
 
       assert_raise Atlas.Context.Error, fn () ->
-        DeleteFeature.call!(invalid_id, Mock.root_user())
+        DeleteFeature.call!(invalid_id, Mock.system_user())
       end
     end
 
     test "updates a record when passed valid params" do
       record = insert(:feature)
 
-      %Feature{} = DeleteFeature.call!(record, Mock.root_user())
+      %Feature{} = DeleteFeature.call!(record, Mock.system_user())
 
       assert Repo.get(Feature, record.id) == nil
     end
@@ -26,7 +26,7 @@ defmodule Atlas.DeleteFeatureTest do
     test "updates a record when passed an id and valid params" do
       record = insert(:feature)
 
-      %Feature{} = DeleteFeature.call!(record.id, Mock.root_user())
+      %Feature{} = DeleteFeature.call!(record.id, Mock.system_user())
 
       assert Repo.get(Feature, record.id) == nil
     end
@@ -36,13 +36,13 @@ defmodule Atlas.DeleteFeatureTest do
     test "returns an error when record not found" do
       invalid_id = 50000000
 
-      {:error, _} = DeleteFeature.call(invalid_id, Mock.root_user())
+      {:error, _} = DeleteFeature.call(invalid_id, Mock.system_user())
     end
 
     test "updates a record when passed valid params" do
       record = insert(:feature)
 
-      {:ok, _} = DeleteFeature.call(record, Mock.root_user())
+      {:ok, _} = DeleteFeature.call(record, Mock.system_user())
 
       assert Repo.get(Feature, record.id) == nil
     end
@@ -50,7 +50,7 @@ defmodule Atlas.DeleteFeatureTest do
     test "updates a record when passed an id and valid params" do
       record = insert(:feature)
 
-      {:ok, _} = DeleteFeature.call(record.id, Mock.root_user())
+      {:ok, _} = DeleteFeature.call(record.id, Mock.system_user())
 
       assert Repo.get(Feature, record.id) == nil
     end
@@ -60,7 +60,7 @@ defmodule Atlas.DeleteFeatureTest do
     test "publishes event and record" do
       AtlasPubSub.subscribe(Atlas.Event.get_broadcast_topic())
 
-      {:ok, feature} = DeleteFeature.call(insert(:feature), Mock.root_user())
+      {:ok, feature} = DeleteFeature.call(insert(:feature), Mock.system_user())
 
       assert_received %Phoenix.Socket.Broadcast{
         event: "feature:deleted",

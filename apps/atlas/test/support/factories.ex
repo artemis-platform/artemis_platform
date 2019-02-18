@@ -44,6 +44,13 @@ defmodule Atlas.Factories do
 
   # Traits
 
+  def with_permission(%Atlas.User{} = user, slug) do
+    permission = Atlas.Repo.get_by(Atlas.Permission, slug: slug) || insert(:permission, slug: slug)
+    role = insert(:role, permissions: [permission])
+    insert(:user_role, role: role, user: user)
+    user
+  end
+
   def with_permissions(%Atlas.Role{} = role, number \\ 3) do
     insert_list(number, :permission, roles: [role])
     role

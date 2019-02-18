@@ -1,6 +1,6 @@
 defmodule AtlasWeb.GetUserByAuthProvider do
   alias Atlas.CreateUser
-  alias Atlas.GetRootUser
+  alias Atlas.GetSystemUser
   alias Atlas.GetUser
   alias Atlas.UpdateUser
 
@@ -12,18 +12,18 @@ defmodule AtlasWeb.GetUserByAuthProvider do
   end
 
   defp get_from_config do
-    case Application.get_env(:atlas, :root_user) do
+    case Application.get_env(:atlas, :system_user) do
       nil -> {:error, "Error fetching data from provider"}
       user_data -> create_or_update_user(user_data.email, user_data)
     end
   end
 
   defp create_or_update_user(email, data) do
-    root_user = GetRootUser.call()
+    system_user = GetSystemUser.call()
 
-    case GetUser.call(email: email) do
-      nil -> CreateUser.call(data, root_user)
-      user -> UpdateUser.call(user.id, data, root_user)
+    case GetUser.call([email: email], system_user) do
+      nil -> CreateUser.call(data, system_user)
+      user -> UpdateUser.call(user.id, data, system_user)
     end
   end
 end

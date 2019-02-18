@@ -4,7 +4,7 @@ defmodule AtlasApi.Public.SessionsTest do
 
   describe "create_session" do
     setup do
-      user = Mock.root_user()
+      user = Mock.system_user()
       query = """
         mutation createSession{
           createSession(

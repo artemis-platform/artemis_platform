@@ -1,4 +1,6 @@
 defmodule AtlasLog.ListEventLogs do
+  use AtlasLog.Context
+
   alias AtlasLog.EventLog
   alias AtlasLog.Repo
 

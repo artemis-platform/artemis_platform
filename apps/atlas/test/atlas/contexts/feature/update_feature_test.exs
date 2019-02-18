@@ -11,7 +11,7 @@ defmodule Atlas.UpdateFeatureTest do
       params = params_for(:feature)
 
       assert_raise Atlas.Context.Error, fn () ->
-        UpdateFeature.call!(invalid_id, params, Mock.root_user())
+        UpdateFeature.call!(invalid_id, params, Mock.system_user())
       end
     end
 
@@ -19,7 +19,7 @@ defmodule Atlas.UpdateFeatureTest do
       feature = insert(:feature)
       params = %{}
 
-      updated = UpdateFeature.call!(feature, params, Mock.root_user())
+      updated = UpdateFeature.call!(feature, params, Mock.system_user())
 
       assert updated.name == feature.name
     end
@@ -28,7 +28,7 @@ defmodule Atlas.UpdateFeatureTest do
       feature = insert(:feature)
       params = params_for(:feature)
 
-      updated = UpdateFeature.call!(feature, params, Mock.root_user())
+      updated = UpdateFeature.call!(feature, params, Mock.system_user())
 
       assert updated.name == params.name
     end
@@ -37,7 +37,7 @@ defmodule Atlas.UpdateFeatureTest do
       feature = insert(:feature)
       params = params_for(:feature)
 
-      updated = UpdateFeature.call!(feature.id, params, Mock.root_user())
+      updated = UpdateFeature.call!(feature.id, params, Mock.system_user())
 
       assert updated.name == params.name
     end
@@ -48,14 +48,14 @@ defmodule Atlas.UpdateFeatureTest do
       invalid_id = 50000000
       params = params_for(:feature)
 
-      {:error, _} = UpdateFeature.call(invalid_id, params, Mock.root_user())
+      {:error, _} = UpdateFeature.call(invalid_id, params, Mock.system_user())
     end
 
     test "returns successfully when params are empty" do
       feature = insert(:feature)
       params = %{}
 
-      {:ok, updated} = UpdateFeature.call(feature, params, Mock.root_user())
+      {:ok, updated} = UpdateFeature.call(feature, params, Mock.system_user())
 
       assert updated.name == feature.name
     end
@@ -64,7 +64,7 @@ defmodule Atlas.UpdateFeatureTest do
       feature = insert(:feature)
       params = params_for(:feature)
 
-      {:ok, updated} = UpdateFeature.call(feature, params, Mock.root_user())
+      {:ok, updated} = UpdateFeature.call(feature, params, Mock.system_user())
 
       assert updated.name == params.name
     end
@@ -73,7 +73,7 @@ defmodule Atlas.UpdateFeatureTest do
       feature = insert(:feature)
       params = params_for(:feature)
 
-      {:ok, updated} = UpdateFeature.call(feature.id, params, Mock.root_user())
+      {:ok, updated} = UpdateFeature.call(feature.id, params, Mock.system_user())
 
       assert updated.name == params.name
     end
@@ -86,7 +86,7 @@ defmodule Atlas.UpdateFeatureTest do
       feature = insert(:feature)
       params = params_for(:feature)
 
-      {:ok, updated} = UpdateFeature.call(feature, params, Mock.root_user())
+      {:ok, updated} = UpdateFeature.call(feature, params, Mock.system_user())
 
       assert_received %Phoenix.Socket.Broadcast{
         event: "feature:updated",

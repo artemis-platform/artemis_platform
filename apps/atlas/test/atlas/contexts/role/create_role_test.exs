@@ -8,14 +8,14 @@ defmodule Atlas.CreateRoleTest do
   describe "call!" do
     test "returns error when params are empty" do
       assert_raise Atlas.Context.Error, fn () ->
-        CreateRole.call!(%{}, Mock.root_user())
+        CreateRole.call!(%{}, Mock.system_user())
       end
     end
 
     test "creates a role when passed valid params" do
       params = params_for(:role)
 
-      role = CreateRole.call!(params, Mock.root_user())
+      role = CreateRole.call!(params, Mock.system_user())
 
       assert role.name == params.name
     end
@@ -23,7 +23,7 @@ defmodule Atlas.CreateRoleTest do
 
   describe "call" do
     test "returns error when params are empty" do
-      {:error, changeset} = CreateRole.call(%{}, Mock.root_user())
+      {:error, changeset} = CreateRole.call(%{}, Mock.system_user())
 
       assert errors_on(changeset).name == ["can't be blank"]
     end
@@ -31,7 +31,7 @@ defmodule Atlas.CreateRoleTest do
     test "creates a role when passed valid params" do
       params = params_for(:role)
 
-      {:ok, role} = CreateRole.call(params, Mock.root_user())
+      {:ok, role} = CreateRole.call(params, Mock.system_user())
 
       assert role.name == params.name
     end
@@ -41,7 +41,7 @@ defmodule Atlas.CreateRoleTest do
         |> params_for
         |> Map.put(:permissions, [params_for(:permission), params_for(:permission)])
 
-      {:ok, role} = CreateRole.call(params, Mock.root_user())
+      {:ok, role} = CreateRole.call(params, Mock.system_user())
 
       assert role.name == params.name
       assert length(role.permissions) == 2
@@ -52,7 +52,7 @@ defmodule Atlas.CreateRoleTest do
     test "publishes event and record" do
       AtlasPubSub.subscribe(Atlas.Event.get_broadcast_topic())
 
-      {:ok, role} = CreateRole.call(params_for(:role), Mock.root_user())
+      {:ok, role} = CreateRole.call(params_for(:role), Mock.system_user())
 
       assert_received %Phoenix.Socket.Broadcast{
         event: "role:created",

@@ -13,8 +13,6 @@ defmodule Atlas.Schema do
       alias __MODULE__
       alias Atlas.Repo
       alias Atlas.Schema
-
-      @behaviour AtlasLog.Behaviour.Filtered
     end
   end
 end

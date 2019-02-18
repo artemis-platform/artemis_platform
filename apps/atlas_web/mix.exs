@@ -50,7 +50,8 @@ defmodule AtlasWeb.MixProject do
       {:oauth2, "~> 0.9"},
       {:scrivener_html, "~> 1.8"},
       {:atlas, in_umbrella: true},
-      {:atlas_pubsub, in_umbrella: true}
+      {:atlas_pubsub, in_umbrella: true},
+      {:atlas_log, in_umbrella: true, only: :test}
     ]
   end
 

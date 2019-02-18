@@ -9,7 +9,7 @@ defmodule AtlasWeb.UserImpersonationController do
 
   def create(conn, %{"user_id" => id}) do
     authorize(conn, "user-impersonations:create", fn () ->
-      user = GetUser.call!(id)
+      user = GetUser.call!(id, current_user(conn))
 
       with {:ok, _} <- CreateSession.call(user),
            {:ok, _} <- Event.broadcast(user, "user-impersonation:created", current_user(conn)) do

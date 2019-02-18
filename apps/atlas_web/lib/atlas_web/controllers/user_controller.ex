@@ -51,7 +51,7 @@ defmodule AtlasWeb.UserController do
 
   def show(conn, %{"id" => id}) do
     authorize(conn, "users:show", fn () ->
-      user = GetUser.call!(id)
+      user = GetUser.call!(id, current_user(conn))
 
       render(conn, "show.html", user: user)
     end)
@@ -59,7 +59,7 @@ defmodule AtlasWeb.UserController do
 
   def edit(conn, %{"id" => id}) do
     authorize(conn, "users:update", fn () ->
-      user = GetUser.call(id, preload: @preload)
+      user = GetUser.call(id, current_user(conn), preload: @preload)
       changeset = User.changeset(user)
       roles = ListRoles.call()
 
@@ -78,7 +78,7 @@ defmodule AtlasWeb.UserController do
           |> redirect(to: Routes.user_path(conn, :show, user))
 
         {:error, %Ecto.Changeset{} = changeset} ->
-          user = GetUser.call(id, preload: @preload)
+          user = GetUser.call(id, current_user(conn), preload: @preload)
           roles = ListRoles.call()
 
           render(conn, "edit.html", changeset: changeset, roles: roles, user: user)

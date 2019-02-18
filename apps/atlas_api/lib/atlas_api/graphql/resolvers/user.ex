@@ -19,7 +19,7 @@ defmodule AtlasApi.GraphQL.Resolver.User do
 
   def get(%{id: id}, context) do
     require_permission context, "users:show", fn () ->
-      {:ok, GetUser.call(id)}
+      {:ok, GetUser.call(id, get_user(context))}
     end
   end
 

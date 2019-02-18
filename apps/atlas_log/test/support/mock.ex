@@ -1,4 +1,4 @@
-defmodule AtlasApi.Mock do
+defmodule AtlasLog.Mock do
   alias Atlas.Repo
   alias Atlas.User
 

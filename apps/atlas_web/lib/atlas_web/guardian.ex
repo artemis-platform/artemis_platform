@@ -2,6 +2,7 @@ defmodule AtlasWeb.Guardian do
   use Guardian, otp_app: :atlas_web
 
   alias Atlas.GetUser
+  alias Atlas.GetSystemUser
 
   def subject_for_token(%{id: id}, _claims) do
     {:ok, to_string(id)}
@@ -11,7 +12,8 @@ defmodule AtlasWeb.Guardian do
   end
 
   def resource_from_claims(%{"sub" => id}) do
-    resource = GetUser.call(id, preload: [:permissions])
+    system_user = GetSystemUser.call!()
+    resource = GetUser.call(id, system_user, preload: [:permissions])
 
     {:ok,  resource}
   end

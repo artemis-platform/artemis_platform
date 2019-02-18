@@ -52,7 +52,7 @@ defmodule AtlasApi.UsersTest do
     end
 
     test "returns paginated data", %{conn: conn, query: query} do
-      user = Mock.root_user()
+      user = Mock.system_user()
       conn = post(conn, "/data", %{query: query})
 
       payload = conn.resp_body
@@ -74,7 +74,7 @@ defmodule AtlasApi.UsersTest do
 
   describe "show" do
     setup %{conn: conn} do
-      user = Mock.root_user()
+      user = Mock.system_user()
       query = """
         query getUser{
           getUser(
@@ -185,7 +185,7 @@ defmodule AtlasApi.UsersTest do
 
   describe "update" do
     setup %{conn: conn} do
-      user = Mock.root_user()
+      user = Mock.system_user()
       query = """
         mutation updateUser{
           updateUser(
@@ -232,7 +232,7 @@ defmodule AtlasApi.UsersTest do
 
   describe "delete" do
     setup %{conn: conn} do
-      user = Mock.root_user()
+      user = Mock.system_user()
       query = """
         mutation deleteUser{
           deleteUser(

@@ -21,14 +21,17 @@ defmodule AtlasLog.DataCase do
       import Ecto.Query
       import AtlasLog.DataCase
 
+      alias AtlasLog.Mock
       alias AtlasLog.Repo
     end
   end
 
   setup tags do
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Atlas.Repo)
     :ok = Ecto.Adapters.SQL.Sandbox.checkout(AtlasLog.Repo)
 
     unless tags[:async] do
+      Ecto.Adapters.SQL.Sandbox.mode(Atlas.Repo, {:shared, self()})
       Ecto.Adapters.SQL.Sandbox.mode(AtlasLog.Repo, {:shared, self()})
     end
 
