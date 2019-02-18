@@ -6,6 +6,7 @@ defmodule AtlasApi.Router do
   end
 
   scope "/" do
+    pipe_through AtlasApi.Plug.ClientCredentials
     pipe_through AtlasApi.Plug.GuardianAuth
     pipe_through AtlasApi.Plug.GraphQLContext
     forward "/data", AtlasApi.Plug.GraphQL

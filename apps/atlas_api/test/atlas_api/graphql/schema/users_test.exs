@@ -23,6 +23,44 @@ defmodule AtlasApi.UsersTest do
     end
   end
 
+  describe "authorization" do
+    test "supports two-step bearer token flows", %{conn: conn} do
+      query = """
+        query listUsers{
+          listUsers{
+            entries {
+              id
+            }
+          }
+        }
+      """
+
+      conn = sign_in(conn)
+      conn = post(conn, "/data", %{query: query})
+
+      assert conn.state == :sent
+      assert conn.status == 200
+    end
+
+    test "supports one-step client credentials flow", %{conn: conn} do
+      query = """
+        query listUsers{
+          listUsers{
+            entries {
+              id
+            }
+          }
+        }
+      """
+
+      conn = sign_in_with_client_credentials(conn)
+      conn = post(conn, "/data", %{query: query})
+
+      assert conn.state == :sent
+      assert conn.status == 200
+    end
+  end
+
   describe "index" do
     setup %{conn: conn} do
       query = """

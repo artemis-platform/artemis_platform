@@ -22,6 +22,7 @@ defmodule AtlasWeb.Router do
   end
 
   pipeline :require_auth do
+    plug AtlasApi.Plug.ClientCredentials
     plug Guardian.Plug.EnsureAuthenticated
   end
 
