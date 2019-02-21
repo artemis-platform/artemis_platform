@@ -2,5 +2,6 @@
 
 source .env && \
 rm -rf ./_build && \
+rm -rf ./deps && \
 mix deps.get && \
 mix deps.compile

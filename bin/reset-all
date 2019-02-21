@@ -1,11 +1,7 @@
 #!/usr/bin/env bash
 
 source .env && \
-rm -rf ./_build && \
-rm -rf ./deps && \
-mix deps.get && \
-mix deps.compile && \
+./bin/reset-build && \
 ./bin/reset-database && \
 ./bin/reset-tests && \
-cd apps/atlas_web/assets && \
-npm install
+./bin/reset-assets

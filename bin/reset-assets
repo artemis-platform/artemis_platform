@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+source .env && \
+cd ./apps/atlas_web/assets && \
+rm -rf ./node_modules && \
+npm install && \
+cd ../ && \
+mix phx.digest
