@@ -1,0 +1,19 @@
+#!/bin/bash
+
+source .env
+
+# -e Exit immediately if a command exits with a non-zero status.
+set -e
+
+# Connect and create db for app
+mix ecto.create --quiet
+
+# Run any migrations for app
+mix ecto.migrate
+
+# Get Phoenix assets ready for startup.
+mix do deps.get, deps.compile
+cd assets && npm install
+cd ..
+
+iex -S mix phx.server

@@ -1,0 +1,7 @@
+.git/
+.gitignore
+Dockerfile
+docker-compose.yml
+apps/atlas_api/priv/static/
+apps/atlas_web/priv/static/
+apps/atlas_web/assets/node_modules
