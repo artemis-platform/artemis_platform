@@ -53,7 +53,7 @@ before_script:
 env:
   matrix:
     - TEST="mix test"
-    - TEST="mix test --only browser"
+    - TEST="mix test --only browser --exclude uses_browser_alert_box"
 
 script:
   - "${TEST}"
