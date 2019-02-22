@@ -20,3 +20,7 @@ erl_crash.dump
 *.ez
 
 .env
+
+screenshot*
+
+.DS_Store

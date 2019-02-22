@@ -22,7 +22,7 @@ defmodule AtlasWeb.Router do
   end
 
   pipeline :require_auth do
-    plug AtlasApi.Plug.ClientCredentials
+    plug AtlasWeb.Plug.ClientCredentials
     plug Guardian.Plug.EnsureAuthenticated
   end
 
@@ -30,7 +30,7 @@ defmodule AtlasWeb.Router do
     pipe_through :browser
     pipe_through :read_auth
 
-    get "/", PageController, :index
+    get "/", HomeController, :index
     resources "/sessions", SessionController, only: [:new, :show, :delete]
 
     scope "/" do

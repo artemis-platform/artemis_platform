@@ -28,7 +28,13 @@
     <tbody>
       <%= for feature <- @features.entries do %>
         <tr>
-          <td><%= feature.slug %></td>
+          <td>
+            <%= if has?(@conn, "features:show") do %>
+              <%= link feature.slug, to: Routes.feature_path(@conn, :show, feature) %>
+            <% else %>
+              <%= feature.slug %>
+            <% end %>
+          </td>
           <td><%= feature.name %></td>
           <td>
             <%= if has?(@conn, "features:show") do %>

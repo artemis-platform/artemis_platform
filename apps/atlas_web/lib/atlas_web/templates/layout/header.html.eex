@@ -1,7 +1,7 @@
 <header id="primary-header">
   <div class="container">
     <a href="/" id="logo">
-      Atlas
+      Atlas Platform
     </a>
 
     <nav id="primary-navigation" role="navigation">
