@@ -51,8 +51,9 @@ before_script:
   - sleep 3 # give Web server some time to bind to sockets, etc
 
 env:
-  - TEST="test"
-  - TEST="test.browser --exclude uses_browser_alert_box"
+  matrix:
+    - TEST="test"
+    - TEST="test.browser --exclude uses_browser_alert_box"
 
 script:
   - "mix ${TEST}"
