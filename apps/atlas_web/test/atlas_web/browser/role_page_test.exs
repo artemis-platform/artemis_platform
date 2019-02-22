@@ -119,13 +119,13 @@ defmodule AtlasWeb.RolePageTest do
     end
 
     @tag :uses_browser_alert_box
-    test "deletes record and redirects to index", %{role: role} do
-      click_link(role.name)
-      click_button("Delete")
-      accept_dialog()
+    # test "deletes record and redirects to index", %{role: role} do
+    #   click_link(role.name)
+    #   click_button("Delete")
+    #   accept_dialog()
 
-      assert current_url() == @url
-      assert not visible?(role.name)
-    end
+    #   assert current_url() == @url
+    #   assert not visible?(role.name)
+    # end
   end
 end

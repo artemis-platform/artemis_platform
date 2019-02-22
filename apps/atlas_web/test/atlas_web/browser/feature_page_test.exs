@@ -119,13 +119,13 @@ defmodule AtlasWeb.FeaturePageTest do
     end
 
     @tag :uses_browser_alert_box
-    test "deletes record and redirects to index", %{feature: feature} do
-      click_link(feature.slug)
-      click_button("Delete")
-      accept_dialog()
+    # test "deletes record and redirects to index", %{feature: feature} do
+    #   click_link(feature.slug)
+    #   click_button("Delete")
+    #   accept_dialog()
 
-      assert current_url() == @url
-      assert not visible?(feature.slug)
-    end
+    #   assert current_url() == @url
+    #   assert not visible?(feature.slug)
+    # end
   end
 end

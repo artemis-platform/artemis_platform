@@ -119,13 +119,13 @@ defmodule AtlasWeb.UserPageTest do
     end
 
     @tag :uses_browser_alert_box
-    test "deletes record and redirects to index", %{user: user} do
-      click_link(user.name)
-      click_button("Delete")
-      accept_dialog()
+    # test "deletes record and redirects to index", %{user: user} do
+    #   click_link(user.name)
+    #   click_button("Delete")
+    #   accept_dialog()
 
-      assert current_url() == @url
-      assert not visible?(user.name)
-    end
+    #   assert current_url() == @url
+    #   assert not visible?(user.name)
+    # end
   end
 end
