@@ -52,3 +52,4 @@ before_script:
 
 script:
   - mix test --exclude uses_browser_alert_box
+  - cd apps/atlas_web/ && MIX_ENV=test mix test.browser --exclude uses_browser_alert_box

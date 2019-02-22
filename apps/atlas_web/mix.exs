@@ -61,6 +61,9 @@ defmodule AtlasWeb.MixProject do
   #
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
-    [test: ["ecto.create --quiet", "ecto.migrate", "test"]]
+    [
+      test: ["ecto.create --quiet", "ecto.migrate", "test --exclude browser_test"],
+      "test.browser": ["ecto.create --quiet", "ecto.migrate", "test --include browser_test"]
+    ]
   end
 end
