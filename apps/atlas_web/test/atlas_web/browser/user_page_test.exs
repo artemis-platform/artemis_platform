@@ -1,4 +1,4 @@
-defmodule AtlasWeb.FeaturePageTest do
+defmodule AtlasWeb.UserPageTest do
   use AtlasWeb.ConnCase
   use ExUnit.Case
   use Hound.Helpers
@@ -8,7 +8,7 @@ defmodule AtlasWeb.FeaturePageTest do
   import AtlasWeb.Router.Helpers
 
   @moduletag :browser
-  @url feature_url(AtlasWeb.Endpoint, :index)
+  @url user_url(AtlasWeb.Endpoint, :index)
 
   hound_session()
 
@@ -30,7 +30,7 @@ defmodule AtlasWeb.FeaturePageTest do
 
     test "list of records" do
       assert page_title() == "Atlas"
-      assert visible?("Listing Features")
+      assert visible?("Listing Users")
     end
   end
 
@@ -53,79 +53,79 @@ defmodule AtlasWeb.FeaturePageTest do
       click_link("New")
 
       fill_inputs(%{
-        feature_name: "Test Name",
-        feature_slug: "test-slug"
+        user_email: "email@test.com",
+        user_name: "Test Name"
       })
 
       submit_form()
 
       assert visible?("Test Name")
-      assert visible?("test-slug")
+      assert visible?("email@test.com")
     end
   end
 
   describe "show" do
     setup do
-      feature = insert(:feature)
+      user = insert(:user)
 
       browser_sign_in()
       navigate_to(@url)
 
-      {:ok, feature: feature}
+      {:ok, user: user}
     end
 
-    test "record details", %{feature: feature} do
-      click_link(feature.slug)
+    test "record details", %{user: user} do
+      click_link(user.name)
 
-      assert visible?(feature.name)
-      assert visible?(feature.slug)
+      assert visible?(user.name)
+      assert visible?(user.email)
     end
   end
 
   describe "edit / update" do
     setup do
-      feature = insert(:feature)
+      user = insert(:user)
 
       browser_sign_in()
       navigate_to(@url)
 
-      {:ok, feature: feature}
+      {:ok, user: user}
     end
 
-    test "successfully updates record", %{feature: feature} do
-      click_link(feature.slug)
+    test "successfully updates record", %{user: user} do
+      click_link(user.name)
       click_link("Edit")
 
       fill_inputs(%{
-        feature_name: "Updated Name",
-        feature_slug: "updated-slug"
+        user_email: "updated@test.com",
+        user_name: "Updated Name"
       })
 
       submit_form()
 
       assert visible?("Updated Name")
-      assert visible?("updated-slug")
+      assert visible?("updated@test.com")
     end
   end
 
   describe "delete" do
     setup do
-      feature = insert(:feature)
+      user = insert(:user)
 
       browser_sign_in()
       navigate_to(@url)
 
-      {:ok, feature: feature}
+      {:ok, user: user}
     end
 
     @tag :uses_browser_alert_box
-    test "deletes record and redirects to index", %{feature: feature} do
-      click_link(feature.slug)
+    test "deletes record and redirects to index", %{user: user} do
+      click_link(user.name)
       click_button("Delete")
       accept_dialog()
 
       assert current_url() == @url
-      assert not visible?(feature.slug)
+      assert not visible?(user.name)
     end
   end
 end

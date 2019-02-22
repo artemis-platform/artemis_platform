@@ -35,5 +35,6 @@ defmodule AtlasWeb.BrowserHelpers do
     |> Regex.compile!()
     |> visible_in_page?
   end
+  def visible?(value) when is_integer(value), do: visible?(Integer.to_string(value))
   def visible?(value), do: visible_in_page?(value)
 end

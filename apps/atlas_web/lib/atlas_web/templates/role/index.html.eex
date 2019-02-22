@@ -27,7 +27,13 @@
     <tbody>
       <%= for role <- @roles.entries do %>
         <tr>
-          <td><%= role.name %></td>
+          <td>
+            <%= if has?(@conn, "roles:show") do %>
+              <%= link role.name, to: Routes.role_path(@conn, :show, role) %>
+            <% else %>
+              <%= role.name %>
+            <% end %>
+          </td>
           <td>
             <%= if has?(@conn, "roles:show") do %>
               <%= link "Show", to: Routes.role_path(@conn, :show, role) %>

@@ -1,4 +1,4 @@
-defmodule AtlasWeb.FeaturePageTest do
+defmodule AtlasWeb.RolePageTest do
   use AtlasWeb.ConnCase
   use ExUnit.Case
   use Hound.Helpers
@@ -8,7 +8,7 @@ defmodule AtlasWeb.FeaturePageTest do
   import AtlasWeb.Router.Helpers
 
   @moduletag :browser
-  @url feature_url(AtlasWeb.Endpoint, :index)
+  @url role_url(AtlasWeb.Endpoint, :index)
 
   hound_session()
 
@@ -30,7 +30,7 @@ defmodule AtlasWeb.FeaturePageTest do
 
     test "list of records" do
       assert page_title() == "Atlas"
-      assert visible?("Listing Features")
+      assert visible?("Listing Roles")
     end
   end
 
@@ -53,8 +53,8 @@ defmodule AtlasWeb.FeaturePageTest do
       click_link("New")
 
       fill_inputs(%{
-        feature_name: "Test Name",
-        feature_slug: "test-slug"
+        role_name: "Test Name",
+        role_slug: "test-slug"
       })
 
       submit_form()
@@ -66,39 +66,39 @@ defmodule AtlasWeb.FeaturePageTest do
 
   describe "show" do
     setup do
-      feature = insert(:feature)
+      role = insert(:role)
 
       browser_sign_in()
       navigate_to(@url)
 
-      {:ok, feature: feature}
+      {:ok, role: role}
     end
 
-    test "record details", %{feature: feature} do
-      click_link(feature.slug)
+    test "record details", %{role: role} do
+      click_link(role.name)
 
-      assert visible?(feature.name)
-      assert visible?(feature.slug)
+      assert visible?(role.name)
+      assert visible?(role.slug)
     end
   end
 
   describe "edit / update" do
     setup do
-      feature = insert(:feature)
+      role = insert(:role)
 
       browser_sign_in()
       navigate_to(@url)
 
-      {:ok, feature: feature}
+      {:ok, role: role}
     end
 
-    test "successfully updates record", %{feature: feature} do
-      click_link(feature.slug)
+    test "successfully updates record", %{role: role} do
+      click_link(role.name)
       click_link("Edit")
 
       fill_inputs(%{
-        feature_name: "Updated Name",
-        feature_slug: "updated-slug"
+        role_name: "Updated Name",
+        role_slug: "updated-slug"
       })
 
       submit_form()
@@ -110,22 +110,22 @@ defmodule AtlasWeb.FeaturePageTest do
 
   describe "delete" do
     setup do
-      feature = insert(:feature)
+      role = insert(:role)
 
       browser_sign_in()
       navigate_to(@url)
 
-      {:ok, feature: feature}
+      {:ok, role: role}
     end
 
     @tag :uses_browser_alert_box
-    test "deletes record and redirects to index", %{feature: feature} do
-      click_link(feature.slug)
+    test "deletes record and redirects to index", %{role: role} do
+      click_link(role.name)
       click_button("Delete")
       accept_dialog()
 
       assert current_url() == @url
-      assert not visible?(feature.slug)
+      assert not visible?(role.name)
     end
   end
 end

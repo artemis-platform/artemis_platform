@@ -28,7 +28,13 @@
     <tbody>
       <%= for event_log <- @event_logs.entries do %>
         <tr>
-          <td><%= event_log.action %></td>
+          <td>
+            <%= if has?(@conn, "event-logs:show") do %>
+              <%= link event_log.action, to: Routes.event_log_path(@conn, :show, event_log) %>
+            <% else %>
+              <%= event_log.action %>
+            <% end %>
+          </td>
           <td><%= event_log.user_name %></td>
           <td>
             <%= if has?(@conn, "event-logs:show") do %>

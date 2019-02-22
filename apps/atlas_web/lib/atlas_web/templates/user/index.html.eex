@@ -27,7 +27,13 @@
     <tbody>
       <%= for user <- @users.entries do %>
         <tr>
-          <td><%= user.name %></td>
+          <td>
+            <%= if has?(@conn, "users:show") do %>
+              <%= link user.name, to: Routes.user_path(@conn, :show, user) %>
+            <% else %>
+              <%= user.name %>
+            <% end %>
+          </td>
           <td>
             <%= if has?(@conn, "users:show") do %>
               <%= link "Show", to: Routes.user_path(@conn, :show, user) %>
