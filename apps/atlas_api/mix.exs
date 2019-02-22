@@ -55,9 +55,12 @@ defmodule AtlasApi.Mixfile do
   end
 
   # Aliases are shortcuts or tasks specific to the current project.
+  # For example, we extend the test task to create and migrate the database.
   #
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
-    []
+    [
+      test: ["ecto.create --quiet", "ecto.migrate", "test"]
+    ]
   end
 end
