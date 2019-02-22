@@ -52,8 +52,8 @@ before_script:
 
 env:
   matrix:
-    - TEST="test"
-    - TEST="test.browser --exclude uses_browser_alert_box"
+    - TEST="mix test"
+    - TEST="cd apps/atlas_web && MIX_ENV=test mix test.browser.ci"
 
 script:
-  - "mix ${TEST}"
+  - "${TEST}"
