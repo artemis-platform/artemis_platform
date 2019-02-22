@@ -6,7 +6,7 @@ defmodule AtlasWeb.HomePageTest do
   import AtlasWeb.BrowserHelpers
   import AtlasWeb.Router.Helpers
 
-  @moduletag :browser_test
+  @moduletag :browser
   @url home_url(AtlasWeb.Endpoint, :index)
 
   hound_session()

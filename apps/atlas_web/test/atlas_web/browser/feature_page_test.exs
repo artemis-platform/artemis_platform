@@ -7,7 +7,7 @@ defmodule AtlasWeb.FeaturePageTest do
   import AtlasWeb.BrowserHelpers
   import AtlasWeb.Router.Helpers
 
-  @moduletag :browser_test
+  @moduletag :browser
   @url feature_url(AtlasWeb.Endpoint, :index)
 
   hound_session()

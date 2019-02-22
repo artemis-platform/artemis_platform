@@ -53,7 +53,7 @@ before_script:
 env:
   matrix:
     - TEST="mix test"
-    - TEST="cd apps/atlas_web && MIX_ENV=test mix test.browser.ci"
+    - TEST="mix test --only browser"
 
 script:
   - "${TEST}"

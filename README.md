@@ -30,11 +30,11 @@ Atlas requires headless chrome for browser-based testing.
 
 It can be installed locally on the command-line using `brew cask install chromedriver`. Before running tests, start the headless chrome server with `chromedriver --headless`.
 
-By default, browser tests are **only** run in the CI environment. To run them locally:
+By default, browser tests are **only** run in the CI environment. To run them use:
 
 ```
-cd apps/atlas_web/
-MIX_ENV=test mix test.browser
+mix test --include browser # runs all tests
+mix test --only browser # runs only browser tests
 ```
 
 #### Code Repository
