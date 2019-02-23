@@ -40,7 +40,6 @@ before_install:
   - mix local.rebar --force
   - cp .env.travis .env
   - source .env
-  - bin/reset-tests
 
 before_script:
   - mix do ecto.create, ecto.migrate
@@ -50,6 +49,7 @@ before_script:
   - sleep 3 # give Web server some time to bind to sockets, etc
   - nohup chromedriver &
   - sleep 3 # give Web server some time to bind to sockets, etc
+  - bin/reset-tests
 
 env:
   matrix:
