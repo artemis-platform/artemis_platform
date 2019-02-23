@@ -1,4 +1,4 @@
-defmodule AtlasWeb.PageController do
+defmodule AtlasWeb.HomeController do
   use AtlasWeb, :controller
 
   def index(conn, _params) do

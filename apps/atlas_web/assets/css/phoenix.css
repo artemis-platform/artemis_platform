@@ -132,3 +132,9 @@ header nav a {
     margin: 2rem 1rem;
   }
 }
+
+.button, button, input[type='button'], input[type='reset'], input[type='submit'] {
+  font-size: 1.25rem;
+  font-weight: 300;
+  text-transform: none;
+}

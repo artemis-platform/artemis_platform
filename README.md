@@ -24,6 +24,19 @@ For an example of running it through a Docker image see the [Bluebox Box](https:
 
 Alternatively, it can be installed locally on the command-line using `brew install postgresql` or with a standalone application like [Postico](https://eggerapps.at/postico/).
 
+#### Browser Tests
+
+Atlas requires headless chrome for browser-based testing.
+
+It can be installed locally on the command-line using `brew cask install chromedriver`. Before running tests, start the headless chrome server with `chromedriver --headless`.
+
+By default, browser tests are **only** run in the CI environment. To run them use:
+
+```
+mix test --include browser # runs all tests
+mix test --only browser # runs only browser tests
+```
+
 #### Code Repository
 
 Fork the [code repository](https://github.ibm.com/bluebox/atlas) and pull down the latest with `git clone PATH_TO_FORKED_REPOSITORY`.

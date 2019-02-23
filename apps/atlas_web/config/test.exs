@@ -12,4 +12,8 @@ config :logger, level: :info
 
 config :atlas_web, AtlasWeb.Endpoint,
   http: [port: 4002],
-  server: false
+  server: true # Enable for use in browser testing with hound
+
+config :hound,
+  browser: "chrome_headless",
+  driver: "chrome_driver"
