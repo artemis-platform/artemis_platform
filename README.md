@@ -1,6 +1,6 @@
 # Atlas
 
-[![Build Status](https://travis-ci.com/chrislaskey/atlas.svg?branch=master)](https://travis-ci.com/chrislaskey/atlas)
+[![Build Status](https://travis-ci.com/chrislaskey/atlas_platform.svg?branch=master)](https://travis-ci.com/chrislaskey/atlas_platform)
 
 ## Developer Environment Setup
 
