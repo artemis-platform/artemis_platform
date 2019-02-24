@@ -24,12 +24,11 @@ services:
       MIX_ENV: dev
     env_file:
       - .env
-    links:
-      - db
     networks:
       - atlas_network
     ports:
-      - "4000:4000"
+      - 4077:4077
+      - 4078:4078
     volumes:
       - type: bind
         source: .

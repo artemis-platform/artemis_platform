@@ -6,4 +6,5 @@ rm -rf ./deps && \
 mix local.hex --force && \
 mix deps.get && \
 mix deps.compile && \
+mix compile && \
 mix phx.digest
