@@ -3,5 +3,8 @@
 source .env && \
 rm -rf ./_build && \
 rm -rf ./deps && \
+mix local.hex --force && \
 mix deps.get && \
-mix deps.compile
+mix deps.compile && \
+mix compile && \
+mix phx.digest
