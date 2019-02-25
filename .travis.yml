@@ -49,7 +49,7 @@ before_script:
   - sleep 3 # give Web server some time to bind to sockets, etc
   - nohup chromedriver &
   - sleep 3 # give Web server some time to bind to sockets, etc
-  - bin/reset-tests
+  - bin/local/reset-tests
 
 env:
   matrix:

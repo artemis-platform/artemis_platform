@@ -17,7 +17,7 @@ services:
 
   server:
     build: .
-    command: bin/docker-run
+    command: bin/docker/entrypoint
     depends_on:
       - db
     environment:
