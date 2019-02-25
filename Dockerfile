@@ -18,5 +18,5 @@ RUN mix local.hex --force && \
     mix local.rebar --force && \
     mix archive.install --force hex phx_new 1.4.1
 
-RUN MIX_ENV=${MIX_ENV} bin/reset-build && \
-    MIX_ENV=${MIX_ENV} bin/reset-assets
+RUN MIX_ENV=${MIX_ENV} bin/local/reset-build && \
+    MIX_ENV=${MIX_ENV} bin/local/reset-assets

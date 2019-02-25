@@ -1,7 +1,0 @@
-#!/usr/bin/env bash
-
-source .env && \
-./bin/reset-build && \
-./bin/reset-database && \
-./bin/reset-tests && \
-./bin/reset-assets
