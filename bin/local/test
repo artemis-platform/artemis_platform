@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+source .env
+
+MIX_ENV=test mix do ecto.create --quiet, ecto.migrate, test $@

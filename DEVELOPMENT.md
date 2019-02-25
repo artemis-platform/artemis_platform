@@ -80,15 +80,31 @@ Before running the application the first time, execute `bin/reset-all`.
 
 ## Testing
 
-### Unit Tests
+### Docker
+
+If not running already, start an instance of the development environment:
+
+```bash
+bin/docker/up
+```
+
+Then execute the tests using:
+
+```bash
+bin/docker/test
+```
+
+### Local Development
+
+#### Unit Tests
 
 Comprehensive unit tests are included in Atlas. To run them use:
 
 ```bash
-mix test
+bin/local/test
 ```
 
-### Browser Tests
+#### Browser Tests
 
 Before running browser tests, start the headless chrome server with `chromedriver --headless`.
 
