@@ -1,0 +1,51 @@
+<div id="content-header">
+  <header>
+    <h1>Search</h1>
+  </header>
+</div>
+
+<div id="content-navigation">
+  <%= render_breadcrumbs @conn %>
+</div>
+
+<div id="content">
+  <%= render_flash_notifications @conn %>
+
+  <form class="search" action="<%= Routes.search_path(@conn, :index) %>" method="get">
+    <input name="query" type="text" value="<%= Map.get(@conn.query_params, "query") %>" />
+    <button type="submit">Search</button>
+  </form>
+
+  <%= if Map.get(@conn.params, "query") do %>
+
+    <h2>Search Results</h2>
+
+    <table class="ui table selectable">
+      <thead>
+        <tr>
+          <th>Resource</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <%= for entry <- search_entries(@results) do %>
+          <tr>
+            <td>
+              <%= if has?(@conn, entry.permission) do %>
+                <%= link entry.title, to: entry.link.(@conn) %>
+              <% else %>
+                <%= entry.title %>
+              <% end %>
+            </td>
+            <td>
+              <%= if has?(@conn, entry.permission) do %>
+                <%= link "View", to: entry.link.(@conn) %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+  <% end %>
+</div>

@@ -40,6 +40,13 @@ defmodule AtlasWeb.LayoutHelpers do
   end
 
   @doc """
+  Generates search form
+  """
+  def render_search(conn) do
+    Phoenix.View.render(AtlasWeb.LayoutView, "search.html", conn: conn)
+  end
+
+  @doc """
   Generates breadcrumbs from current URL
   """
   def render_breadcrumbs(conn) do

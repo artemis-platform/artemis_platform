@@ -14,7 +14,6 @@ defmodule Atlas.ListUsersTest do
   end
 
   describe "call" do
-
     test "returns empty list when no users exist" do
       assert ListUsers.call() == []
     end
@@ -77,6 +76,46 @@ defmodule Atlas.ListUsersTest do
       user = hd(users)
 
       assert is_list(user.user_roles)
+    end
+
+    test "query - search" do
+      insert(:user, name: "John Smith", email: "john@smith.com")
+      insert(:user, name: "Jill Smith", email: "jill@smith.com")
+      insert(:user, name: "John Doe", email: "john@doe.com")
+
+      users = ListUsers.call()
+
+      assert length(users) == 4
+
+      # Succeeds when given a word part of a larger phrase
+
+      params = %{
+        query: "smit"
+      }
+
+      users = ListUsers.call(params)
+
+      assert length(users) == 2
+
+      # Succeeds with partial value when it is start of a word
+
+      params = %{
+        query: "john@"
+      }
+
+      users = ListUsers.call(params)
+
+      assert length(users) == 2
+
+      # Fails with partial value when it is not the start of a word
+
+      params = %{
+        query: "mith.com"
+      }
+
+      users = ListUsers.call(params)
+
+      assert length(users) == 0
     end
   end
 end

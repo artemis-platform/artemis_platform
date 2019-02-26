@@ -29,6 +29,11 @@
       </ul>
     </nav>
 
+    <form class="search" action="<%= Routes.search_path(@conn, :index) %>" method="get">
+      <input name="query" type="text" value="<%= Map.get(@conn.query_params, "query") %>" />
+      <button type="submit">Search</button>
+    </form>
+
     <nav id="user-navigation">
       <ul>
         <li>
