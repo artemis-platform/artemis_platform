@@ -22,15 +22,27 @@ defmodule AtlasWeb.PermissionPageTest do
 
   describe "index" do
     setup do
+      permission = insert(:permission)
+
       browser_sign_in()
       navigate_to(@url)
 
-      {:ok, []}
+      {:ok, permission: permission}
     end
 
     test "list of records" do
       assert page_title() == "Atlas"
       assert visible?("Listing Permissions")
+    end
+
+    test "search", %{permission: permission} do
+      fill_inputs(".search-resource", %{
+        query: permission.name
+      })
+
+      submit_form(".search-resource")
+
+      assert visible?(permission.name)
     end
   end
 
@@ -52,9 +64,9 @@ defmodule AtlasWeb.PermissionPageTest do
     test "successfully creates a new record" do
       click_link("New")
 
-      fill_inputs(%{
-        permission_name: "Test Name",
-        permission_slug: "test-slug"
+      fill_inputs("#permission-form", %{
+        "permission[name]": "Test Name",
+        "permission[slug]": "test-slug"
       })
 
       submit_form("#permission-form")
@@ -96,9 +108,9 @@ defmodule AtlasWeb.PermissionPageTest do
       click_link(permission.slug)
       click_link("Edit")
 
-      fill_inputs(%{
-        permission_name: "Updated Name",
-        permission_slug: "updated-slug"
+      fill_inputs("#permission-form", %{
+        "permission[name]": "Updated Name",
+        "permission[slug]": "updated-slug"
       })
 
       submit_form("#permission-form")

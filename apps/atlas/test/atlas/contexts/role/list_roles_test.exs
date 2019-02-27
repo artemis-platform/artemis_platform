@@ -78,5 +78,45 @@ defmodule Atlas.ListRolesTest do
 
       assert is_list(role.user_roles)
     end
+
+    test "query - search" do
+      insert(:role, name: "John Smith", slug: "john-smith")
+      insert(:role, name: "Jill Smith", slug: "jill-smith")
+      insert(:role, name: "John Doe", slug: "john-doe")
+
+      roles = ListRoles.call()
+
+      assert length(roles) == 4
+
+      # Succeeds when given a word part of a larger phrase
+
+      params = %{
+        query: "smit"
+      }
+
+      roles = ListRoles.call(params)
+
+      assert length(roles) == 2
+
+      # Succeeds with partial value when it is start of a word
+
+      params = %{
+        query: "john-"
+      }
+
+      roles = ListRoles.call(params)
+
+      assert length(roles) == 2
+
+      # Fails with partial value when it is not the start of a word
+
+      params = %{
+        query: "mith"
+      }
+
+      roles = ListRoles.call(params)
+
+      assert length(roles) == 0
+    end
   end
 end

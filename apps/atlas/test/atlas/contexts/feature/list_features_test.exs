@@ -61,5 +61,45 @@ defmodule Atlas.ListFeaturesTest do
 
       assert response_keys == pagination_keys
     end
+
+    test "query - search" do
+      insert(:feature, name: "John Smith", slug: "john-smith")
+      insert(:feature, name: "Jill Smith", slug: "jill-smith")
+      insert(:feature, name: "John Doe", slug: "john-doe")
+
+      features = ListFeatures.call()
+
+      assert length(features) == 4
+
+      # Succeeds when given a word part of a larger phrase
+
+      params = %{
+        query: "smit"
+      }
+
+      features = ListFeatures.call(params)
+
+      assert length(features) == 2
+
+      # Succeeds with partial value when it is start of a word
+
+      params = %{
+        query: "john-"
+      }
+
+      features = ListFeatures.call(params)
+
+      assert length(features) == 2
+
+      # Fails with partial value when it is not the start of a word
+
+      params = %{
+        query: "mith"
+      }
+
+      features = ListFeatures.call(params)
+
+      assert length(features) == 0
+    end
   end
 end

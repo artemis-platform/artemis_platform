@@ -22,15 +22,27 @@ defmodule AtlasWeb.EventLogPageTest do
 
   describe "index" do
     setup do
+      event_log = insert(:event_log)
+
       browser_sign_in()
       navigate_to(@url)
 
-      {:ok, []}
+      {:ok, event_log: event_log}
     end
 
     test "list of records" do
       assert page_title() == "Atlas"
       assert visible?("Listing Event Logs")
+    end
+
+    test "search", %{event_log: event_log} do
+      fill_inputs(".search-resource", %{
+        query: event_log.action
+      })
+
+      submit_form(".search-resource")
+
+      assert visible?(event_log.action)
     end
   end
 

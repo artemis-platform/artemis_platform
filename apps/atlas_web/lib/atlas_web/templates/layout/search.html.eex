@@ -1,4 +1,4 @@
-<form class="search" action="<%= @conn.request_path %>" method="get">
-  <input name="query" type="text" value="<%= Map.get(@conn.query_params, "query") %>" />
+<form class="search search-resource" action="<%= @conn.request_path %>" method="get">
+  <input name="query" id="query" type="text" value="<%= Map.get(@conn.query_params, "query") %>" />
   <button type="submit">Search</button>
 </form>

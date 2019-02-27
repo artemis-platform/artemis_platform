@@ -14,13 +14,17 @@ defmodule AtlasWeb.BrowserHelpers do
 
   def click_link(text), do: click({:link_text, text})
 
-  def fill_inputs(params) do
-    Enum.each(params, fn ({key, value}) ->
-      fill_input(key, value)
+  def fill_inputs(identifier, params) do
+    form = find_element(:css, identifier)
+
+    Enum.each(params, fn ({name, value}) ->
+      form
+      |> find_within_element(:name, name)
+      |> fill_input(value)
     end)
   end
 
-  def fill_input(key, value), do: fill_field({:id, key}, value)
+  def fill_input(element, value), do: fill_field(element, value)
 
   def submit_form(identifier), do: click({:css, "#{identifier} button[type='submit']"})
 
