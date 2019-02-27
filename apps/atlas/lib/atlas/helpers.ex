@@ -74,6 +74,19 @@ defmodule Atlas.Helpers do
   end
 
   @doc """
+  Returns a titlecased string. Example:
+
+      Input: hello world
+      Ouput: Hello World
+  """
+  def titlecase(value) do
+    value
+    |> String.split(" ")
+    |> Enum.map(&String.capitalize(&1))
+    |> Enum.join(" ")
+  end
+
+  @doc """
   Returns a simplified module name. Example:
 
       Input: Elixir.MyApp.MyModule

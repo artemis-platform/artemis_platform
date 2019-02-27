@@ -1,4 +1,4 @@
-defmodule AtlasWeb.RolePageTest do
+defmodule AtlasWeb.PermissionPageTest do
   use AtlasWeb.ConnCase
   use ExUnit.Case
   use Hound.Helpers
@@ -8,7 +8,7 @@ defmodule AtlasWeb.RolePageTest do
   import AtlasWeb.Router.Helpers
 
   @moduletag :browser
-  @url role_url(AtlasWeb.Endpoint, :index)
+  @url permission_url(AtlasWeb.Endpoint, :index)
 
   hound_session()
 
@@ -30,7 +30,7 @@ defmodule AtlasWeb.RolePageTest do
 
     test "list of records" do
       assert page_title() == "Atlas"
-      assert visible?("Listing Roles")
+      assert visible?("Listing Permissions")
     end
   end
 
@@ -44,7 +44,7 @@ defmodule AtlasWeb.RolePageTest do
 
     test "submitting an empty form shows an error" do
       click_link("New")
-      submit_form("#role-form")
+      submit_form("#permission-form")
 
       assert visible?("can't be blank")
     end
@@ -53,11 +53,11 @@ defmodule AtlasWeb.RolePageTest do
       click_link("New")
 
       fill_inputs(%{
-        role_name: "Test Name",
-        role_slug: "test-slug"
+        permission_name: "Test Name",
+        permission_slug: "test-slug"
       })
 
-      submit_form("#role-form")
+      submit_form("#permission-form")
 
       assert visible?("Test Name")
       assert visible?("test-slug")
@@ -66,42 +66,42 @@ defmodule AtlasWeb.RolePageTest do
 
   describe "show" do
     setup do
-      role = insert(:role)
+      permission = insert(:permission)
 
       browser_sign_in()
-      navigate_to(@url)
+      navigate_to(@url <> "?page_size=10000")
 
-      {:ok, role: role}
+      {:ok, permission: permission}
     end
 
-    test "record details", %{role: role} do
-      click_link(role.name)
+    test "record details", %{permission: permission} do
+      click_link(permission.slug)
 
-      assert visible?(role.name)
-      assert visible?(role.slug)
+      assert visible?(permission.name)
+      assert visible?(permission.slug)
     end
   end
 
   describe "edit / update" do
     setup do
-      role = insert(:role)
+      permission = insert(:permission)
 
       browser_sign_in()
-      navigate_to(@url)
+      navigate_to(@url <> "?page_size=10000")
 
-      {:ok, role: role}
+      {:ok, permission: permission}
     end
 
-    test "successfully updates record", %{role: role} do
-      click_link(role.name)
+    test "successfully updates record", %{permission: permission} do
+      click_link(permission.slug)
       click_link("Edit")
 
       fill_inputs(%{
-        role_name: "Updated Name",
-        role_slug: "updated-slug"
+        permission_name: "Updated Name",
+        permission_slug: "updated-slug"
       })
 
-      submit_form("#role-form")
+      submit_form("#permission-form")
 
       assert visible?("Updated Name")
       assert visible?("updated-slug")
@@ -110,22 +110,22 @@ defmodule AtlasWeb.RolePageTest do
 
   describe "delete" do
     setup do
-      role = insert(:role)
+      permission = insert(:permission)
 
       browser_sign_in()
       navigate_to(@url)
 
-      {:ok, role: role}
+      {:ok, permission: permission}
     end
 
     @tag :uses_browser_alert_box
-    # test "deletes record and redirects to index", %{role: role} do
-    #   click_link(role.name)
+    # test "deletes record and redirects to index", %{permission: permission} do
+    #   click_link(permission.slug)
     #   click_button("Delete")
     #   accept_dialog()
 
     #   assert current_url() == @url
-    #   assert not visible?(role.name)
+    #   assert not visible?(permission.slug)
     # end
   end
 end

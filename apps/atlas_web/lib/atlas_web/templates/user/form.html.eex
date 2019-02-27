@@ -1,4 +1,4 @@
-<%= form_for @changeset, @action, [class: "ui form"], fn f -> %>
+<%= form_for @changeset, @action, [class: "ui form", id: "user-form"], fn f -> %>
   <div class="field">
     <%= label_with_errors f, :name %>
     <%= text_input f, :name, placeholder: "Name" %>

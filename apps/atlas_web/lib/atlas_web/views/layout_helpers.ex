@@ -6,6 +6,13 @@ defmodule AtlasWeb.LayoutHelpers do
   use Phoenix.HTML
 
   @doc """
+  Returns existing query params as a Keyword list
+  """
+  def current_query_params(conn) do
+    Enum.into(conn.query_params, [])
+  end
+
+  @doc """
   Generates an action tag.
 
   Type of tag is determined by the `method`:

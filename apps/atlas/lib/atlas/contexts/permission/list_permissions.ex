@@ -1,6 +1,7 @@
 defmodule Atlas.ListPermissions do
   use Atlas.Context
 
+  import Atlas.Helpers.Search
   import Ecto.Query
 
   alias Atlas.Permission
@@ -14,6 +15,7 @@ defmodule Atlas.ListPermissions do
 
     Permission
     |> preload(^Map.get(params, "preload"))
+    |> search_filter(params)
     |> get_records(params)
   end
 

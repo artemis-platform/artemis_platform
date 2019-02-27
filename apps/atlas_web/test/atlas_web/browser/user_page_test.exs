@@ -44,7 +44,9 @@ defmodule AtlasWeb.UserPageTest do
 
     test "submitting an empty form shows an error" do
       click_link("New")
-      submit_form()
+      submit_form("#user-form")
+
+      take_screenshot()
 
       assert visible?("can't be blank")
     end
@@ -57,7 +59,7 @@ defmodule AtlasWeb.UserPageTest do
         user_name: "Test Name"
       })
 
-      submit_form()
+      submit_form("#user-form")
 
       assert visible?("Test Name")
       assert visible?("email@test.com")
@@ -101,7 +103,7 @@ defmodule AtlasWeb.UserPageTest do
         user_name: "Updated Name"
       })
 
-      submit_form()
+      submit_form("#user-form")
 
       assert visible?("Updated Name")
       assert visible?("updated@test.com")

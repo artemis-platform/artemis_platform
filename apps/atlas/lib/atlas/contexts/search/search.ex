@@ -3,8 +3,11 @@ defmodule Atlas.Search do
 
   import Atlas.UserAccess
 
-  @default_page_size 10
+  @default_page_size 5
   @searchable_resources %{
+    "features" => [function: &Atlas.ListFeatures.call/1, permissions: "features:list"],
+    "permissions" => [function: &Atlas.ListPermissions.call/1, permissions: "permissions:list"],
+    "roles" => [function: &Atlas.ListRoles.call/1, permissions: "roles:list"],
     "users" => [function: &Atlas.ListUsers.call/1, permissions: "users:list"]
   }
 
@@ -15,8 +18,8 @@ defmodule Atlas.Search do
       |> Map.put_new("page_size", @default_page_size)
 
     case Map.get(params, "query") do
-      nil -> {:error, "Error query param is empty"}
-      "" -> {:error, "Error query param is empty"}
+      nil -> %{}
+      "" -> %{}
       _ -> search(params, user)
     end
   end

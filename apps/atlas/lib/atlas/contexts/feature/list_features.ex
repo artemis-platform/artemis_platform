@@ -1,6 +1,7 @@
 defmodule Atlas.ListFeatures do
   use Atlas.Context
 
+  import Atlas.Helpers.Search
   import Ecto.Query
 
   alias Atlas.Feature
@@ -14,6 +15,7 @@ defmodule Atlas.ListFeatures do
 
     Feature
     |> preload(^Map.get(params, "preload"))
+    |> search_filter(params)
     |> get_records(params)
   end
 

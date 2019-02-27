@@ -44,7 +44,7 @@ defmodule AtlasWeb.FeaturePageTest do
 
     test "submitting an empty form shows an error" do
       click_link("New")
-      submit_form()
+      submit_form("#feature-form")
 
       assert visible?("can't be blank")
     end
@@ -57,7 +57,7 @@ defmodule AtlasWeb.FeaturePageTest do
         feature_slug: "test-slug"
       })
 
-      submit_form()
+      submit_form("#feature-form")
 
       assert visible?("Test Name")
       assert visible?("test-slug")
@@ -101,7 +101,7 @@ defmodule AtlasWeb.FeaturePageTest do
         feature_slug: "updated-slug"
       })
 
-      submit_form()
+      submit_form("#feature-form")
 
       assert visible?("Updated Name")
       assert visible?("updated-slug")

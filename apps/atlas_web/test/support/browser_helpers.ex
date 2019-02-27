@@ -22,7 +22,7 @@ defmodule AtlasWeb.BrowserHelpers do
 
   def fill_input(key, value), do: fill_field({:id, key}, value)
 
-  def submit_form(), do: click({:css, "button[type='submit']"})
+  def submit_form(identifier), do: click({:css, "#{identifier} button[type='submit']"})
 
   # Assertions
 

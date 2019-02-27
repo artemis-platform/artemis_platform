@@ -61,22 +61,5 @@ defmodule Atlas.ListPermissionsTest do
 
       assert response_keys == pagination_keys
     end
-
-    test "preload" do
-      permissions = ListPermissions.call()
-      permission = hd(permissions)
-
-      assert !is_list(permission.permission_roles)
-      assert permission.permission_roles.__struct__ == Ecto.Association.NotLoaded
-
-      options = [
-        preload: [:permission_roles]
-      ]
-
-      permissions = ListPermissions.call(options)
-      permission = hd(permissions)
-
-      assert is_list(permission.permission_roles)
-    end
   end
 end

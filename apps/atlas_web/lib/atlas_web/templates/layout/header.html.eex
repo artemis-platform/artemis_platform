@@ -17,6 +17,11 @@
           </a>
         </li>
         <li>
+          <a href="<%= Routes.permission_path(@conn, :index) %>">
+            Permissions
+          </a>
+        </li>
+        <li>
           <a href="<%= Routes.role_path(@conn, :index) %>">
             Roles
           </a>

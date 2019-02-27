@@ -41,8 +41,8 @@ defmodule Atlas.SearchTest do
   end
 
   describe "call" do
-    test "returns an error when no query param is sent" do
-      {:error, _} = Search.call(%{}, Mock.system_user())
+    test "returns an empty map when no query param is sent" do
+      %{} = Search.call(%{}, Mock.system_user())
     end
 
     test "returns empty pagination results when query param does not match" do

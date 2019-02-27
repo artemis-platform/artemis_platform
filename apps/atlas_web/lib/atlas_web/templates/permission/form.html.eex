@@ -1,4 +1,4 @@
-<%= form_for @changeset, @action, [class: "ui form", id: "feature-form"], fn f -> %>
+<%= form_for @changeset, @action, [class: "ui form", id: "permission-form"], fn f -> %>
   <div class="field">
     <%= label_with_errors f, :name %>
     <%= text_input f, :name, placeholder: "Name" %>
@@ -10,8 +10,8 @@
   </div>
 
   <div class="field">
-    <%= label f, :active %>
-    <%= checkbox f, :active %>
+    <%= label_with_errors f, :description %>
+    <%= textarea f, :description %>
   </div>
 
   <div>
