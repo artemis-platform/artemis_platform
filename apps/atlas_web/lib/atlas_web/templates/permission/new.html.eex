@@ -1,0 +1,14 @@
+<div id="content-header">
+  <header>
+    <h1>New Permission</h1>
+  </header>
+</div>
+
+<div id="content-navigation">
+  <%= render_breadcrumbs @conn %>
+</div>
+
+<div id="content">
+  <%= render_flash_notifications @conn %>
+  <%= render "form.html", Map.put(assigns, :action, Routes.permission_path(@conn, :create)) %>
+</div>

@@ -32,6 +32,18 @@ defmodule AtlasWeb.UserPageTest do
       assert page_title() == "Atlas"
       assert visible?("Listing Users")
     end
+
+    test "search" do
+      user = Mock.system_user()
+
+      fill_inputs(".search-resource", %{
+        query: user.email
+      })
+
+      submit_form(".search-resource")
+
+      assert visible?(user.name)
+    end
   end
 
   describe "new / create" do
@@ -44,7 +56,9 @@ defmodule AtlasWeb.UserPageTest do
 
     test "submitting an empty form shows an error" do
       click_link("New")
-      submit_form()
+      submit_form("#user-form")
+
+      take_screenshot()
 
       assert visible?("can't be blank")
     end
@@ -52,12 +66,12 @@ defmodule AtlasWeb.UserPageTest do
     test "successfully creates a new record" do
       click_link("New")
 
-      fill_inputs(%{
-        user_email: "email@test.com",
-        user_name: "Test Name"
+      fill_inputs("#user-form", %{
+        "user[email]": "email@test.com",
+        "user[name]": "Test Name"
       })
 
-      submit_form()
+      submit_form("#user-form")
 
       assert visible?("Test Name")
       assert visible?("email@test.com")
@@ -96,12 +110,12 @@ defmodule AtlasWeb.UserPageTest do
       click_link(user.name)
       click_link("Edit")
 
-      fill_inputs(%{
-        user_email: "updated@test.com",
-        user_name: "Updated Name"
+      fill_inputs("#user-form", %{
+        "user[email]": "updated@test.com",
+        "user[name]": "Updated Name"
       })
 
-      submit_form()
+      submit_form("#user-form")
 
       assert visible?("Updated Name")
       assert visible?("updated@test.com")

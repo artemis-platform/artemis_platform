@@ -1,0 +1,43 @@
+<div id="content-header">
+  <header>
+    <h1>
+      <%= @permission.name %>
+    </h1>
+
+    <div class="actions">
+      <%= if has?(@conn, "permissions:delete") do %>
+        <%= action "Delete", method: "delete", to: Routes.permission_path(@conn, :delete, @permission), data: [confirm: "Confirm Delete"] %>
+      <% end %>
+      <%= if has?(@conn, "permissions:update") do %>
+        <%= action "Edit", to: Routes.permission_path(@conn, :edit, @permission), color: "green" %>
+      <% end %>
+    </div>
+  </header>
+</div>
+
+<div id="content-navigation">
+  <%= render_breadcrumbs @conn %>
+</div>
+
+<div id="content">
+  <%= render_flash_notifications @conn %>
+
+  <ul>
+
+    <li>
+      <strong>Name:</strong>
+      <%= @permission.name %>
+    </li>
+
+    <li>
+      <strong>Slug:</strong>
+      <%= @permission.slug %>
+    </li>
+
+    <li>
+      <strong>Description:</strong>
+      <%= @permission.description %>
+    </li>
+
+  </ul>
+</div>

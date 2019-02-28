@@ -1,0 +1,24 @@
+<%= form_for @changeset, @action, [class: "ui form", id: "permission-form"], fn f -> %>
+  <div class="field">
+    <%= label_with_errors f, :name %>
+    <%= text_input f, :name, placeholder: "Name" %>
+  </div>
+
+  <div class="field">
+    <%= label_with_errors f, :slug %>
+    <%= text_input f, :slug, placeholder: "Slug" %>
+  </div>
+
+  <div class="field">
+    <%= label_with_errors f, :description %>
+    <%= textarea f, :description %>
+  </div>
+
+  <div>
+    <%= if @changeset.action do %>
+      <%= render_notification :error, body: "Error Submitting Form" %>
+    <% end %>
+
+    <%= submit "Save", class: "ui button primary" %>
+  </div>
+<% end %>

@@ -38,7 +38,9 @@ defmodule AtlasWeb.Router do
 
       resources "/event-logs", EventLogController, only: [:index, :show]
       resources "/features", FeatureController
+      resources "/permissions", PermissionController
       resources "/roles", RoleController
+      resources "/search", SearchController, only: [:index]
       resources "/users", UserController do
         resources "/impersonation", UserImpersonationController, as: "impersonation", only: [:create]
       end

@@ -1,0 +1,90 @@
+<div id="content-header">
+  <header>
+    <h1>Search</h1>
+  </header>
+</div>
+
+<div id="content-navigation">
+  <%= render_breadcrumbs @conn %>
+</div>
+
+<div id="content">
+  <%= render_flash_notifications @conn %>
+
+  <form class="search" action="<%= Routes.search_path(@conn, :index) %>" method="get">
+    <input name="query" type="text" value="<%= Map.get(@conn.query_params, "query") %>" />
+    <button type="submit">Search</button>
+  </form>
+
+  <%= if Map.get(@conn.params, "query") do %>
+
+    <%= if search_results?(@results) do %>
+
+      <h2>Search Summary</h2>
+
+      <ul class="search-summary">
+        <%= for {key, data} <- @results do %>
+          <%= if search_results?(data) do %>
+            <li>
+              <a href="#<%= search_anchor(key) %>">
+                <span class="title"><%= search_title(key) %></span>
+                -
+                <span class="total"><%= search_matches_text(data) %></span>
+              </a>
+            </li>
+          <% end %>
+        <% end %>
+      </ul>
+
+      <h2>Search Results</h2>
+
+      <%= for {key, data} <- @results do %>
+        <%= if search_results?(data) do %>
+
+          <h3 id="<%= search_anchor(key) %>">
+            <%= search_title(key) %> - <%= search_matches_text(data) %>
+          </h3>
+
+          <table class="ui table selectable">
+            <thead>
+              <tr>
+                <th>Resource</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <%= for entry <- search_entries(data) do %>
+                <tr>
+                  <td>
+                    <%= if has?(@conn, entry.permission) do %>
+                      <%= link entry.title, to: entry.link.(@conn) %>
+                    <% else %>
+                      <%= entry.title %>
+                    <% end %>
+                  </td>
+                  <td>
+                    <%= if has?(@conn, entry.permission) do %>
+                      <%= link "View", to: entry.link.(@conn) %>
+                    <% end %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+
+          <p>
+            <%= search_link(@conn, key, data) %>
+            Previewing <%= search_entries_total(data) %> of <%= search_total(data) %>
+          </p>
+
+        <% end %>
+      <% end %>
+
+    <% else %>
+
+      <p>No matching results found</p>
+
+    <% end %>
+
+  <% end %>
+</div>

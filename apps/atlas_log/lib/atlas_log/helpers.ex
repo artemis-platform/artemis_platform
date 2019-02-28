@@ -1,5 +1,13 @@
 defmodule AtlasLog.Helpers do
   @doc """
+  Detect if value is truthy
+  """
+  def present?(nil), do: false
+  def present?(""), do: false
+  def present?(0), do: false
+  def present?(_value), do: true
+
+  @doc """
   Recursively converts the keys of a map into a string.
 
   Example:

@@ -34,5 +34,10 @@
       <%= @role.slug %>
     </li>
 
+    <li>
+      <strong>Description:</strong>
+      <%= @role.description %>
+    </li>
+
   </ul>
 </div>

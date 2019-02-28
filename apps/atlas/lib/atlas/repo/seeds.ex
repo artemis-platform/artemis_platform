@@ -40,6 +40,12 @@ defmodule Atlas.Repo.Seeds do
       %{slug: "features:show", name: "Features - Show"},
       %{slug: "features:update", name: "Features - Update"},
 
+      %{slug: "permissions:create", name: "Permissions - Create"},
+      %{slug: "permissions:delete", name: "Permissions - Delete"},
+      %{slug: "permissions:list", name: "Permissions - List"},
+      %{slug: "permissions:show", name: "Permissions - Show"},
+      %{slug: "permissions:update", name: "Permissions - Update"},
+
       %{slug: "roles:create", name: "Roles - Create"},
       %{slug: "roles:delete", name: "Roles - Delete"},
       %{slug: "roles:list", name: "Roles - List"},

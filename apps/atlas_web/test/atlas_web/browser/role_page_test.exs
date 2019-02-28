@@ -22,15 +22,27 @@ defmodule AtlasWeb.RolePageTest do
 
   describe "index" do
     setup do
+      role = insert(:role)
+
       browser_sign_in()
       navigate_to(@url)
 
-      {:ok, []}
+      {:ok, role: role}
     end
 
     test "list of records" do
       assert page_title() == "Atlas"
       assert visible?("Listing Roles")
+    end
+
+    test "search", %{role: role} do
+      fill_inputs(".search-resource", %{
+        query: role.name
+      })
+
+      submit_form(".search-resource")
+
+      assert visible?(role.name)
     end
   end
 
@@ -44,7 +56,7 @@ defmodule AtlasWeb.RolePageTest do
 
     test "submitting an empty form shows an error" do
       click_link("New")
-      submit_form()
+      submit_form("#role-form")
 
       assert visible?("can't be blank")
     end
@@ -52,12 +64,12 @@ defmodule AtlasWeb.RolePageTest do
     test "successfully creates a new record" do
       click_link("New")
 
-      fill_inputs(%{
-        role_name: "Test Name",
-        role_slug: "test-slug"
+      fill_inputs("#role-form", %{
+        "role[name]": "Test Name",
+        "role[slug]": "test-slug"
       })
 
-      submit_form()
+      submit_form("#role-form")
 
       assert visible?("Test Name")
       assert visible?("test-slug")
@@ -96,12 +108,12 @@ defmodule AtlasWeb.RolePageTest do
       click_link(role.name)
       click_link("Edit")
 
-      fill_inputs(%{
-        role_name: "Updated Name",
-        role_slug: "updated-slug"
+      fill_inputs("#role-form", %{
+        "role[name]": "Updated Name",
+        "role[slug]": "updated-slug"
       })
 
-      submit_form()
+      submit_form("#role-form")
 
       assert visible?("Updated Name")
       assert visible?("updated-slug")

@@ -22,15 +22,27 @@ defmodule AtlasWeb.FeaturePageTest do
 
   describe "index" do
     setup do
+      feature = insert(:feature)
+
       browser_sign_in()
       navigate_to(@url)
 
-      {:ok, []}
+      {:ok, feature: feature}
     end
 
     test "list of records" do
       assert page_title() == "Atlas"
       assert visible?("Listing Features")
+    end
+
+    test "search", %{feature: feature} do
+      fill_inputs(".search-resource", %{
+        query: feature.slug
+      })
+
+      submit_form(".search-resource")
+
+      assert visible?(feature.slug)
     end
   end
 
@@ -44,7 +56,7 @@ defmodule AtlasWeb.FeaturePageTest do
 
     test "submitting an empty form shows an error" do
       click_link("New")
-      submit_form()
+      submit_form("#feature-form")
 
       assert visible?("can't be blank")
     end
@@ -52,12 +64,12 @@ defmodule AtlasWeb.FeaturePageTest do
     test "successfully creates a new record" do
       click_link("New")
 
-      fill_inputs(%{
-        feature_name: "Test Name",
-        feature_slug: "test-slug"
+      fill_inputs("#feature-form", %{
+        "feature[name]": "Test Name",
+        "feature[slug]": "test-slug"
       })
 
-      submit_form()
+      submit_form("#feature-form")
 
       assert visible?("Test Name")
       assert visible?("test-slug")
@@ -96,12 +108,12 @@ defmodule AtlasWeb.FeaturePageTest do
       click_link(feature.slug)
       click_link("Edit")
 
-      fill_inputs(%{
-        feature_name: "Updated Name",
-        feature_slug: "updated-slug"
+      fill_inputs("#feature-form", %{
+        "feature[name]": "Updated Name",
+        "feature[slug]": "updated-slug"
       })
 
-      submit_form()
+      submit_form("#feature-form")
 
       assert visible?("Updated Name")
       assert visible?("updated-slug")

@@ -1,3 +1,9 @@
+/* Layout */
+
+.container {
+  max-width: 1024px;
+}
+
 /* Page Header */
 
 #primary-header .container {
@@ -11,7 +17,39 @@
 
 #primary-header #logo {
   color: #333;
-  font-weight: 500;
+  font-weight: 600;
+}
+
+/* Search */
+
+.search {
+  align-self: center;
+  display: flex;
+}
+
+.search button {
+  margin: 0 0 0 0.75rem;
+}
+
+#primary-header .search {
+  margin: 0 0 1rem 0;
+  padding: 0;
+}
+
+#primary-header .search input {
+  margin: 0;
+  height: 3rem;
+}
+
+#primary-header .search button {
+  background: #f2f2f2;
+  border-color: #d2d2d2;
+  color: #888;
+  height: 3rem;
+  line-height: 3rem;
+  letter-spacing: 0;
+  margin: 0 0 0 3px;
+  padding: 0 2.0rem;
 }
 
 /* Primary Navigation */

@@ -62,21 +62,44 @@ defmodule Atlas.ListPermissionsTest do
       assert response_keys == pagination_keys
     end
 
-    test "preload" do
+    test "query - search" do
+      insert(:permission, name: "John Smith", slug: "john-smith")
+      insert(:permission, name: "Jill Smith", slug: "jill-smith")
+      insert(:permission, name: "John Doe", slug: "john-doe")
+
       permissions = ListPermissions.call()
-      permission = hd(permissions)
 
-      assert !is_list(permission.permission_roles)
-      assert permission.permission_roles.__struct__ == Ecto.Association.NotLoaded
+      assert length(permissions) == 4
 
-      options = [
-        preload: [:permission_roles]
-      ]
+      # Succeeds when given a word part of a larger phrase
 
-      permissions = ListPermissions.call(options)
-      permission = hd(permissions)
+      params = %{
+        query: "smit"
+      }
 
-      assert is_list(permission.permission_roles)
+      permissions = ListPermissions.call(params)
+
+      assert length(permissions) == 2
+
+      # Succeeds with partial value when it is start of a word
+
+      params = %{
+        query: "john-"
+      }
+
+      permissions = ListPermissions.call(params)
+
+      assert length(permissions) == 2
+
+      # Fails with partial value when it is not the start of a word
+
+      params = %{
+        query: "mith"
+      }
+
+      permissions = ListPermissions.call(params)
+
+      assert length(permissions) == 0
     end
   end
 end

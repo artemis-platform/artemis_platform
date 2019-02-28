@@ -1,0 +1,58 @@
+<div id="content-header">
+  <header>
+    <h1>Listing Permissions</h1>
+
+    <div class="actions">
+      <%= if has?(@conn, "permissions:create") do %>
+        <%= action "New", to: Routes.permission_path(@conn, :new), color: "blue" %>
+      <% end %>
+    </div>
+  </header>
+</div>
+
+<div id="content-navigation">
+  <%= render_breadcrumbs @conn %>
+</div>
+
+<div id="content">
+  <%= render_flash_notifications @conn %>
+
+  <%= render_search @conn %>
+
+  <table class="ui table selectable">
+    <thead>
+      <tr>
+        <th>Slug</th>
+        <th>Name</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= for permission <- @permissions.entries do %>
+        <tr>
+          <td>
+            <%= if has?(@conn, "permissions:show") do %>
+              <%= link permission.slug, to: Routes.permission_path(@conn, :show, permission) %>
+            <% else %>
+              <%= permission.slug %>
+            <% end %>
+          </td>
+          <td><%= permission.name %></td>
+          <td>
+            <%= if has?(@conn, "permissions:show") do %>
+              <%= link "Show", to: Routes.permission_path(@conn, :show, permission) %>
+            <% end %>
+            <%= if has?(@conn, "permissions:update") do %>
+              <%= link "Edit", to: Routes.permission_path(@conn, :edit, permission) %>
+            <% end %>
+            <%= if has?(@conn, "permissions:delete") do %>
+              <%= link "Delete", to: Routes.permission_path(@conn, :delete, permission), method: :delete, data: [confirm: "Are you sure?"] %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <%= pagination_links @permissions %>
+</div>

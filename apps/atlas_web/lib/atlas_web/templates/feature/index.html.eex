@@ -17,6 +17,8 @@
 <div id="content">
   <%= render_flash_notifications @conn %>
 
+  <%= render_search @conn %>
+
   <table class="ui table selectable">
     <thead>
       <tr>
