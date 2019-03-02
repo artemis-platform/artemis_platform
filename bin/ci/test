@@ -1,0 +1,11 @@
+#!/bin/bash
+
+source .env
+
+attempts=0
+
+until [ $attempts -ge 3 ]
+do
+  mix test $@ && exit 0
+  attempts=$[$attempts + 1]
+done

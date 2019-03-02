@@ -53,7 +53,7 @@ before_script:
 
 env:
   matrix:
-    - TEST="mix test --include browser"
+    - TEST="--include browser"
 
 script:
-  - "${TEST}"
+  - bin/ci/test "${TEST}"
