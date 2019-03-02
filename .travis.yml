@@ -37,9 +37,9 @@ before_install:
   - sudo apt-get update
   - sudo apt-get install chromium-chromedriver
   - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
-  - mix local.rebar --force
   - cp .env.travis .env
   - source .env
+  - mix local.rebar --force
 
 before_script:
   - mix do ecto.create, ecto.migrate
@@ -53,8 +53,7 @@ before_script:
 
 env:
   matrix:
-    - TEST="mix test"
-    - TEST="mix test --only browser"
+    - TEST="--include browser"
 
 script:
-  - "${TEST}"
+  - bin/ci/test "${TEST}"
