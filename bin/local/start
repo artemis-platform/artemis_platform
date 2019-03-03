@@ -10,16 +10,16 @@ source .env
 # To spin up a cluster locally:
 #
 #   bin/start
-#   NAME="atlas02@0.0.0.0" PORT=4082 bin/start
+#   NAME="artemis02@0.0.0.0" PORT=4082 bin/start
 #
 # NOTE: cluster node names are defined in .env
 
 if [ -z "${NAME}" ]; then
-  NAME=atlas01@0.0.0.0
+  NAME=artemis01@0.0.0.0
 fi
 
 if [ -n "${PORT}" ]; then
-  ATLAS_PORT="${PORT}"
+  ARTEMIS_PORT="${PORT}"
 fi
 
-source .env && mix ecto.migrate && ATLAS_PORT="${ATLAS_PORT}" iex --name "${NAME}" -S mix phx.server
+source .env && mix ecto.migrate && ARTEMIS_PORT="${ARTEMIS_PORT}" iex --name "${NAME}" -S mix phx.server

@@ -1,0 +1,64 @@
+<header id="primary-header">
+  <div class="container">
+    <a href="/" id="logo">
+      Artemis Platform
+    </a>
+
+    <nav id="primary-navigation" role="navigation">
+      <ul>
+        <li>
+          <a href="<%= Routes.event_log_path(@conn, :index) %>">
+            Event Log
+          </a>
+        </li>
+        <li>
+          <a href="<%= Routes.feature_path(@conn, :index) %>">
+            Features
+          </a>
+        </li>
+        <li>
+          <a href="<%= Routes.permission_path(@conn, :index) %>">
+            Permissions
+          </a>
+        </li>
+        <li>
+          <a href="<%= Routes.role_path(@conn, :index) %>">
+            Roles
+          </a>
+        </li>
+        <li>
+          <a href="<%= Routes.user_path(@conn, :index) %>">
+            Users
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <form class="search" action="<%= Routes.search_path(@conn, :index) %>" method="get">
+      <input name="query" type="text" value="<%= Map.get(@conn.query_params, "query") %>" />
+      <button type="submit">Search</button>
+    </form>
+
+    <nav id="user-navigation">
+      <ul>
+        <li>
+          <%= if current_user?(@conn) do %>
+            <a href="<%= Routes.user_path(@conn, :show, current_user(@conn)) %>">
+              <span>
+                <i class="user icon"></i>
+                <%= current_user(@conn).name %>
+              </span>
+            </a>
+          <% else %>
+            <a href="<%= Routes.session_path(@conn, :new) %>">
+              <span>
+                <i class="sign-in icon"></i>
+                Log In
+              </span>
+            </a>
+          <% end %>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>

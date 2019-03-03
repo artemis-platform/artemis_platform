@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 DIRS="apps bin config"
+FILES="DEVELOPMENT.md Dockerfile docker-compose.yml LICENSE.txt README.md mix.exs mix.lock .env .env.demo .env.example .env.travis .dockerignore .travis.yml"
 
 capitalize() {
   FIRST=$(echo ${1:0:1} | tr '[:lower:]' '[:upper:]')
@@ -17,7 +18,7 @@ lowercase() {
 }
 
 replace() {
-  find ${DIRS} -type f -not -path '*node_modules*' | xargs sed -i'' -e "s/${1}/${2}/g"
+  find ${DIRS} ${FILES} -type f -not -path '*node_modules*' | xargs sed -i'' -e "s/${1}/${2}/g"
 }
 
 move() {
