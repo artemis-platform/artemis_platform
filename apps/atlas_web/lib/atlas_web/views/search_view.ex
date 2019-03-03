@@ -37,7 +37,7 @@ defmodule AtlasWeb.SearchView do
   def search_matches_text(data) do
     total = search_total(data)
 
-    ngettext("Match", "%{total} Matches", total, total: total)
+    ngettext("%{total} Match", "%{total} Matches", total, total: total)
   end
 
   def search_entries(data) do
