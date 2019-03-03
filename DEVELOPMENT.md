@@ -1,10 +1,10 @@
-# Development with Atlas
+# Development with Artemis
 
-Atlas can be used to jump-start a new web application.
+Artemis can be used to jump-start a new web application.
 
 ## Common Setup
 
-Atlas supports both local and containerized development. Regardless of which is used, the following common setup steps should be followed.
+Artemis supports both local and containerized development. Regardless of which is used, the following common setup steps should be followed.
 
 ### Code Repository
 
@@ -24,15 +24,15 @@ vim .env
 
 ### System Ports and Local DNS
 
-Atlas runs a development webserver on a local port. The default port is specified in the `.env` file, but can be changed.
+Artemis runs a development webserver on a local port. The default port is specified in the `.env` file, but can be changed.
 
-For websocket support, Atlas must be reachable through local DNS at `https://atlas.dev`. A local DNS manager with SSL support like [Puma Dev](https://github.com/puma/puma-dev) makes this easy.
+For websocket support, Artemis must be reachable through local DNS at `https://artemis.dev`. A local DNS manager with SSL support like [Puma Dev](https://github.com/puma/puma-dev) makes this easy.
 
 If using Puma Dev, this can be accomplished by creating a new puma dev config file:
 
 ```
 source .env
-echo $ATLAS_PORT > ~/.puma-dev/atlas
+echo $ARTEMIS_PORT > ~/.puma-dev/artemis
 ```
 
 ## Docker Environment
@@ -48,19 +48,19 @@ bin/docker/up
 
 ### Elixir
 
-Atlas requires a specific version of Elixir. The version is always specified in `.env.example`.
+Artemis requires a specific version of Elixir. The version is always specified in `.env.example`.
 
 An Elixir version manager like [`kiex`](https://github.com/taylor/kiex) can make it easy to manage multiple Elixir versions in the same development environment.
 
 ### Node
 
-Atlas requires a specific version of NodeJS. The version is always specified in `.env.example`.
+Artemis requires a specific version of NodeJS. The version is always specified in `.env.example`.
 
 A Node version manager like [`nvm`](https://github.com/creationix/nvm) can make it easy to manage multiple Node versions in the same development environment.
 
 ### PostgreSQL
 
-Atlas requires PostgreSQL >= 9.6.
+Artemis requires PostgreSQL >= 9.6.
 
 For an example of running it through a Docker image see the [Bluebox Box](https://github.ibm.com/bluebox/box) repository.
 
@@ -68,7 +68,7 @@ Alternatively, it can be installed locally on the command-line using `brew insta
 
 ### Browser Testing
 
-Atlas requires headless chrome for browser-based testing.
+Artemis requires headless chrome for browser-based testing.
 
 It can be installed locally on the command-line using `brew cask install chromedriver`.
 
@@ -98,7 +98,7 @@ bin/docker/test
 
 #### Unit Tests
 
-Comprehensive unit tests are included in Atlas. To run them use:
+Comprehensive unit tests are included in Artemis. To run them use:
 
 ```bash
 bin/local/test

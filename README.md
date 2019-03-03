@@ -1,10 +1,10 @@
-# Atlas Platform
+# Artemis Platform
 
-[![Build Status](https://travis-ci.com/chrislaskey/atlas_platform.svg?branch=master)](https://travis-ci.com/chrislaskey/atlas_platform)
+[![Build Status](https://travis-ci.com/chrislaskey/artemis_platform.svg?branch=master)](https://travis-ci.com/chrislaskey/artemis_platform)
 
 ## About
 
-Atlas Platform contains enterprise ready patterns for web applications in Elixir. It can be used as:
+Artemis Platform contains enterprise ready patterns for web applications in Elixir. It can be used as:
 
 - A starting point for a new web application
 - A pattern reference for an existing web application
@@ -56,12 +56,12 @@ bin/demo/remove # Remove the demo environment
 
 ## Looking for a UI Design?
 
-> ### [Atlas Dashboard](https://github.com/chrislaskey/atlas_dashboard)
+> ### [Artemis Dashboard](https://github.com/chrislaskey/artemis_dashboard)
 
-Atlas Dashboard is an example of a complete application (including UI and design) built on top of Atlas Platform.
+Artemis Dashboard is an example of a complete application (including UI and design) built on top of Artemis Platform.
 
 ## Development
 
-Atlas can be used as a pattern reference for an existing application or as a starting point for a new one.
+Artemis can be used as a pattern reference for an existing application or as a starting point for a new one.
 
-To build a new application using Atlas, see the [`DEVELOPMENT.md`](DEVELOPMENT.md).
+To build a new application using Artemis, see the [`DEVELOPMENT.md`](DEVELOPMENT.md).

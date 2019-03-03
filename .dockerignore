@@ -2,6 +2,6 @@
 .gitignore
 Dockerfile
 docker-compose.yml
-apps/atlas_api/priv/static/
-apps/atlas_web/priv/static/
-apps/atlas_web/assets/node_modules
+apps/artemis_api/priv/static/
+apps/artemis_web/priv/static/
+apps/artemis_web/assets/node_modules

@@ -2,5 +2,5 @@
 
 source .env && \
 mix do ecto.drop, ecto.create, ecto.migrate && \
-mix run apps/atlas/priv/repo/seeds.exs && \
-mix run apps/atlas/priv/repo/seeds.dev.exs
+mix run apps/artemis/priv/repo/seeds.exs && \
+mix run apps/artemis/priv/repo/seeds.dev.exs

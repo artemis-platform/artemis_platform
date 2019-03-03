@@ -1,5 +1,5 @@
 #!/bin/bash
 
 docker-compose down
-docker volume rm atlas_pgdata
+docker volume rm artemis_pgdata
 docker-compose build

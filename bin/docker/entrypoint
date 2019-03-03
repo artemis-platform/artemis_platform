@@ -4,6 +4,6 @@ source .env
 
 mix ecto.create --quiet
 mix ecto.migrate
-mix run apps/atlas/priv/repo/seeds.exs
+mix run apps/artemis/priv/repo/seeds.exs
 
 iex -S mix phx.server

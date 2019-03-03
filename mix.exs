@@ -1,4 +1,4 @@
-defmodule Atlas.Umbrella.MixProject do
+defmodule Artemis.Umbrella.MixProject do
   use Mix.Project
 
   def project do

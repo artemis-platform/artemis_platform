@@ -3,4 +3,4 @@
 source .env
 
 docker-compose down
-docker volume rm atlas_pgdata
+docker volume rm artemis_pgdata
