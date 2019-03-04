@@ -6,7 +6,7 @@ defmodule ArtemisWeb.EventLogController do
 
   def index(conn, params) do
     authorize(conn, "event-logs:list", fn () ->
-      event_logs = ListEventLogs.call(params)
+      event_logs = ListEventLogs.call(params, current_user(conn))
 
       render(conn, "index.html", event_logs: event_logs)
     end)

@@ -8,7 +8,7 @@ defmodule ArtemisLog.ListEventLogs do
 
   @default_page_size 25
 
-  def call(params \\ %{}) do
+  def call(params \\ %{}, _user) do
     params = default_params(params)
 
     EventLog

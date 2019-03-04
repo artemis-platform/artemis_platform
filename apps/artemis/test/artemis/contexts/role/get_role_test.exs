@@ -16,21 +16,21 @@ defmodule Artemis.GetRoleTest do
     test "returns nil role not found" do
       invalid_id = 50000000
 
-      assert GetRole.call(invalid_id) == nil
+      assert GetRole.call(invalid_id, Mock.system_user()) == nil
     end
 
     test "finds role by id", %{role: role} do
-      assert GetRole.call(role.id) == role
+      assert GetRole.call(role.id, Mock.system_user()) == role
     end
 
     test "finds user keyword list", %{role: role} do
-      assert GetRole.call(name: role.name, slug: role.slug) == role
+      assert GetRole.call([name: role.name, slug: role.slug], Mock.system_user()) == role
     end
   end
 
   describe "call - options" do
     test "preload", %{role: role} do
-      role = GetRole.call(role.id)
+      role = GetRole.call(role.id, Mock.system_user())
 
       assert !is_list(role.permissions)
       assert role.permissions.__struct__ == Ecto.Association.NotLoaded
@@ -44,7 +44,7 @@ defmodule Artemis.GetRoleTest do
         preload: [:permissions]
       ]
 
-      role = GetRole.call(values, options)
+      role = GetRole.call(values, Mock.system_user(), options)
 
       assert is_list(role.permissions)
     end
@@ -55,12 +55,12 @@ defmodule Artemis.GetRoleTest do
       invalid_id = 50000000
 
       assert_raise Ecto.NoResultsError, fn () ->
-        GetRole.call!(invalid_id) == nil
+        GetRole.call!(invalid_id, Mock.system_user()) == nil
       end
     end
 
     test "finds role by id", %{role: role} do
-      assert GetRole.call!(role.id) == role
+      assert GetRole.call!(role.id, Mock.system_user()) == role
     end
   end
 end

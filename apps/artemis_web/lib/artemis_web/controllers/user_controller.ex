@@ -14,7 +14,7 @@ defmodule ArtemisWeb.UserController do
   def index(conn, params) do
     authorize(conn, "users:list", fn () ->
       params = Map.put(params, :paginate, true)
-      users = ListUsers.call(params)
+      users = ListUsers.call(params, current_user(conn))
 
       render(conn, "index.html", users: users)
     end)
@@ -24,7 +24,7 @@ defmodule ArtemisWeb.UserController do
     authorize(conn, "users:create", fn () ->
       user = %User{user_roles: []}
       changeset = User.changeset(user)
-      roles = ListRoles.call()
+      roles = ListRoles.call(current_user(conn))
 
       render(conn, "new.html", changeset: changeset, roles: roles, user: user)
     end)
@@ -42,7 +42,7 @@ defmodule ArtemisWeb.UserController do
 
         {:error, %Ecto.Changeset{} = changeset} ->
           user = %User{user_roles: []}
-          roles = ListRoles.call()
+          roles = ListRoles.call(current_user(conn))
 
           render(conn, "new.html", changeset: changeset, roles: roles, user: user)
       end
@@ -61,7 +61,7 @@ defmodule ArtemisWeb.UserController do
     authorize(conn, "users:update", fn () ->
       user = GetUser.call(id, current_user(conn), preload: @preload)
       changeset = User.changeset(user)
-      roles = ListRoles.call()
+      roles = ListRoles.call(current_user(conn))
 
       render(conn, "edit.html", changeset: changeset, roles: roles, user: user)
     end)
@@ -79,7 +79,7 @@ defmodule ArtemisWeb.UserController do
 
         {:error, %Ecto.Changeset{} = changeset} ->
           user = GetUser.call(id, current_user(conn), preload: @preload)
-          roles = ListRoles.call()
+          roles = ListRoles.call(current_user(conn))
 
           render(conn, "edit.html", changeset: changeset, roles: roles, user: user)
       end

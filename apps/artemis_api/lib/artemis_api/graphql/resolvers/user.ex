@@ -13,7 +13,7 @@ defmodule ArtemisApi.GraphQL.Resolver.User do
     require_permission context, "users:list", fn () ->
       params = Map.put(params, :paginate, true)
 
-      {:ok, ListUsers.call(params)}
+      {:ok, ListUsers.call(params, get_user(context))}
     end
   end
 

@@ -6,11 +6,11 @@ defmodule Artemis.GetPermission do
 
   @default_preload []
 
-  def call!(value, options \\ []) do
+  def call!(value, _user, options \\ []) do
     get_record(value, options, &Repo.get_by!/2)
   end
 
-  def call(value, options \\ []) do
+  def call(value, _user, options \\ []) do
     get_record(value, options, &Repo.get_by/2)
   end
 

@@ -13,7 +13,7 @@ defmodule ArtemisWeb.PermissionController do
   def index(conn, params) do
     authorize(conn, "permissions:list", fn () ->
       params = Map.put(params, :paginate, true)
-      permissions = ListPermissions.call(params)
+      permissions = ListPermissions.call(params, current_user(conn))
 
       render(conn, "index.html", permissions: permissions)
     end)
@@ -46,7 +46,7 @@ defmodule ArtemisWeb.PermissionController do
 
   def show(conn, %{"id" => id}) do
     authorize(conn, "permissions:show", fn () ->
-      permission = GetPermission.call!(id)
+      permission = GetPermission.call!(id, current_user(conn))
 
       render(conn, "show.html", permission: permission)
     end)
@@ -54,7 +54,7 @@ defmodule ArtemisWeb.PermissionController do
 
   def edit(conn, %{"id" => id}) do
     authorize(conn, "permissions:update", fn () ->
-      permission = GetPermission.call(id, preload: @preload)
+      permission = GetPermission.call(id, current_user(conn), preload: @preload)
       changeset = Permission.changeset(permission)
 
       render(conn, "edit.html", changeset: changeset, permission: permission)
@@ -70,7 +70,7 @@ defmodule ArtemisWeb.PermissionController do
           |> redirect(to: Routes.permission_path(conn, :show, permission))
 
         {:error, %Ecto.Changeset{} = changeset} ->
-          permission = GetPermission.call(id, preload: @preload)
+          permission = GetPermission.call(id, current_user(conn), preload: @preload)
 
           render(conn, "edit.html", changeset: changeset, permission: permission)
       end

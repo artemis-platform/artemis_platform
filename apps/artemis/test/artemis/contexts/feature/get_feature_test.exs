@@ -15,15 +15,15 @@ defmodule Artemis.GetFeatureTest do
     test "returns nil feature not found" do
       invalid_id = 50000000
 
-      assert GetFeature.call(invalid_id) == nil
+      assert GetFeature.call(invalid_id, Mock.system_user()) == nil
     end
 
     test "finds feature by id", %{feature: feature} do
-      assert GetFeature.call(feature.id) == feature
+      assert GetFeature.call(feature.id, Mock.system_user()) == feature
     end
 
     test "finds user keyword list", %{feature: feature} do
-      assert GetFeature.call(name: feature.name, slug: feature.slug) == feature
+      assert GetFeature.call([name: feature.name, slug: feature.slug], Mock.system_user()) == feature
     end
   end
 
@@ -32,12 +32,12 @@ defmodule Artemis.GetFeatureTest do
       invalid_id = 50000000
 
       assert_raise Ecto.NoResultsError, fn () ->
-        GetFeature.call!(invalid_id) == nil
+        GetFeature.call!(invalid_id, Mock.system_user()) == nil
       end
     end
 
     test "finds feature by id", %{feature: feature} do
-      assert GetFeature.call!(feature.id) == feature
+      assert GetFeature.call!(feature.id, Mock.system_user()) == feature
     end
   end
 end
