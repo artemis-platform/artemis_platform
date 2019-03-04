@@ -14,22 +14,21 @@ defmodule Artemis.ListRolesTest do
   end
 
   describe "call" do
-
     test "returns empty list when no roles exist" do
-      assert ListRoles.call() == []
+      assert ListRoles.call(Mock.system_user()) == []
     end
 
     test "returns existing role" do
       role = insert(:role)
 
-      assert ListRoles.call()  == [role]
+      assert ListRoles.call(Mock.system_user())  == [role]
     end
 
     test "returns a list of roles" do
       count = 3
       insert_list(count, :role)
 
-      roles = ListRoles.call()
+      roles = ListRoles.call(Mock.system_user())
 
       assert length(roles) == count
     end
@@ -47,7 +46,7 @@ defmodule Artemis.ListRolesTest do
         paginate: true
       }
 
-      response_keys = ListRoles.call(params)
+      response_keys = ListRoles.call(params, Mock.system_user())
         |> Map.from_struct()
         |> Map.keys()
 
@@ -63,7 +62,8 @@ defmodule Artemis.ListRolesTest do
     end
 
     test "preload" do
-      roles = ListRoles.call()
+      user = Mock.system_user()
+      roles = ListRoles.call(user)
       role = hd(roles)
 
       assert !is_list(role.user_roles)
@@ -73,18 +73,19 @@ defmodule Artemis.ListRolesTest do
         preload: [:user_roles]
       }
 
-      roles = ListRoles.call(params)
+      roles = ListRoles.call(params, user)
       role = hd(roles)
 
       assert is_list(role.user_roles)
     end
 
     test "query - search" do
-      insert(:role, name: "John Smith", slug: "john-smith")
+      insert(:role, name: "John Smith", slug: "johnn-smith")
       insert(:role, name: "Jill Smith", slug: "jill-smith")
-      insert(:role, name: "John Doe", slug: "john-doe")
+      insert(:role, name: "John Doe", slug: "johnn-doe")
 
-      roles = ListRoles.call()
+      user = Mock.system_user()
+      roles = ListRoles.call(user)
 
       assert length(roles) == 4
 
@@ -94,17 +95,17 @@ defmodule Artemis.ListRolesTest do
         query: "smit"
       }
 
-      roles = ListRoles.call(params)
+      roles = ListRoles.call(params, user)
 
       assert length(roles) == 2
 
       # Succeeds with partial value when it is start of a word
 
       params = %{
-        query: "john-"
+        query: "johnn-"
       }
 
-      roles = ListRoles.call(params)
+      roles = ListRoles.call(params, user)
 
       assert length(roles) == 2
 
@@ -114,7 +115,7 @@ defmodule Artemis.ListRolesTest do
         query: "mith"
       }
 
-      roles = ListRoles.call(params)
+      roles = ListRoles.call(params, user)
 
       assert length(roles) == 0
     end

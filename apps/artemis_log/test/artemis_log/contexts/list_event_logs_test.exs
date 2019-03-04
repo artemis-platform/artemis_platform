@@ -15,7 +15,7 @@ defmodule ArtemisLog.ListEventLogsTest do
 
   describe "call" do
     test "always returns paginated results" do
-      response_keys = ListEventLogs.call()
+      response_keys = ListEventLogs.call(Mock.system_user())
         |> Map.from_struct()
         |> Map.keys()
 
@@ -31,13 +31,13 @@ defmodule ArtemisLog.ListEventLogsTest do
     end
 
     test "returns empty list when no event logs exist" do
-      assert ListEventLogs.call().entries == []
+      assert ListEventLogs.call(Mock.system_user()).entries == []
     end
 
     test "returns existing event logs" do
       event_log = insert(:event_log)
 
-      event_logs = ListEventLogs.call()
+      event_logs = ListEventLogs.call(Mock.system_user())
 
       assert hd(event_logs.entries).id == event_log.id
     end
@@ -46,7 +46,7 @@ defmodule ArtemisLog.ListEventLogsTest do
       count = 3
       insert_list(count, :event_log)
 
-      event_logs = ListEventLogs.call()
+      event_logs = ListEventLogs.call(Mock.system_user())
 
       assert length(event_logs.entries) == count
     end
@@ -64,7 +64,7 @@ defmodule ArtemisLog.ListEventLogsTest do
         paginate: true
       }
 
-      response_keys = ListEventLogs.call(params)
+      response_keys = ListEventLogs.call(params, Mock.system_user())
         |> Map.from_struct()
         |> Map.keys()
 
@@ -84,7 +84,8 @@ defmodule ArtemisLog.ListEventLogsTest do
       insert(:event_log, user_name: "Jill Smith", action: "create-role")
       insert(:event_log, user_name: "John Doe", action: "update-user")
 
-      %{entries: event_logs} = ListEventLogs.call()
+      user = Mock.system_user()
+      %{entries: event_logs} = ListEventLogs.call(user)
 
       assert length(event_logs) == 4
 
@@ -94,7 +95,7 @@ defmodule ArtemisLog.ListEventLogsTest do
         query: "smit"
       }
 
-      %{entries: event_logs} = ListEventLogs.call(params)
+      %{entries: event_logs} = ListEventLogs.call(params, user)
 
       assert length(event_logs) == 2
 
@@ -104,7 +105,7 @@ defmodule ArtemisLog.ListEventLogsTest do
         query: "create-"
       }
 
-      %{entries: event_logs} = ListEventLogs.call(params)
+      %{entries: event_logs} = ListEventLogs.call(params, user)
 
       assert length(event_logs) == 2
 
@@ -114,7 +115,7 @@ defmodule ArtemisLog.ListEventLogsTest do
         query: "mith"
       }
 
-      %{entries: event_logs} = ListEventLogs.call(params)
+      %{entries: event_logs} = ListEventLogs.call(params, user)
 
       assert length(event_logs) == 0
     end

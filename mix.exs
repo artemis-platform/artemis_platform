@@ -5,6 +5,7 @@ defmodule Artemis.Umbrella.MixProject do
     [
       apps_path: "apps",
       start_permanent: Mix.env() == :prod,
+      aliases: aliases(),
       deps: deps()
     ]
   end
@@ -23,5 +24,26 @@ defmodule Artemis.Umbrella.MixProject do
   # and cannot be accessed from applications inside the apps folder
   defp deps do
     []
+  end
+
+  # Aliases are shortcuts or tasks specific to the current project.
+  # For example, we extend the test task to create and migrate the database.
+  #
+  # See the documentation for `Mix` for more info on aliases.
+  defp aliases do
+    [
+      # Run each umbrella applications tests independently. Similar to doing:
+      #
+      #   cd apps/app_01 && mix test
+      #   cd apps/app_02 && mix test
+      #
+      # With standard `mix test` in an umbrella app, the BEAM VM is reused between tests.
+      # This can lead to one application leaking into another. Forcing
+      # independent tests is a safe guard against flakey test failures and
+      # ensures all applications are independent and self sufficient
+      #
+      # For futher discussion see: https://elixirforum.com/t/mix-test-in-an-umbrella/10771
+      test: ["cmd mix test --color"]
+    ]
   end
 end

@@ -15,15 +15,15 @@ defmodule Artemis.GetPermissionTest do
     test "returns nil permission not found" do
       invalid_id = 50000000
 
-      assert GetPermission.call(invalid_id) == nil
+      assert GetPermission.call(invalid_id, Mock.system_user()) == nil
     end
 
     test "finds permission by id", %{permission: permission} do
-      assert GetPermission.call(permission.id) == permission
+      assert GetPermission.call(permission.id, Mock.system_user()) == permission
     end
 
     test "finds user keyword list", %{permission: permission} do
-      assert GetPermission.call(name: permission.name, slug: permission.slug) == permission
+      assert GetPermission.call([name: permission.name, slug: permission.slug], Mock.system_user()) == permission
     end
   end
 
@@ -32,12 +32,12 @@ defmodule Artemis.GetPermissionTest do
       invalid_id = 50000000
 
       assert_raise Ecto.NoResultsError, fn () ->
-        GetPermission.call!(invalid_id) == nil
+        GetPermission.call!(invalid_id, Mock.system_user()) == nil
       end
     end
 
     test "finds permission by id", %{permission: permission} do
-      assert GetPermission.call!(permission.id) == permission
+      assert GetPermission.call!(permission.id, Mock.system_user()) == permission
     end
   end
 end

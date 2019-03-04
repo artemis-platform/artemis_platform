@@ -15,20 +15,20 @@ defmodule Artemis.ListUsersTest do
 
   describe "call" do
     test "returns empty list when no users exist" do
-      assert ListUsers.call() == []
+      assert ListUsers.call(Mock.system_user()) == []
     end
 
     test "returns existing user" do
       user = insert(:user)
 
-      assert ListUsers.call()  == [user]
+      assert ListUsers.call(Mock.system_user())  == [user]
     end
 
     test "returns a list of users" do
       count = 3
       insert_list(count, :user)
 
-      users = ListUsers.call()
+      users = ListUsers.call(Mock.system_user())
 
       assert length(users) == count
     end
@@ -46,7 +46,7 @@ defmodule Artemis.ListUsersTest do
         paginate: true
       }
 
-      response_keys = ListUsers.call(params)
+      response_keys = ListUsers.call(params, Mock.system_user())
         |> Map.from_struct()
         |> Map.keys()
 
@@ -62,7 +62,7 @@ defmodule Artemis.ListUsersTest do
     end
 
     test "preload" do
-      users = ListUsers.call()
+      users = ListUsers.call(Mock.system_user())
       user = hd(users)
 
       assert !is_list(user.user_roles)
@@ -72,18 +72,18 @@ defmodule Artemis.ListUsersTest do
         preload: [:user_roles]
       }
 
-      users = ListUsers.call(params)
+      users = ListUsers.call(params, Mock.system_user())
       user = hd(users)
 
       assert is_list(user.user_roles)
     end
 
     test "query - search" do
-      insert(:user, name: "John Smith", email: "john@smith.com")
+      insert(:user, name: "John Smith", email: "johnn@smith.com")
       insert(:user, name: "Jill Smith", email: "jill@smith.com")
-      insert(:user, name: "John Doe", email: "john@doe.com")
+      insert(:user, name: "John Doe", email: "johnn@doe.com")
 
-      users = ListUsers.call()
+      users = ListUsers.call(Mock.system_user())
 
       assert length(users) == 4
 
@@ -93,17 +93,17 @@ defmodule Artemis.ListUsersTest do
         query: "smit"
       }
 
-      users = ListUsers.call(params)
+      users = ListUsers.call(params, Mock.system_user())
 
       assert length(users) == 2
 
       # Succeeds with partial value when it is start of a word
 
       params = %{
-        query: "john@"
+        query: "johnn@"
       }
 
-      users = ListUsers.call(params)
+      users = ListUsers.call(params, Mock.system_user())
 
       assert length(users) == 2
 
@@ -113,7 +113,7 @@ defmodule Artemis.ListUsersTest do
         query: "mith.com"
       }
 
-      users = ListUsers.call(params)
+      users = ListUsers.call(params, Mock.system_user())
 
       assert length(users) == 0
     end

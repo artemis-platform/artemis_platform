@@ -14,22 +14,21 @@ defmodule Artemis.ListFeaturesTest do
   end
 
   describe "call" do
-
     test "returns empty list when no features exist" do
-      assert ListFeatures.call() == []
+      assert ListFeatures.call(Mock.system_user()) == []
     end
 
     test "returns existing feature" do
       feature = insert(:feature)
 
-      assert ListFeatures.call()  == [feature]
+      assert ListFeatures.call(Mock.system_user())  == [feature]
     end
 
     test "returns a list of features" do
       count = 3
       insert_list(count, :feature)
 
-      features = ListFeatures.call()
+      features = ListFeatures.call(Mock.system_user())
 
       assert length(features) == count
     end
@@ -47,7 +46,7 @@ defmodule Artemis.ListFeaturesTest do
         paginate: true
       }
 
-      response_keys = ListFeatures.call(params)
+      response_keys = ListFeatures.call(params, Mock.system_user())
         |> Map.from_struct()
         |> Map.keys()
 
@@ -67,7 +66,8 @@ defmodule Artemis.ListFeaturesTest do
       insert(:feature, name: "Jill Smith", slug: "jill-smith")
       insert(:feature, name: "John Doe", slug: "john-doe")
 
-      features = ListFeatures.call()
+      user = Mock.system_user()
+      features = ListFeatures.call(user)
 
       assert length(features) == 4
 
@@ -77,7 +77,7 @@ defmodule Artemis.ListFeaturesTest do
         query: "smit"
       }
 
-      features = ListFeatures.call(params)
+      features = ListFeatures.call(params, user)
 
       assert length(features) == 2
 
@@ -87,7 +87,7 @@ defmodule Artemis.ListFeaturesTest do
         query: "john-"
       }
 
-      features = ListFeatures.call(params)
+      features = ListFeatures.call(params, user)
 
       assert length(features) == 2
 
@@ -97,7 +97,7 @@ defmodule Artemis.ListFeaturesTest do
         query: "mith"
       }
 
-      features = ListFeatures.call(params)
+      features = ListFeatures.call(params, user)
 
       assert length(features) == 0
     end

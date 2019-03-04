@@ -5,10 +5,10 @@ defmodule Artemis.Search do
 
   @default_page_size 5
   @searchable_resources %{
-    "features" => [function: &Artemis.ListFeatures.call/1, permissions: "features:list"],
-    "permissions" => [function: &Artemis.ListPermissions.call/1, permissions: "permissions:list"],
-    "roles" => [function: &Artemis.ListRoles.call/1, permissions: "roles:list"],
-    "users" => [function: &Artemis.ListUsers.call/1, permissions: "users:list"]
+    "features" => [function: &Artemis.ListFeatures.call/2, permissions: "features:list"],
+    "permissions" => [function: &Artemis.ListPermissions.call/2, permissions: "permissions:list"],
+    "roles" => [function: &Artemis.ListRoles.call/2, permissions: "roles:list"],
+    "users" => [function: &Artemis.ListUsers.call/2, permissions: "users:list"]
   }
 
   def call(params, user) do
@@ -29,7 +29,7 @@ defmodule Artemis.Search do
 
     Enum.reduce(resources, %{}, fn ({key, options}, acc) ->
       function = Keyword.get(options, :function)
-      value = function.(params)
+      value = function.(params, user)
 
       Map.put(acc, key, value)
     end)

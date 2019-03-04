@@ -14,7 +14,7 @@ defmodule ArtemisWeb.RoleController do
   def index(conn, params) do
     authorize(conn, "roles:list", fn () ->
       params = Map.put(params, :paginate, true)
-      roles = ListRoles.call(params)
+      roles = ListRoles.call(params, current_user(conn))
 
       render(conn, "index.html", roles: roles)
     end)
@@ -24,7 +24,7 @@ defmodule ArtemisWeb.RoleController do
     authorize(conn, "roles:create", fn () ->
       role = %Role{permissions: []}
       changeset = Role.changeset(role)
-      permissions = ListPermissions.call()
+      permissions = ListPermissions.call(current_user(conn))
 
       render(conn, "new.html", changeset: changeset, permissions: permissions, role: role)
     end)
@@ -42,7 +42,7 @@ defmodule ArtemisWeb.RoleController do
 
         {:error, %Ecto.Changeset{} = changeset} ->
           role = %Role{permissions: []}
-          permissions = ListPermissions.call()
+          permissions = ListPermissions.call(current_user(conn))
 
           render(conn, "new.html", changeset: changeset, permissions: permissions, role: role)
       end
@@ -51,7 +51,7 @@ defmodule ArtemisWeb.RoleController do
 
   def show(conn, %{"id" => id}) do
     authorize(conn, "roles:show", fn () ->
-      role = GetRole.call!(id)
+      role = GetRole.call!(id, current_user(conn))
 
       render(conn, "show.html", role: role)
     end)
@@ -59,9 +59,9 @@ defmodule ArtemisWeb.RoleController do
 
   def edit(conn, %{"id" => id}) do
     authorize(conn, "roles:update", fn () ->
-      role = GetRole.call(id, preload: @preload)
+      role = GetRole.call(id, current_user(conn), preload: @preload)
       changeset = Role.changeset(role)
-      permissions = ListPermissions.call()
+      permissions = ListPermissions.call(current_user(conn))
 
       render(conn, "edit.html", changeset: changeset, permissions: permissions, role: role)
     end)
@@ -78,8 +78,8 @@ defmodule ArtemisWeb.RoleController do
           |> redirect(to: Routes.role_path(conn, :show, role))
 
         {:error, %Ecto.Changeset{} = changeset} ->
-          role = GetRole.call(id, preload: @preload)
-          permissions = ListPermissions.call()
+          role = GetRole.call(id, current_user(conn), preload: @preload)
+          permissions = ListPermissions.call(current_user(conn))
 
           render(conn, "edit.html", changeset: changeset, permissions: permissions, role: role)
       end

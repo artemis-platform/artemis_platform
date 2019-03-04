@@ -10,7 +10,7 @@ defmodule Artemis.ListPermissions do
   @default_page_size 25
   @default_preload []
 
-  def call(params \\ %{}) do
+  def call(params \\ %{}, _user) do
     params = default_params(params)
 
     Permission

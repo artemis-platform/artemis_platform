@@ -13,7 +13,7 @@ defmodule ArtemisWeb.FeatureController do
   def index(conn, params) do
     authorize(conn, "features:list", fn () ->
       params = Map.put(params, :paginate, true)
-      features = ListFeatures.call(params)
+      features = ListFeatures.call(params, current_user(conn))
 
       render(conn, "index.html", features: features)
     end)
@@ -46,7 +46,7 @@ defmodule ArtemisWeb.FeatureController do
 
   def show(conn, %{"id" => id}) do
     authorize(conn, "features:show", fn () ->
-      feature = GetFeature.call!(id)
+      feature = GetFeature.call!(id, current_user(conn))
 
       render(conn, "show.html", feature: feature)
     end)
@@ -54,7 +54,7 @@ defmodule ArtemisWeb.FeatureController do
 
   def edit(conn, %{"id" => id}) do
     authorize(conn, "features:update", fn () ->
-      feature = GetFeature.call(id, preload: @preload)
+      feature = GetFeature.call(id, current_user(conn), preload: @preload)
       changeset = Feature.changeset(feature)
 
       render(conn, "edit.html", changeset: changeset, feature: feature)
@@ -70,7 +70,7 @@ defmodule ArtemisWeb.FeatureController do
           |> redirect(to: Routes.feature_path(conn, :show, feature))
 
         {:error, %Ecto.Changeset{} = changeset} ->
-          feature = GetFeature.call(id, preload: @preload)
+          feature = GetFeature.call(id, current_user(conn), preload: @preload)
 
           render(conn, "edit.html", changeset: changeset, feature: feature)
       end

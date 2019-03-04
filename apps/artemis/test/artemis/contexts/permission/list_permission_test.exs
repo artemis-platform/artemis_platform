@@ -14,22 +14,21 @@ defmodule Artemis.ListPermissionsTest do
   end
 
   describe "call" do
-
     test "returns empty list when no permissions exist" do
-      assert ListPermissions.call() == []
+      assert ListPermissions.call(Mock.system_user()) == []
     end
 
     test "returns existing permission" do
       permission = insert(:permission)
 
-      assert ListPermissions.call()  == [permission]
+      assert ListPermissions.call(Mock.system_user())  == [permission]
     end
 
     test "returns a list of permissions" do
       count = 3
       insert_list(count, :permission)
 
-      permissions = ListPermissions.call()
+      permissions = ListPermissions.call(Mock.system_user())
 
       assert length(permissions) == count
     end
@@ -47,7 +46,7 @@ defmodule Artemis.ListPermissionsTest do
         paginate: true
       }
 
-      response_keys = ListPermissions.call(params)
+      response_keys = ListPermissions.call(params, Mock.system_user())
         |> Map.from_struct()
         |> Map.keys()
 
@@ -67,7 +66,8 @@ defmodule Artemis.ListPermissionsTest do
       insert(:permission, name: "Jill Smith", slug: "jill-smith")
       insert(:permission, name: "John Doe", slug: "john-doe")
 
-      permissions = ListPermissions.call()
+      user = Mock.system_user()
+      permissions = ListPermissions.call(user)
 
       assert length(permissions) == 4
 
@@ -77,7 +77,7 @@ defmodule Artemis.ListPermissionsTest do
         query: "smit"
       }
 
-      permissions = ListPermissions.call(params)
+      permissions = ListPermissions.call(params, user)
 
       assert length(permissions) == 2
 
@@ -87,7 +87,7 @@ defmodule Artemis.ListPermissionsTest do
         query: "john-"
       }
 
-      permissions = ListPermissions.call(params)
+      permissions = ListPermissions.call(params, user)
 
       assert length(permissions) == 2
 
@@ -97,7 +97,7 @@ defmodule Artemis.ListPermissionsTest do
         query: "mith"
       }
 
-      permissions = ListPermissions.call(params)
+      permissions = ListPermissions.call(params, user)
 
       assert length(permissions) == 0
     end
