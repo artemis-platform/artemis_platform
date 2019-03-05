@@ -13,19 +13,37 @@ defmodule ArtemisApi.UserAccess do
 
   alias Artemis.Feature
 
-  def require_feature(_request, feature, action) do
-    case Feature.active?(feature) do
-      true -> action.()
-      false -> {:error, "Unauthorized Feature"}
+  def authorize(request, permission, action) do
+    with {:ok, user} <- fetch_user(request),
+         true <- has?(user, permission) do
+      action.()
+    else
+      _ -> {:error, "Unauthorized User"}
     end
   end
 
-  def require_permission(request, permissions, action) do
+  def authorize_any(request, permissions, action) do
     with {:ok, user} <- fetch_user(request),
          true <- has_any?(user, permissions) do
       action.()
     else
       _ -> {:error, "Unauthorized User"}
+    end
+  end
+
+  def authorize_all(request, permissions, action) do
+    with {:ok, user} <- fetch_user(request),
+         true <- has_all?(user, permissions) do
+      action.()
+    else
+      _ -> {:error, "Unauthorized User"}
+    end
+  end
+
+  def require_feature(_request, feature, action) do
+    case Feature.active?(feature) do
+      true -> action.()
+      false -> {:error, "Unauthorized Feature"}
     end
   end
 

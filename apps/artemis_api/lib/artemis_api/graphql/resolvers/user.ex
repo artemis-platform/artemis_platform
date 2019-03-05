@@ -10,7 +10,7 @@ defmodule ArtemisApi.GraphQL.Resolver.User do
   # Queries
 
   def list(params, context) do
-    require_permission context, "users:list", fn () ->
+    authorize context, "users:list", fn () ->
       params = Map.put(params, :paginate, true)
 
       {:ok, ListUsers.call(params, get_user(context))}
@@ -18,7 +18,7 @@ defmodule ArtemisApi.GraphQL.Resolver.User do
   end
 
   def get(%{id: id}, context) do
-    require_permission context, "users:show", fn () ->
+    authorize context, "users:show", fn () ->
       {:ok, GetUser.call(id, get_user(context))}
     end
   end
@@ -26,19 +26,19 @@ defmodule ArtemisApi.GraphQL.Resolver.User do
   # Mutations
 
   def create(%{user: params}, context) do
-    require_permission context, "users:create", fn () ->
+    authorize context, "users:create", fn () ->
       CreateUser.call(params, get_user(context))
     end
   end
 
   def update(%{id: id, user: params}, context) do
-    require_permission context, "users:update", fn () ->
+    authorize context, "users:update", fn () ->
       UpdateUser.call(id, params, get_user(context))
     end
   end
 
   def delete(%{id: id}, context) do
-    require_permission context, "users:delete", fn () ->
+    authorize context, "users:delete", fn () ->
       DeleteUser.call(id, get_user(context))
     end
   end
