@@ -9,3 +9,5 @@ do
   mix test $@ && exit 0
   attempts=$[$attempts + 1]
 done
+
+exit 1
