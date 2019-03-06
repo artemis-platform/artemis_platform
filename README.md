@@ -14,8 +14,8 @@ Artemis Platform contains enterprise ready patterns for web applications in Elix
 General Patterns:
 
 - Authentication with OAuth2
-- Role-Based Access Control
-- Full Text Search
+- Role-Based Access Control [⬈ Documentation](https://github.com/chrislaskey/artemis_platform/wiki/Role-Based-Access-Control) [⬈ Discussion](https://github.com/chrislaskey/artemis_platform/issues/12)
+- Full Text Search [⬈ Documentation](https://github.com/chrislaskey/artemis_platform/wiki/Full-Text-Search) [⬈ Discussion](https://github.com/chrislaskey/artemis_platform/issues/13)
 - Event Based Pub/Sub
 - Dedicated Audit Logging
 - Feature Flipper
