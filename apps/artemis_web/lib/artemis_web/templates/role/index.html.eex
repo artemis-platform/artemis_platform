@@ -52,5 +52,5 @@
     </tbody>
   </table>
 
-  <%= pagination_links @roles %>
+  <%= render_pagination @conn, @roles %>
 </div>

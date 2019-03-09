@@ -54,5 +54,5 @@
     </tbody>
   </table>
 
-  <%= pagination_links @permissions %>
+  <%= render_pagination @conn, @permissions %>
 </div>
