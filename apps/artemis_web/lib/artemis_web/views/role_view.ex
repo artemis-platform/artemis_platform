@@ -2,7 +2,6 @@ defmodule ArtemisWeb.RoleView do
   use ArtemisWeb, :view
 
   import Artemis.Helpers, only: [keys_to_atoms: 2]
-  import Scrivener.HTML
 
   alias Artemis.Permission
 

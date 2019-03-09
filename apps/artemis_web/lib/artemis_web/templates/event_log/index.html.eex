@@ -48,5 +48,5 @@
     </tbody>
   </table>
 
-  <%= pagination_links @event_logs %>
+  <%= render_pagination @conn, @event_logs %>
 </div>
