@@ -7,6 +7,7 @@ defmodule Artemis.ListRoles do
   alias Artemis.Repo
   alias Artemis.Role
 
+  @default_order "slug"
   @default_page_size 25
   @default_preload []
 
@@ -16,12 +17,14 @@ defmodule Artemis.ListRoles do
     Role
     |> preload(^Map.get(params, "preload"))
     |> search_filter(params)
+    |> order_query(params)
     |> get_records(params)
   end
 
   defp default_params(params) do
     params
     |> Artemis.Helpers.keys_to_strings()
+    |> Map.put_new("order", @default_order)
     |> Map.put_new("page_size", @default_page_size)
     |> Map.put_new("preload", @default_preload)
   end

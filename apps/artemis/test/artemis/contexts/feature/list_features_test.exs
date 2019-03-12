@@ -41,6 +41,18 @@ defmodule Artemis.ListFeaturesTest do
       {:ok, feature: feature}
     end
 
+    test "order" do
+      insert_list(3, :feature)
+
+      params = %{order: "name"}
+      ascending = ListFeatures.call(params, Mock.system_user())
+
+      params = %{order: "-name"}
+      descending = ListFeatures.call(params, Mock.system_user())
+
+      assert ascending == Enum.reverse(descending)
+    end
+
     test "paginate" do
       params = %{
         paginate: true

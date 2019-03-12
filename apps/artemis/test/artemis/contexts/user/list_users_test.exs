@@ -41,6 +41,18 @@ defmodule Artemis.ListUsersTest do
       {:ok, user: user}
     end
 
+    test "order" do
+      insert_list(3, :user)
+
+      params = %{order: "name"}
+      ascending = ListUsers.call(params, Mock.system_user())
+
+      params = %{order: "-name"}
+      descending = ListUsers.call(params, Mock.system_user())
+
+      assert ascending == Enum.reverse(descending)
+    end
+
     test "paginate" do
       params = %{
         paginate: true

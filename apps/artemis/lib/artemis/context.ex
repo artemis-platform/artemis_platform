@@ -7,6 +7,7 @@ defmodule Artemis.Context do
     quote do
       import Artemis.Context
       import Artemis.Repo.Helpers
+      import Artemis.Repo.Order
       import Artemis.UserAccess
 
       alias Artemis.Event

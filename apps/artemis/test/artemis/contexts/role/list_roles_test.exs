@@ -41,6 +41,18 @@ defmodule Artemis.ListRolesTest do
       {:ok, role: role}
     end
 
+    test "order" do
+      insert_list(3, :role)
+
+      params = %{order: "name"}
+      ascending = ListRoles.call(params, Mock.system_user())
+
+      params = %{order: "-name"}
+      descending = ListRoles.call(params, Mock.system_user())
+
+      assert ascending == Enum.reverse(descending)
+    end
+
     test "paginate" do
       params = %{
         paginate: true
