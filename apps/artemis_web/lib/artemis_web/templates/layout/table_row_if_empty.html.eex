@@ -1,0 +1,5 @@
+<tr class="empty-table-row">
+  <td colspan="1000">
+    <%= @message %>
+  </td>
+</tr>
