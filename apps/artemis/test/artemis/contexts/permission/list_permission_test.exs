@@ -41,6 +41,18 @@ defmodule Artemis.ListPermissionsTest do
       {:ok, permission: permission}
     end
 
+    test "order" do
+      insert_list(3, :permission)
+
+      params = %{order: "name"}
+      ascending = ListPermissions.call(params, Mock.system_user())
+
+      params = %{order: "-name"}
+      descending = ListPermissions.call(params, Mock.system_user())
+
+      assert ascending == Enum.reverse(descending)
+    end
+
     test "paginate" do
       params = %{
         paginate: true
