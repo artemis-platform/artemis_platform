@@ -1,3 +1,5 @@
-#!/usr/bin/env bash
+#!/bin/bash
+
+source .env
 
 docker-compose exec server bin/local/test

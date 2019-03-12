@@ -1,6 +1,8 @@
 FROM elixir:1.8.1
 
-ARG MIX_ENV=dev
+ARG MIX_ENV=prod
+
+ENV MIX_ENV=${MIX_ENV}
 
 SHELL ["/bin/bash", "-c"]
 

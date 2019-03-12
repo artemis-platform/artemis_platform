@@ -20,15 +20,13 @@ services:
     command: bin/docker/entrypoint
     depends_on:
       - db
-    environment:
-      MIX_ENV: dev
     env_file:
       - .env
     networks:
       - artemis_network
     ports:
-      - 4077:4077
-      - 4078:4078
+      - ${ARTEMIS_API_PORT}:${ARTEMIS_API_PORT}
+      - ${ARTEMIS_WEB_PORT}:${ARTEMIS_WEB_PORT}
     volumes:
       - type: bind
         source: .

@@ -40,7 +40,7 @@ echo $ARTEMIS_PORT > ~/.puma-dev/artemis
 A container-based development environment is available using [docker](https://www.docker.com/) and [docker compose](https://docs.docker.com/compose/). Once the docker platform is installed, build and run the containers:
 
 ```bash
-bin/docker/build
+bin/docker/build dev
 bin/docker/up
 ```
 
@@ -74,9 +74,9 @@ It can be installed locally on the command-line using `brew cask install chromed
 
 ### Initial Configuration
 
-Before running the application the first time, execute `bin/reset-all`.
+Before running the application the first time, execute `bin/local/reset-all`.
 
-**Warning**: The `bin/reset-all` script is destructive. It will drop current dependencies and pull down the latest, and it will drop databases and recreate them with seed data.
+**Warning**: The `bin/local/reset-all` script is destructive. It will drop current dependencies and pull down the latest, and it will drop databases and recreate them with seed data.
 
 ## Testing
 
@@ -111,6 +111,5 @@ Before running browser tests, start the headless chrome server with `chromedrive
 By default, browser tests are **only** run in the CI environment. To run them use:
 
 ```bash
-mix test --include browser # runs all tests including browser tests
-mix test --only browser # runs only browser tests
+mix test --include browser
 ```

@@ -5,4 +5,5 @@ cd ./apps/artemis_web/assets && \
 rm -rf ./node_modules && \
 npm install && \
 cd ../ && \
+mkdir -p ./apps/artemis_web/priv/static && \
 mix phx.digest
