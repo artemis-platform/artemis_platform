@@ -24,10 +24,12 @@
       <tr>
         <th>Action</th>
         <th>User Name</th>
+        <th>Created On</th>
         <th></th>
       </tr>
     </thead>
     <tbody>
+      <%= render_table_row_if_empty(@event_logs.entries) %>
       <%= for event_log <- @event_logs.entries do %>
         <tr>
           <td>
@@ -38,6 +40,7 @@
             <% end %>
           </td>
           <td><%= event_log.user_name %></td>
+          <td><%= event_log.inserted_at %></td>
           <td>
             <%= if has?(@conn, "event-logs:show") do %>
               <%= link "Show", to: Routes.event_log_path(@conn, :show, event_log) %>

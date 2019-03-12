@@ -27,6 +27,7 @@
       </tr>
     </thead>
     <tbody>
+      <%= render_table_row_if_empty(@roles.entries) %>
       <%= for role <- @roles.entries do %>
         <tr>
           <td>

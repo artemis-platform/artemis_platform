@@ -63,6 +63,17 @@ defmodule ArtemisWeb.LayoutHelpers do
   end
 
   @doc """
+  Generates empty table row if no records match
+  """
+  def render_table_row_if_empty(records, options \\ [])
+  def render_table_row_if_empty(records, options) when length(records) == 0 do
+    message = Keyword.get(options, :message, "No records found")
+
+    Phoenix.View.render(ArtemisWeb.LayoutView, "table_row_if_empty.html", message: message)
+  end
+  def render_table_row_if_empty(_records, _options), do: nil
+
+  @doc """
   Generates search form
   """
   def render_search(conn) do

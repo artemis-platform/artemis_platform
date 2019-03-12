@@ -59,6 +59,18 @@ defmodule ArtemisLog.ListEventLogsTest do
       {:ok, event_log: event_log}
     end
 
+    test "order" do
+      insert_list(3, :event_log)
+
+      params = %{order: "action"}
+      ascending = ListEventLogs.call(params, Mock.system_user())
+
+      params = %{order: "-action"}
+      descending = ListEventLogs.call(params, Mock.system_user())
+
+      assert ascending.entries == Enum.reverse(descending.entries)
+    end
+
     test "paginate" do
       params = %{
         paginate: true

@@ -7,6 +7,7 @@ defmodule ArtemisLog.Context do
     quote do
       import Artemis.UserAccess
       import ArtemisLog.Context
+      import ArtemisLog.Repo.Order
     end
   end
 end
