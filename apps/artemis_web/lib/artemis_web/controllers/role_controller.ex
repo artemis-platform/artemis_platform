@@ -51,7 +51,7 @@ defmodule ArtemisWeb.RoleController do
 
   def show(conn, %{"id" => id}) do
     authorize(conn, "roles:show", fn () ->
-      role = GetRole.call!(id, current_user(conn))
+      role = GetRole.call!(id, current_user(conn), preload: [:permissions])
 
       render(conn, "show.html", role: role)
     end)

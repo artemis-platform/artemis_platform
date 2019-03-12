@@ -78,7 +78,9 @@ defmodule ArtemisWeb.RolePageTest do
 
   describe "show" do
     setup do
-      role = insert(:role)
+      role = :role
+        |> insert()
+        |> with_permissions()
 
       browser_sign_in()
       navigate_to(@url)
@@ -86,11 +88,13 @@ defmodule ArtemisWeb.RolePageTest do
       {:ok, role: role}
     end
 
-    test "record details", %{role: role} do
+    test "record details and associations", %{role: role} do
       click_link(role.name)
 
       assert visible?(role.name)
       assert visible?(role.slug)
+
+      assert visible?("Permissions")
     end
   end
 

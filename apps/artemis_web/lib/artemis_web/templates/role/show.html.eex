@@ -40,4 +40,15 @@
     </li>
 
   </ul>
+
+  <h4>Permissions</h4>
+
+  <ul>
+    <%= Enum.map @role.permissions, fn (permission) -> %>
+      <li>
+        <code><%= permission.slug %></code>
+        <%= permission.name %>
+      </li>
+    <% end %>
+  </ul>
 </div>

@@ -39,6 +39,24 @@
       <strong>Email:</strong>
       <%= @user.email %>
     </li>
+  </ul>
 
+  <h4>Roles</h4>
+
+  <ul>
+    <%= Enum.map @user.roles, fn (role) -> %>
+      <li><%= role.name %></li>
+    <% end %>
+  </ul>
+
+  <h4>Permissions</h4>
+
+  <ul>
+    <%= Enum.map @user.permissions, fn (permission) -> %>
+      <li>
+        <code><%= permission.slug %></code>
+        <%= permission.name %>
+      </li>
+    <% end %>
   </ul>
 </div>
