@@ -9,3 +9,10 @@ use Mix.Config
 #   :warn
 #
 config :logger, level: :info
+
+config :artemis, Artemis.Repo,
+  username: System.get_env("ARTEMIS_POSTGRES_USER"),
+  password: System.get_env("ARTEMIS_POSTGRES_PASS"),
+  database: System.get_env("ARTEMIS_POSTGRES_DB"),
+  hostname: System.get_env("ARTEMIS_POSTGRES_HOST"),
+  pool_size: 10

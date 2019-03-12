@@ -1,5 +1,7 @@
 .git/
 .gitignore
+_build
+deps
 Dockerfile
 docker-compose.yml
 apps/artemis_api/priv/static/
