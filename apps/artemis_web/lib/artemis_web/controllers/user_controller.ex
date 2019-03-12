@@ -51,7 +51,7 @@ defmodule ArtemisWeb.UserController do
 
   def show(conn, %{"id" => id}) do
     authorize(conn, "users:show", fn () ->
-      user = GetUser.call!(id, current_user(conn))
+      user = GetUser.call!(id, current_user(conn), preload: [:permissions, :roles])
 
       render(conn, "show.html", user: user)
     end)

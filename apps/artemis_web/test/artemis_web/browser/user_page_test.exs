@@ -80,7 +80,10 @@ defmodule ArtemisWeb.UserPageTest do
 
   describe "show" do
     setup do
-      user = insert(:user)
+      user = :user
+        |> insert()
+        |> with_permission("users:create")
+        |> with_permission("users:list")
 
       browser_sign_in()
       navigate_to(@url)
@@ -88,11 +91,16 @@ defmodule ArtemisWeb.UserPageTest do
       {:ok, user: user}
     end
 
-    test "record details", %{user: user} do
+    test "record details and associations", %{user: user} do
       click_link(user.name)
 
       assert visible?(user.name)
       assert visible?(user.email)
+
+      assert visible?("Roles")
+      assert visible?("Permissions")
+      assert visible?("users:create")
+      assert visible?("users:list")
     end
   end
 
