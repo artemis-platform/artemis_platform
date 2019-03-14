@@ -5,33 +5,7 @@
     </a>
 
     <nav id="primary-navigation" role="navigation">
-      <ul>
-        <li>
-          <a href="<%= Routes.event_log_path(@conn, :index) %>">
-            Event Log
-          </a>
-        </li>
-        <li>
-          <a href="<%= Routes.feature_path(@conn, :index) %>">
-            Features
-          </a>
-        </li>
-        <li>
-          <a href="<%= Routes.permission_path(@conn, :index) %>">
-            Permissions
-          </a>
-        </li>
-        <li>
-          <a href="<%= Routes.role_path(@conn, :index) %>">
-            Roles
-          </a>
-        </li>
-        <li>
-          <a href="<%= Routes.user_path(@conn, :index) %>">
-            Users
-          </a>
-        </li>
-      </ul>
+      <%= render_primary_nav(@conn, @user) %>
     </nav>
 
     <form class="search" action="<%= Routes.search_path(@conn, :index) %>" method="get">

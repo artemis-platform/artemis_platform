@@ -44,5 +44,10 @@
       <%= @event_log.updated_at %>
     </li>
 
+    <li>
+      <strong>Meta</strong>
+      <pre><code><%= Jason.encode!(@event_log.meta, pretty: true) %></code></pre>
+    </li>
+
   </ul>
 </div>

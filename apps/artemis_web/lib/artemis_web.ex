@@ -71,6 +71,7 @@ defmodule ArtemisWeb do
       import ArtemisWeb.ErrorHelpers
       import ArtemisWeb.Gettext
       import ArtemisWeb.Guardian.Helpers
+      import ArtemisWeb.LayoutData
       import ArtemisWeb.LayoutHelpers
       import ArtemisWeb.UserAccess
 
