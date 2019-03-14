@@ -6,7 +6,7 @@ defmodule ArtemisLog.ListEventLogs do
   alias ArtemisLog.EventLog
   alias ArtemisLog.Repo
 
-  @default_order "inserted_at"
+  @default_order "-inserted_at"
   @default_page_size 25
 
   def call(params \\ %{}, _user) do
