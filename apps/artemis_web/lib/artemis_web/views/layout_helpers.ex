@@ -1,4 +1,6 @@
 defmodule ArtemisWeb.LayoutHelpers do
+  import ArtemisWeb.LayoutData
+
   @moduledoc """
   Convenience functions for common layout elements
   """
@@ -44,6 +46,46 @@ defmodule ArtemisWeb.LayoutHelpers do
     else
       button(title, tag_options)
     end
+  end
+
+  @doc """
+  Generates primary nav from nav items
+  """
+  def render_primary_nav(conn, user) do
+    nav_items = nav_items_for_current_user(user)
+    links = Enum.map(nav_items, fn ({section, items}) ->
+      label = section
+      path = items
+        |> hd
+        |> Keyword.get(:path)
+
+      content_tag(:li) do
+        link(label, to: path.(conn))
+      end
+    end)
+
+    case links == [] do
+      true -> nil
+      false -> content_tag(:ul, links)
+    end
+  end
+
+  @doc """
+  Filter nav items by current users permissions
+  """
+  def nav_items_for_current_user(user) do
+    Enum.reduce(nav_items(), [], fn ({section, potential_items}, acc) ->
+      verified_items = Enum.filter(potential_items, fn (item) ->
+        verify = Keyword.get(item, :verify)
+
+        verify.(user)
+      end)
+
+      case verified_items == [] do
+        true -> acc
+        false -> [{section, verified_items}|acc]
+      end
+    end)
   end
 
   @doc """
