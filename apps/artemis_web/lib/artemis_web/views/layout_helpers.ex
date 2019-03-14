@@ -64,9 +64,44 @@ defmodule ArtemisWeb.LayoutHelpers do
       end
     end)
 
-    case links == [] do
-      true -> nil
-      false -> content_tag(:ul, links)
+    content_tag(:ul, links)
+  end
+
+  @doc """
+  Generates footer nav from nav items
+  """
+  def render_footer_nav(conn, user) do
+    nav_items = nav_items_for_current_user(user)
+    sections = Enum.map(nav_items, fn ({section, items}) ->
+      links = Enum.map(items, fn (item) ->
+        label = Keyword.get(item, :label)
+        path = Keyword.get(item, :path)
+
+        content_tag(:li) do
+          link(label, to: path.(conn))
+        end
+      end)
+
+      content_tag(:div, class: "section") do
+        [
+          content_tag(:h5, section),
+          content_tag(:ul, links)
+        ]
+      end
+    end)
+
+    case sections == [] do
+      true ->
+        nil
+      false ->
+        per_column = length(sections) / 3
+          |> Float.ceil()
+          |> trunc()
+        chunked = Enum.chunk_every(sections, per_column)
+
+        Enum.map(chunked, fn (sections) ->
+          content_tag(:div, sections, class: "column")
+        end)
     end
   end
 
@@ -144,7 +179,8 @@ defmodule ArtemisWeb.LayoutHelpers do
     Enum.map(range, fn (index) ->
       title = sections
         |> Enum.at(index)
-        |> String.capitalize
+        |> String.replace("-", " ")
+        |> Artemis.Helpers.titlecase()
 
       path = sections
         |> Enum.take(index + 1)

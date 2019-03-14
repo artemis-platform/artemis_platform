@@ -12,6 +12,7 @@
     <main role="main" class="container">
       <%= render @view_module, @view_template, assigns %>
     </main>
+    <%= render "footer.html", conn: @conn, user: current_user(@conn) %>
     <script type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
   </body>
 </html>

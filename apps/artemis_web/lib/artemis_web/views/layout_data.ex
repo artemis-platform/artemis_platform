@@ -18,7 +18,7 @@ defmodule ArtemisWeb.LayoutData do
     Enum.reverse([
       "Event Log": [
         [
-          label: "Event Log",
+          label: "View Event Log",
           path: &Routes.event_log_path(&1, :index),
           verify: &has?(&1, "event-logs:list")
         ]

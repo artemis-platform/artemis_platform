@@ -1,0 +1,41 @@
+<footer id="primary-footer">
+  <div class="container content">
+    <div class="about">
+      <h3>Artemis Platform</h3>
+      <p>Artemis Platform contains enterprise ready patterns for web applications in Elixir. It can be used as:</p>
+
+      <ul>
+        <li>A starting point for a new web application</li>
+        <li>A pattern reference for an existing web application</li>
+      </ul>
+
+      <p>Learn more on <a target="_blank" href="https://github.com/chrislaskey/artemis_platform">GitHub</a>.</p>
+    </div>
+
+    <nav id="primary-footer-navigation" role="navigation">
+      <%= render_footer_nav(@conn, @user) %>
+    </nav>
+  </div>
+
+  <div class="container footer">
+    <div></div>
+    <div>
+      <%= if current_user?(@conn) do %>
+        Logged in as 
+        <a href="<%= Routes.user_path(@conn, :show, current_user(@conn)) %>">
+          <span>
+            <i class="user icon"></i>
+            <%= current_user(@conn).name %>
+          </span>
+        </a>
+      <% else %>
+        <a href="<%= Routes.session_path(@conn, :new) %>">
+          <span>
+            <i class="sign-in icon"></i>
+            Log In
+          </span>
+        </a>
+      <% end %>
+    </div>
+  </div>
+</footer>
