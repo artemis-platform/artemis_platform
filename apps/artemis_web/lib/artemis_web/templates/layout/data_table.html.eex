@@ -1,0 +1,25 @@
+<%= link("Export", to: export_path(@conn, :csv), class: "export", download: true) %>
+
+<table class="ui table selectable data-table">
+  <thead>
+    <tr>
+      <%= Enum.map @columns, fn (column) -> %>
+        <td>
+          <%= render_data_table_label(@conn, column, :html) %>
+        </td>
+      <% end %>
+    </tr>
+  </thead>
+  <tbody>
+    <%= render_table_row_if_empty(@data) %>
+    <%= Enum.map @data, fn (row) -> %>
+      <tr>
+        <%= Enum.map @columns, fn (column) -> %>
+          <td>
+            <%= render_data_table_value(@conn, column, row, :html) %>
+          </td>
+        <% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

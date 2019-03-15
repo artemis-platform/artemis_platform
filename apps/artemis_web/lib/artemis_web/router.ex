@@ -2,7 +2,7 @@ defmodule ArtemisWeb.Router do
   use ArtemisWeb, :router
 
   pipeline :browser do
-    plug :accepts, ["html"]
+    plug :accepts, ["html", "csv"]
     plug :fetch_session
     plug :fetch_flash
     plug :protect_from_forgery

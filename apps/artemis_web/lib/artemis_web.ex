@@ -30,8 +30,20 @@ defmodule ArtemisWeb do
       alias ArtemisWeb.Router.Helpers, as: Routes
 
       defp render_format(conn, filename, params) do
-        render(conn, "#{filename}.#{conn.private.phoenix_format}", params)
+        format = get_format(conn)
+        conn = render_format_headers(conn, format)
+
+        render(conn, "#{filename}.#{format}", params)
       end
+
+      defp render_format_headers(conn, :csv) do
+        filename = Regex.replace(~r/[^a-z0-9_-]+/, conn.request_path, "")
+
+        conn
+        |> put_resp_header("content-disposition", "attachment; filename=#{filename}.csv")
+        |> put_resp_content_type("text/csv")
+      end
+      defp render_format_headers(conn, _), do: conn
 
       defp authorize(conn, permission, render_controller) do
         case has?(conn, permission) do
