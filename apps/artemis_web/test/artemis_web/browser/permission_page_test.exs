@@ -87,7 +87,7 @@ defmodule ArtemisWeb.PermissionPageTest do
     end
 
     test "record details", %{permission: permission} do
-      click_link(permission.slug)
+      click_link(permission.name)
 
       assert visible?(permission.name)
       assert visible?(permission.slug)
@@ -105,7 +105,7 @@ defmodule ArtemisWeb.PermissionPageTest do
     end
 
     test "successfully updates record", %{permission: permission} do
-      click_link(permission.slug)
+      click_link(permission.name)
       click_link("Edit")
 
       fill_inputs("#permission-form", %{

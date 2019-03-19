@@ -15,7 +15,7 @@ defmodule ArtemisWeb.PermissionController do
       params = Map.put(params, :paginate, true)
       permissions = ListPermissions.call(params, current_user(conn))
 
-      render(conn, "index.html", permissions: permissions)
+      render_format(conn, "index", permissions: permissions)
     end)
   end
 

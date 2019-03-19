@@ -19,41 +19,14 @@
 
   <%= render_search @conn %>
 
-  <table class="ui table selectable">
-    <thead>
-      <tr>
-        <th>Slug</th>
-        <th>Name</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-      <%= render_table_row_if_empty(@permissions.entries) %>
-      <%= for permission <- @permissions.entries do %>
-        <tr>
-          <td>
-            <%= if has?(@conn, "permissions:show") do %>
-              <%= link permission.slug, to: Routes.permission_path(@conn, :show, permission) %>
-            <% else %>
-              <%= permission.slug %>
-            <% end %>
-          </td>
-          <td><%= permission.name %></td>
-          <td>
-            <%= if has?(@conn, "permissions:show") do %>
-              <%= link "Show", to: Routes.permission_path(@conn, :show, permission) %>
-            <% end %>
-            <%= if has?(@conn, "permissions:update") do %>
-              <%= link "Edit", to: Routes.permission_path(@conn, :edit, permission) %>
-            <% end %>
-            <%= if has?(@conn, "permissions:delete") do %>
-              <%= link "Delete", to: Routes.permission_path(@conn, :delete, permission), method: :delete, data: [confirm: "Are you sure?"] %>
-            <% end %>
-          </td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
+  <%=
+    render_data_table(
+      @conn,
+      @permissions.entries,
+      allowed_columns: allowed_columns(),
+      default_columns: ["name", "slug", "actions"]
+    )
+  %>
 
   <%= render_pagination @conn, @permissions %>
 </div>

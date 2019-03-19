@@ -49,6 +49,7 @@ defmodule ArtemisWeb.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:guardian, "~> 1.2"},
       {:oauth2, "~> 0.9"},
+      {:nimble_csv, "~> 0.5"},
       {:scrivener_html, "~> 1.8"},
       {:artemis, in_umbrella: true},
       {:artemis_pubsub, in_umbrella: true},

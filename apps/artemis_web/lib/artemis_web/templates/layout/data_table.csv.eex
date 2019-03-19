@@ -1,0 +1,13 @@
+<%=
+  headings = Enum.map(@columns, fn (column) ->
+    render_data_table_label(@conn, column, :csv)
+  end)
+
+  rows = Enum.map(@data, fn (row) -> 
+    Enum.map(@columns, fn (column) ->
+      render_data_table_value(@conn, column, row, :csv)
+    end)
+  end)
+
+  ArtemisWeb.CSV.create([headings|rows])
+%>
