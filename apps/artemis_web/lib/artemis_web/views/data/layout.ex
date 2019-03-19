@@ -1,4 +1,4 @@
-defmodule ArtemisWeb.LayoutData do
+defmodule ArtemisWeb.ViewData.Layout do
   import ArtemisWeb.UserAccess
 
   alias ArtemisWeb.Router.Helpers, as: Routes

@@ -4,9 +4,9 @@
   <thead>
     <tr>
       <%= Enum.map @columns, fn (column) -> %>
-        <td>
+        <th>
           <%= render_data_table_label(@conn, column, :html) %>
-        </td>
+        </th>
       <% end %>
     </tr>
   </thead>

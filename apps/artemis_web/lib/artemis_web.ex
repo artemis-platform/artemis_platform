@@ -80,12 +80,13 @@ defmodule ArtemisWeb do
       # Use all HTML functionality (forms, tags, etc)
       use Phoenix.HTML
 
-      import ArtemisWeb.ErrorHelpers
       import ArtemisWeb.Gettext
       import ArtemisWeb.Guardian.Helpers
-      import ArtemisWeb.LayoutData
-      import ArtemisWeb.LayoutHelpers
       import ArtemisWeb.UserAccess
+      import ArtemisWeb.ViewData.Layout
+      import ArtemisWeb.ViewHelper.Errors
+      import ArtemisWeb.ViewHelper.Layout
+      import ArtemisWeb.ViewHelper.Tables
 
       alias ArtemisWeb.Router.Helpers, as: Routes
     end

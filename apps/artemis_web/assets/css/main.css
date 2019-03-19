@@ -95,6 +95,12 @@ body {
   content: ""
 }
 
+/* Content */
+
+table thead th a {
+  color: #333;
+}
+
 /* Pagination */
 
 .pagination {

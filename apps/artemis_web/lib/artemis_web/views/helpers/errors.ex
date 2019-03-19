@@ -1,4 +1,4 @@
-defmodule ArtemisWeb.ErrorHelpers do
+defmodule ArtemisWeb.ViewHelper.Errors do
   @moduledoc """
   Conveniences for translating and building error messages.
   """
