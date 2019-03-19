@@ -22,9 +22,9 @@
   <table class="ui table selectable">
     <thead>
       <tr>
-        <th>Action</th>
-        <th>User Name</th>
-        <th>Created On</th>
+        <th><%= sortable_table_header(@conn, "action", "Action") %></th>
+        <th><%= sortable_table_header(@conn, "user_name", "User Name") %></th>
+        <th><%= sortable_table_header(@conn, "inserted_at", "Created On") %></th>
         <th></th>
       </tr>
     </thead>

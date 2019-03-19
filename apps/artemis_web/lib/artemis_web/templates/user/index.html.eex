@@ -22,7 +22,7 @@
   <table class="ui table selectable">
     <thead>
       <tr>
-        <th>Name</th>
+        <th><%= sortable_table_header(@conn, "name", "Name") %></th>
         <th></th>
       </tr>
     </thead>

@@ -7,11 +7,14 @@ defmodule ArtemisWeb.PermissionView do
     %{
       "actions" => [
         label: fn (_conn) -> nil end,
-        value: fn (_conn) -> nil end,
+        value: fn (_conn, _row) -> nil end,
         value_html: &actions_column_html/2,
       ],
       "name" => [
         label: fn (_conn) -> "Name" end,
+        label_html: fn (conn) ->
+          sortable_table_header(conn, "name", "Name")
+        end,
         value: fn (_conn, row) -> row.name end,
         value_html: fn (conn, row) ->
           link(row.name, to: Routes.permission_path(conn, :show, row))
@@ -19,6 +22,9 @@ defmodule ArtemisWeb.PermissionView do
       ],
       "slug" => [
         label: fn (_conn) -> "Slug" end,
+        label_html: fn (conn) ->
+          sortable_table_header(conn, "slug", "Slug")
+        end,
         value: fn (_conn, row) -> row.slug end,
         value_html: fn (_conn, row) ->
           content_tag(:code, row.slug)
