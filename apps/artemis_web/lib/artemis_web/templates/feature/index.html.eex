@@ -1,6 +1,6 @@
 <div id="content-header">
   <header>
-    <h1>Listing Features</h1>
+    <h1>Features</h1>
 
     <div class="actions">
       <%= if has?(@conn, "features:create") do %>

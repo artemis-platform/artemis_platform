@@ -32,7 +32,7 @@ defmodule ArtemisWeb.EventLogPageTest do
 
     test "list of records" do
       assert page_title() == "Artemis"
-      assert visible?("Listing Event Logs")
+      assert visible?("Event Logs")
     end
 
     test "search", %{event_log: event_log} do

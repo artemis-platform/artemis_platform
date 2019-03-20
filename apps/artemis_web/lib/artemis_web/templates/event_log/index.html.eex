@@ -1,6 +1,6 @@
 <div id="content-header">
   <header>
-    <h1>Listing Event Logs</h1>
+    <h1>Event Logs</h1>
 
     <div class="actions">
       <%= if has?(@conn, "event-logs:create") do %>

@@ -1,6 +1,6 @@
 <div id="content-header">
   <header>
-    <h1>Listing Users</h1>
+    <h1>Users</h1>
 
     <div class="actions">
       <%= if has?(@conn, "users:create") do %>

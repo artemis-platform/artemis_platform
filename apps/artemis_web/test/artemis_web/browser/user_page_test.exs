@@ -30,7 +30,7 @@ defmodule ArtemisWeb.UserPageTest do
 
     test "list of records" do
       assert page_title() == "Artemis"
-      assert visible?("Listing Users")
+      assert visible?("Users")
     end
 
     test "search" do
