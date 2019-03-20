@@ -32,7 +32,7 @@ defmodule ArtemisWeb.FeaturePageTest do
 
     test "list of records" do
       assert page_title() == "Artemis"
-      assert visible?("Listing Features")
+      assert visible?("Features")
     end
 
     test "search", %{feature: feature} do

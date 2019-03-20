@@ -14,7 +14,7 @@ defmodule ArtemisWeb.FeatureControllerTest do
   describe "index" do
     test "lists all features", %{conn: conn} do
       conn = get(conn, Routes.feature_path(conn, :index))
-      assert html_response(conn, 200) =~ "Listing Features"
+      assert html_response(conn, 200) =~ "Features"
     end
   end
 

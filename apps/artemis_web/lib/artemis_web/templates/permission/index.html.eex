@@ -1,6 +1,6 @@
 <div id="content-header">
   <header>
-    <h1>Listing Permissions</h1>
+    <h1>Permissions</h1>
 
     <div class="actions">
       <%= if has?(@conn, "permissions:create") do %>

@@ -14,7 +14,7 @@ defmodule ArtemisWeb.RoleControllerTest do
   describe "index" do
     test "lists all roles", %{conn: conn} do
       conn = get(conn, Routes.role_path(conn, :index))
-      assert html_response(conn, 200) =~ "Listing Roles"
+      assert html_response(conn, 200) =~ "Roles"
     end
   end
 

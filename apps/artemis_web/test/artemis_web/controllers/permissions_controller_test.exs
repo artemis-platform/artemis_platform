@@ -14,7 +14,7 @@ defmodule ArtemisWeb.PermissionControllerTest do
   describe "index" do
     test "lists all permissions", %{conn: conn} do
       conn = get(conn, Routes.permission_path(conn, :index))
-      assert html_response(conn, 200) =~ "Listing Permissions"
+      assert html_response(conn, 200) =~ "Permissions"
     end
   end
 

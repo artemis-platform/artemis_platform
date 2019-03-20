@@ -32,7 +32,7 @@ defmodule ArtemisWeb.RolePageTest do
 
     test "list of records" do
       assert page_title() == "Artemis"
-      assert visible?("Listing Roles")
+      assert visible?("Roles")
     end
 
     test "search", %{role: role} do

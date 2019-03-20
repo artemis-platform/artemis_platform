@@ -32,7 +32,7 @@ defmodule ArtemisWeb.PermissionPageTest do
 
     test "list of records" do
       assert page_title() == "Artemis"
-      assert visible?("Listing Permissions")
+      assert visible?("Permissions")
     end
 
     test "search", %{permission: permission} do
