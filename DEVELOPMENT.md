@@ -62,8 +62,6 @@ A Node version manager like [`nvm`](https://github.com/creationix/nvm) can make 
 
 Artemis requires PostgreSQL >= 9.6.
 
-For an example of running it through a Docker image see the [Bluebox Box](https://github.ibm.com/bluebox/box) repository.
-
 Alternatively, it can be installed locally on the command-line using `brew install postgresql` or with a standalone application like [Postico](https://eggerapps.at/postico/).
 
 ### Browser Testing
