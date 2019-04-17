@@ -13,6 +13,7 @@ defmodule Artemis.Repo.Seeds do
 
     roles = [
       %{slug: "developer", name: "Site Developer"},
+      %{slug: "default", name: "Default"},
     ]
 
     Enum.map(roles, fn (params) ->
@@ -81,6 +82,26 @@ defmodule Artemis.Repo.Seeds do
     role = Role
       |> preload([:permissions, :user_roles])
       |> Repo.get_by(slug: "developer")
+
+    role
+    |> Role.associations_changeset(%{permissions: permissions})
+    |> Repo.update!
+
+    # Role Permissions - Default Role
+
+    permission_slugs = [
+      "event-logs:access:self",
+      "users:access:self",
+      "users:show"
+    ]
+
+    permissions = Permission
+      |> where([p], p.slug in ^permission_slugs)
+      |> Repo.all()
+
+    role = Role
+      |> preload([:permissions, :user_roles])
+      |> Repo.get_by(slug: "default")
 
     role
     |> Role.associations_changeset(%{permissions: permissions})
