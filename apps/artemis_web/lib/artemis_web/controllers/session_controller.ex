@@ -27,7 +27,10 @@ defmodule ArtemisWeb.SessionController do
     else
       error ->
         Logger.debug "Log In With Provider Error: " <> inspect(error)
-        render(conn, "new.html", providers: ListSessionAuthProviders.call(conn))
+
+        conn
+        |> put_flash(:error, "Error logging in")
+        |> render("new.html", providers: ListSessionAuthProviders.call(conn))
     end
   end
 
