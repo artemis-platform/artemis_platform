@@ -9,7 +9,7 @@ services:
       PGDATA: /var/lib/postgresql/data/pgdata
     networks:
       - artemis_network
-    restart: always
+    restart: unless-stopped
     volumes:
       - type: volume
         source: pgdata
@@ -17,9 +17,11 @@ services:
 
   server:
     build: .
-    command: bin/docker/entrypoint
+    command: bin/docker-dev/entrypoint
     depends_on:
       - db
+    environment:
+      MIX_ENV: dev
     env_file:
       - .env
     networks:
@@ -27,6 +29,7 @@ services:
     ports:
       - ${ARTEMIS_API_PORT}:${ARTEMIS_API_PORT}
       - ${ARTEMIS_WEB_PORT}:${ARTEMIS_WEB_PORT}
+    restart: unless-stopped
     volumes:
       - type: bind
         source: .

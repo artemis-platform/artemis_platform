@@ -2,4 +2,4 @@
 
 source .env
 
-bin/docker/stop
+bin/docker-prod/stop

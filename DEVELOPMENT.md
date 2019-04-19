@@ -40,8 +40,8 @@ echo $ARTEMIS_PORT > ~/.puma-dev/artemis
 A container-based development environment is available using [docker](https://www.docker.com/) and [docker compose](https://docs.docker.com/compose/). Once the docker platform is installed, build and run the containers:
 
 ```bash
-bin/docker/build dev
-bin/docker/up
+bin/docker-dev/build dev
+bin/docker-dev/up
 ```
 
 ## Local Environment
@@ -83,13 +83,13 @@ Before running the application the first time, execute `bin/local/reset-all`.
 If not running already, start an instance of the development environment:
 
 ```bash
-bin/docker/up
+bin/docker-dev/up
 ```
 
 Then execute the tests using:
 
 ```bash
-bin/docker/test
+bin/docker-dev/test
 ```
 
 ### Local Development

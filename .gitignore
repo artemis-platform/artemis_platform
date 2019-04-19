@@ -24,3 +24,7 @@ erl_crash.dump
 screenshot*
 
 .DS_Store
+
+docker-compose.yml
+
+.env.pre-demo-backup

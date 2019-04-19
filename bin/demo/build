@@ -8,4 +8,4 @@ cp .env.demo .env
 
 source .env
 
-bin/docker/build dev
+bin/docker-prod/build dev
