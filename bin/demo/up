@@ -2,4 +2,4 @@
 
 source .env
 
-bin/docker/up
+bin/docker-prod/up

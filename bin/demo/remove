@@ -2,8 +2,7 @@
 
 source .env
 
-docker-compose down
-docker volume rm artemis_pgdata
+bin/docker-prod/remove
 
 if [ -f .env.pre-demo-backup ]; then
   cp .env.pre-demo-backup .env

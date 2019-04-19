@@ -1,9 +1,20 @@
 #!/usr/bin/env bash
 
-source .env && \
-cd ./apps/artemis_web/assets && \
-rm -rf ./node_modules && \
-npm install && \
-cd ../../../ && \
-mkdir -p ./apps/artemis_web/priv/static && \
-mix phx.digest
+source .env
+
+root_dir=$(pwd)
+assets_dir="${root_dir}/apps/artemis_web/assets"
+
+mkdir -p ./apps/artemis_web/priv/static
+
+cd "${assets_dir}" && \
+  rm -rf ./node_modules && \
+  npm install && \
+  npm rebuild node-sass
+
+if [[ $MIX_ENV = "prod" ]]; then
+  ./node_modules/webpack/bin/webpack.js --mode production
+fi
+
+cd "${root_dir}" && \
+  mix phx.digest

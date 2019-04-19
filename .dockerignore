@@ -4,6 +4,3 @@ _build
 deps
 Dockerfile
 docker-compose.yml
-apps/artemis_api/priv/static/
-apps/artemis_web/priv/static/
-apps/artemis_web/assets/node_modules

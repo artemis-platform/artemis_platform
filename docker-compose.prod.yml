@@ -1,0 +1,39 @@
+version: "3.7"
+
+services:
+  db:
+    image: postgres:11.1
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      PGDATA: /var/lib/postgresql/data/pgdata
+    networks:
+      - artemis_network
+    restart: unless-stopped
+    volumes:
+      - type: volume
+        source: pgdata
+        target: "/var/lib/postgresql/data"
+
+  server:
+    build: .
+    command: bin/docker-prod/entrypoint
+    depends_on:
+      - db
+    environment:
+      MIX_ENV: prod
+    env_file:
+      - .env
+    networks:
+      - artemis_network
+    ports:
+      - ${ARTEMIS_API_PORT}:${ARTEMIS_API_PORT}
+      - ${ARTEMIS_WEB_PORT}:${ARTEMIS_WEB_PORT}
+    restart: unless-stopped
+
+networks:
+  artemis_network:
+    driver: bridge
+
+volumes:
+  pgdata:

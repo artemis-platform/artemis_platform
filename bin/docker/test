@@ -1,5 +1,0 @@
-#!/bin/bash
-
-source .env
-
-docker-compose exec server bin/local/test

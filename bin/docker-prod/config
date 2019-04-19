@@ -1,0 +1,12 @@
+#!/bin/bash
+
+source .env
+export MIX_ENV=prod
+
+# Print the docker-compose.yml file after variable substitution.
+# Can be used to debug environmental variable issues.
+
+# NOTE: For application environmental config values, use `.env` in the
+# application root directory.
+
+docker-compose -f "docker-compose.${MIX_ENV}.yml" config
