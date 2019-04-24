@@ -9,7 +9,7 @@ config :artemis_api,
 
 config :artemis_api, ArtemisApi.Endpoint,
   url: [host: "localhost"],
-  secret_key_base: System.get_env("ARTEMIS_SECRET_KEY_BASE"),
+  secret_key_base: System.get_env("ARTEMIS_SECRET_KEY"),
   render_errors: [view: ArtemisApi.ErrorView, accepts: ~w(json)],
   pubsub: [name: ArtemisPubSub]
 

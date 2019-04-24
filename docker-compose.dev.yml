@@ -33,7 +33,7 @@ services:
     volumes:
       - type: bind
         source: .
-        target: "/app"
+        target: "/app/source"
 
 networks:
   artemis_network:

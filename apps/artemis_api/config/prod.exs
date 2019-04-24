@@ -26,8 +26,7 @@ config :logger, level: :info
 config :artemis_api, ArtemisApi.Endpoint,
   load_from_system_env: false,
   http: [port: System.get_env("ARTEMIS_API_PORT")],
-  url: [host: "example.com", port: 80],
-  secret_key_base: System.get_env("ARTEMIS_API_SECRET_KEY_BASE"),
+  url: [host: "localhost", port: System.get_env("ARTEMIS_API_PORT")],
   server: true
 
 # ## SSL Support

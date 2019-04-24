@@ -17,7 +17,7 @@ config :logger, level: :info
 # watchers to your application. For example, we use it
 # with brunch.io to recompile .js and .css sources.
 config :artemis_api, ArtemisApi.Endpoint,
-  http: [port: {:system, "ARTEMIS_API_PORT"}],
+  http: [port: System.get_env("ARTEMIS_API_PORT")],
   debug_errors: true,
   code_reloader: true,
   check_origin: false,

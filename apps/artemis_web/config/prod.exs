@@ -20,9 +20,12 @@ config :logger, level: :info
 # which you should run after static files are built and
 # before starting your production server.
 config :artemis_web, ArtemisWeb.Endpoint,
-  http: [:inet6, port: System.get_env("ARTEMIS_WEB_PORT") || 4000],
-  url: [host: "example.com", port: 80],
-  cache_static_manifest: "priv/static/cache_manifest.json"
+  http: [port: System.get_env("ARTEMIS_WEB_PORT")],
+  url: [host: "localhost", port: System.get_env("ARTEMIS_WEB_PORT")],
+  cache_static_manifest: "priv/static/cache_manifest.json",
+  server: true,
+  root: ".",
+  version: Application.spec(:artemis, :vsn)
 
 # ## SSL Support
 #
