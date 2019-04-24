@@ -11,8 +11,8 @@ use Mix.Config
 config :logger, level: :info
 
 config :artemis_log, ArtemisLog.Repo,
-  username: System.get_env("ARTEMIS_LOG_POSTGRES_USER"),
-  password: System.get_env("ARTEMIS_LOG_POSTGRES_PASS"),
-  database: System.get_env("ARTEMIS_LOG_POSTGRES_DB") <> "_test",
-  hostname: System.get_env("ARTEMIS_LOG_POSTGRES_HOST"),
+  username: {:system, "ARTEMIS_LOG_POSTGRES_USER"},
+  password: {:system, "ARTEMIS_LOG_POSTGRES_PASS"},
+  database: {:system, "ARTEMIS_LOG_POSTGRES_DB"} <> "_test",
+  hostname: {:system, "ARTEMIS_LOG_POSTGRES_HOST"},
   pool: Ecto.Adapters.SQL.Sandbox

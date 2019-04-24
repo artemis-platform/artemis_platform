@@ -11,7 +11,7 @@ use Mix.Config
 config :logger, level: :info
 
 config :artemis_web, ArtemisWeb.Endpoint,
-  http: [port: System.get_env("ARTEMIS_WEB_PORT")],
+  http: [port: {:system, "ARTEMIS_WEB_PORT"}],
   debug_errors: true,
   code_reloader: true,
   check_origin: false,
