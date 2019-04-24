@@ -1,0 +1,16 @@
+#!/bin/bash
+
+source .env
+export MIX_ENV=prod
+
+# Replace all `System.get_env()` calls with `{:system, ""}` tuples.
+#
+# Enables dynamic environmental variables within distillery releases using
+# the ConfigTuples plugin.
+#
+find apps/*/config/* -type f | xargs sed -i"" -e 's/System.get_env.*(\(.*\))/{:system, \1}/g'
+
+# Build Release
+MIX_ENV=${MIX_ENV} mix release --verbose
+
+exit 0

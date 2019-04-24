@@ -1,6 +1,10 @@
 #!/bin/bash
 
-source .env
-export MIX_ENV=prod
+source /app/config
 
-source /.env && /release/bin/artemis foreground
+cd /app/source
+  mix ecto.create --quiet
+  mix ecto.migrate
+  mix run apps/artemis/priv/repo/seeds.exs
+
+/app/release/bin/artemis foreground

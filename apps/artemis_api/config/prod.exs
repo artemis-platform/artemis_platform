@@ -25,8 +25,8 @@ config :logger, level: :info
 # which you typically run after static files are built.
 config :artemis_api, ArtemisApi.Endpoint,
   load_from_system_env: false,
-  http: [port: {:system, "ARTEMIS_API_PORT"}],
-  url: [host: "localhost", port: {:system, "ARTEMIS_API_PORT"}],
+  http: [port: System.get_env("ARTEMIS_API_PORT")],
+  url: [host: "localhost", port: System.get_env("ARTEMIS_API_PORT")],
   server: true
 
 # ## SSL Support

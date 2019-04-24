@@ -9,7 +9,7 @@ config :artemis_api,
 
 config :artemis_api, ArtemisApi.Endpoint,
   url: [host: "localhost"],
-  secret_key_base: {:system, "ARTEMIS_SECRET_KEY"},
+  secret_key_base: System.get_env("ARTEMIS_SECRET_KEY"),
   render_errors: [view: ArtemisApi.ErrorView, accepts: ~w(json)],
   pubsub: [name: ArtemisPubSub]
 
@@ -18,7 +18,7 @@ config :artemis_api, ArtemisApi.Guardian,
   issuer: "artemis",
   ttl: { 18, :hours },
   verify_issuer: true,
-  secret_key: {:system, "ARTEMIS_GUARDIAN_KEY"}
+  secret_key: System.get_env("ARTEMIS_GUARDIAN_KEY")
 
 config :logger, :console,
   format: "$time $metadata[$level] $levelpad$message\n",
