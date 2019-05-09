@@ -1,6 +1,8 @@
 defmodule ArtemisWeb.Router do
   use ArtemisWeb, :router
 
+  require Ueberauth
+
   pipeline :browser do
     plug :accepts, ["html", "csv"]
     plug :fetch_session
@@ -31,7 +33,14 @@ defmodule ArtemisWeb.Router do
     pipe_through :read_auth
 
     get "/", HomeController, :index
-    resources "/sessions", SessionController, only: [:new, :show, :delete]
+
+    scope "/auth" do
+      get "/new", AuthController, :new
+      get "/:provider", AuthController, :request
+      get "/:provider/callback", AuthController, :callback
+      post "/:provider/callback", AuthController, :callback
+      delete "/logout", AuthController, :delete
+    end
 
     scope "/" do
       pipe_through :require_auth

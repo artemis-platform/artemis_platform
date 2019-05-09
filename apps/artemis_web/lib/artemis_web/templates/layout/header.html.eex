@@ -24,7 +24,7 @@
               </span>
             </a>
           <% else %>
-            <a href="<%= Routes.session_path(@conn, :new) %>">
+            <a href="<%= Routes.auth_path(@conn, :new) %>">
               <span>
                 <i class="sign-in icon"></i>
                 Log In

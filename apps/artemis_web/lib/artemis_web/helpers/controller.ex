@@ -1,4 +1,4 @@
-defmodule ArtemisWeb.Controller.Helpers do
+defmodule ArtemisWeb.Helpers.Controller do
   @doc """
   Convert checkbox form data to params
 

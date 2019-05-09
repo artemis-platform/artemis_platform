@@ -5,13 +5,15 @@ defmodule Artemis.User do
   schema "users" do
     field :client_key, :string
     field :client_secret, :string
+    field :description, :string
     field :email, :string
     field :first_name, :string
+    field :image, :string
+    field :last_log_in_at, :utc_datetime
     field :last_name, :string
     field :name, :string
-    field :provider_data, :map
-    field :provider_uid, :string
 
+    has_many :auth_providers, Artemis.AuthProvider, on_delete: :delete_all
     has_many :user_roles, Artemis.UserRole, on_delete: :delete_all, on_replace: :delete
     has_many :roles, through: [:user_roles, :role]
     has_many :permissions, through: [:roles, :permissions]
@@ -24,12 +26,13 @@ defmodule Artemis.User do
   def updatable_fields, do: [
     :client_key,
     :client_secret,
+    :description,
     :email,
     :name,
     :first_name,
-    :last_name,
-    :provider_uid,
-    :provider_data
+    :image,
+    :last_log_in_at,
+    :last_name
   ]
 
   def required_fields, do: [

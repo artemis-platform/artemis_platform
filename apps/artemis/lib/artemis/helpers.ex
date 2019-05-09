@@ -101,6 +101,13 @@ defmodule Artemis.Helpers do
   end
 
   @doc """
+  Converts an atom or integer as a bitstring
+  """
+  def to_string(value) when is_atom(value), do: Atom.to_string(value)
+  def to_string(value) when is_integer(value), do: Integer.to_string(value)
+  def to_string(value), do: value
+
+  @doc """
   Converts a nested list to a nested map. Example:
 
   Input: [[:one, :two, 3], [:one, :three, 3]]
@@ -266,6 +273,62 @@ defmodule Artemis.Helpers do
     |> :erlang.binary_to_list
     |> :erlang.list_to_pid
   end
+
+  @doc """
+  Recursive version of `Map.delete/2`. Adds support for nested values:
+
+  Example:
+
+    map = %{
+      hello: "world",
+      nested: %{example: "value", hello: "world"}
+    }
+
+    deep_delete(map, [:nested, :example])
+
+  Returns:
+
+    %{
+      nested: %{example: "value"}
+    }
+
+  """
+  def deep_delete(data, delete_key) when is_map(data) do
+    data
+    |> Map.delete(delete_key)
+    |> Enum.reduce(%{}, fn ({key, value}, acc) ->
+      Map.put(acc, key, deep_delete(value, delete_key))
+    end)
+  end
+  def deep_delete(data, _), do: data
+
+  @doc """
+  Recursive version of `Map.get/2`. Adds support for nested values:
+
+  Example:
+
+    map = %{
+      simple: "simple",
+      nested: %{example: "value", other: "value"}
+    }
+
+    deep_get(map, [:nested, :example])
+
+  Returns:
+
+    "value"
+
+  """
+  def deep_get(data, keys, default \\ nil)
+  def deep_get(data, [current_key|remaining_keys], default) when is_map(data) do
+    value = Map.get(data, current_key)
+
+    case remaining_keys do
+      [] -> value
+      _ -> deep_get(value, remaining_keys, default)
+    end
+  end
+  def deep_get(_data, _, default), do: default
 
   @doc """
   Recursive version of `Map.take/2`. Adds support for nested values:

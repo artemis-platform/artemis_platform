@@ -15,7 +15,7 @@
         <%= action "Edit", to: Routes.user_path(@conn, :edit, @user), color: "green" %>
       <% end %>
       <%= if current_user?(@conn) && current_user(@conn).id == @user.id do %>
-        <%= action "Log Out", method: "delete", to: Routes.session_path(@conn, :delete, current_user(@conn)), color: "blue", data: [confirm: "Log Out?"] %>
+        <%= action "Log Out", method: "delete", to: Routes.auth_path(@conn, :delete), color: "blue", data: [confirm: "Log Out?"] %>
       <% end %>
     </div>
   </header>

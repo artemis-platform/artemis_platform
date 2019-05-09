@@ -24,7 +24,7 @@ defmodule ArtemisWeb.MixProject do
   def application do
     [
       mod: {ArtemisWeb.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :ueberauth]
     ]
   end
 
@@ -51,6 +51,9 @@ defmodule ArtemisWeb.MixProject do
       {:oauth2, "~> 0.9"},
       {:nimble_csv, "~> 0.5"},
       {:scrivener_html, "~> 1.8"},
+      {:timex, "~> 3.0"},
+      {:ueberauth, "~> 0.6"},
+      {:ueberauth_github, "~> 0.7"},
       {:artemis, in_umbrella: true},
       {:artemis_pubsub, in_umbrella: true},
       {:artemis_log, in_umbrella: true, only: :test}

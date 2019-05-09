@@ -1,0 +1,15 @@
+<main role="main" id="login">
+  <section>
+    <h1>
+      <i class="fire icon"></i>
+      Artemis Dashboard
+    </h1>
+    <ul class="providers">
+      <%= for provider <- list_auth_providers(@conn) do %>
+        <li>
+          <%= action provider.title, to: provider.link, color: Map.get(provider, :color, "gray"), size: "medium" %>
+        </li>
+      <% end %>
+    </ul>
+  </section>
+</main>

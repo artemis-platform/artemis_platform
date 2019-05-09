@@ -44,7 +44,7 @@ defmodule ArtemisWeb.Guardian.Helpers do
   Immediately redirect to the user log in
   """
   def redirect_to_log_in(conn) do
-    path = ArtemisWeb.Router.Helpers.session_path(conn, :new)
+    path = ArtemisWeb.Router.Helpers.auth_path(conn, :new)
     query_params = "?redirect=#{conn.request_path}"
 
     conn

@@ -22,9 +22,9 @@ defmodule ArtemisWeb do
       use Phoenix.Controller, namespace: ArtemisWeb
 
       import Plug.Conn
-      import ArtemisWeb.Controller.Helpers
       import ArtemisWeb.Gettext
       import ArtemisWeb.Guardian.Helpers
+      import ArtemisWeb.Helpers.Controller
       import ArtemisWeb.UserAccess
 
       alias ArtemisWeb.Router.Helpers, as: Routes
