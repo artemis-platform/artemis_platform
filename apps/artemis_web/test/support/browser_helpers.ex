@@ -4,8 +4,8 @@ defmodule ArtemisWeb.BrowserHelpers do
   import ArtemisWeb.Router.Helpers
 
   def browser_sign_in() do
-    navigate_to(session_url(ArtemisWeb.Endpoint, :new))
-    click_link("Local Provider")
+    navigate_to(auth_url(ArtemisWeb.Endpoint, :new))
+    click_link("Log in as System User")
   end
 
   # Actions
@@ -31,7 +31,7 @@ defmodule ArtemisWeb.BrowserHelpers do
   # Assertions
 
   def redirected_to_sign_in_page?() do
-    current_path() == session_path(ArtemisWeb.Endpoint, :new)
+    current_path() == auth_path(ArtemisWeb.Endpoint, :new)
   end
 
   def visible?(value) when is_bitstring(value) do

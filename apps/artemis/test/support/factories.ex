@@ -3,6 +3,15 @@ defmodule Artemis.Factories do
 
   # Factories
 
+  def auth_provider_factory do
+    %Artemis.AuthProvider{
+      data: %{},
+      type: Faker.Internet.slug(),
+      uid: sequence(:uid, &"#{Faker.Internet.slug()}-#{&1}"),
+      user: insert(:user)
+    }
+  end
+
   def feature_factory do
     %Artemis.Feature{
       active: false,
@@ -43,6 +52,11 @@ defmodule Artemis.Factories do
   end
 
   # Traits
+
+  def with_auth_providers(%Artemis.User{} = user, number \\ 3) do
+    insert_list(number, :auth_provider, user: user)
+    user
+  end
 
   def with_permission(%Artemis.User{} = user, slug) do
     permission = Artemis.Repo.get_by(Artemis.Permission, slug: slug) || insert(:permission, slug: slug)
