@@ -5,6 +5,7 @@ defmodule ArtemisLog.Worker do
   
   alias ArtemisLog.CreateEventLog
 
+  @subscribe_to_events Application.get_env(:artemis_log, :subscribe_to_events, true)
   @topic "private:artemis"
 
   def start_link() do
@@ -17,7 +18,9 @@ defmodule ArtemisLog.Worker do
   # Callbacks
 
   def init(state) do
-    :ok = subscribe(@topic)
+    if @subscribe_to_events do
+      :ok = subscribe(@topic)
+    end
 
     {:ok, state}
   end

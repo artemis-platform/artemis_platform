@@ -16,3 +16,6 @@ config :artemis_log, ArtemisLog.Repo,
   database: System.get_env("ARTEMIS_LOG_POSTGRES_DB") <> "_test",
   hostname: System.get_env("ARTEMIS_LOG_POSTGRES_HOST"),
   pool: Ecto.Adapters.SQL.Sandbox
+
+config :artemis_log,
+  subscribe_to_events: false
