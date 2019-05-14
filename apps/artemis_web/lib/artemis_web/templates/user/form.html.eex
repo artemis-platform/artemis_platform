@@ -9,7 +9,9 @@
     <%= text_input f, :email, placeholder: "Email" %>
   </div>
 
-  <ul>
+  <h3>Roles</h3>
+
+  <ul class="form-checklist">
     <%= for role <- @roles do %>
       <% user_role = find_user_role(role.id, f, @user) %>
       <li>

@@ -101,6 +101,21 @@ table thead th a {
   color: #333;
 }
 
+ul.providers {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+ul.providers li {
+  margin-right: 5px;
+}
+
+ul.form-checklist li {
+  display: flex;
+}
+
 /* Pagination */
 
 .pagination {
