@@ -14,7 +14,9 @@
     <%= textarea f, :description %>
   </div>
 
-  <ul>
+  <h3>Permissions</h3>
+
+  <ul class="form-checklist">
     <%= for permission <- @permissions do %>
       <% is_checked = find_permission(permission.id, f, @role) %>
       <li>
