@@ -1,5 +1,15 @@
 #!/usr/bin/env bash
 
+set -a
 source .env
+set +a
 
-MIX_ENV=test mix do ecto.create --quiet, ecto.migrate, test $@
+if [ ! -z "$1" ]; then
+  APP="--app $1"
+fi
+
+if [ ! -z "$2" ]; then
+  TEST_PATH="$2"
+fi
+
+MIX_ENV=test mix do ecto.create --quiet, ecto.migrate, cmd ${APP} mix test --color ${TEST_PATH}

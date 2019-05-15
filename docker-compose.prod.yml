@@ -12,7 +12,7 @@ services:
     restart: unless-stopped
     volumes:
       - type: volume
-        source: pgdata
+        source: postgres_data
         target: "/var/lib/postgresql/data"
 
   server:
@@ -36,4 +36,4 @@ networks:
     driver: bridge
 
 volumes:
-  pgdata:
+  postgres_data:

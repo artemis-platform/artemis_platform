@@ -1,6 +1,8 @@
 #!/bin/bash
 
-source /app/config
+# source /app/config
+
+# TODO: create `/app/config/.env` file if it does not exist
 
 cd /app/source
   mix ecto.create --quiet
