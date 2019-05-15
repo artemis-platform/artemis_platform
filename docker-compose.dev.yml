@@ -1,7 +1,7 @@
 version: "3.7"
 
 services:
-  db:
+  postgres:
     image: postgres:11.1
     environment:
       POSTGRES_USER: postgres
@@ -12,14 +12,14 @@ services:
     restart: unless-stopped
     volumes:
       - type: volume
-        source: pgdata
+        source: postgres_data
         target: "/var/lib/postgresql/data"
 
   server:
     build: .
     command: bin/docker-dev/entrypoint
     depends_on:
-      - db
+      - postgres
     environment:
       MIX_ENV: dev
     env_file:
@@ -40,4 +40,4 @@ networks:
     driver: bridge
 
 volumes:
-  pgdata:
+  postgres_data:

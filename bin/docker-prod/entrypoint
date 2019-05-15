@@ -1,7 +1,5 @@
 #!/bin/bash
 
-source /app/config
-
 cd /app/source
   mix ecto.create --quiet
   mix ecto.migrate

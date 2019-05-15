@@ -1,7 +1,10 @@
 #!/bin/bash
 
+set -a
 source .env
+set +a
+
 export MIX_ENV=prod
 
 docker-compose -f "docker-compose.${MIX_ENV}.yml" down
-docker volume rm artemis_pgdata
+docker volume rm artemis_postgres_data

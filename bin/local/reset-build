@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 
-source .env && \
+set -a
+source .env
+set +a
+
 rm -rf ./_build && \
 rm -rf ./deps && \
 mix local.hex --force && \

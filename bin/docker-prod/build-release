@@ -1,6 +1,9 @@
 #!/bin/bash
 
+set -a
 source .env
+set +a
+
 export MIX_ENV=prod
 
 # Replace all `System.get_env()` calls with `{:system, ""}` tuples.

@@ -1,3 +1,7 @@
 #!/usr/bin/env bash
 
-source .env && MIX_ENV=test mix do ecto.drop, ecto.create
+set -a
+source .env
+set +a
+
+MIX_ENV=test mix do ecto.drop, ecto.create
