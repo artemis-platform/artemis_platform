@@ -1,9 +1,16 @@
-<main role="main" id="login">
-  <section>
-    <h1>
-      <i class="fire icon"></i>
-      Artemis Dashboard
-    </h1>
+<div id="content-header">
+  <header>
+    <h1>Log In</h1>
+  </header>
+</div>
+
+<div id="content-navigation">
+  <%= render_breadcrumbs @conn %>
+</div>
+
+<div id="content">
+  <%= render_flash_notifications @conn %>
+  <h3>Log In with Provider</h3>
     <ul class="providers">
       <%= for provider <- list_auth_providers(@conn) do %>
         <li>
@@ -11,5 +18,4 @@
         </li>
       <% end %>
     </ul>
-  </section>
-</main>
+</div>

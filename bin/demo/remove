@@ -1,6 +1,8 @@
 #!/bin/bash
 
+set -a
 source .env
+set +a
 
 bin/docker-prod/remove
 

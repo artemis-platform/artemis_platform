@@ -1,6 +1,9 @@
 #!/bin/bash
 
+set -a
 source .env
+set +a
+
 export MIX_ENV=dev
 
 docker-compose -f "docker-compose.${MIX_ENV}.yml" down

@@ -28,13 +28,13 @@ defmodule ArtemisWeb.AuthController do
 
   def request(conn, _params) do
     conn
-    |> put_flash(:info, "Specified Auth Provider not recognized")
+    |> put_flash(:info, "Specified auth provider not recognized")
     |> redirect(to: Routes.auth_path(conn, :new))
   end
 
   def callback(%{assigns: %{ueberauth_failure: _fails}} = conn, _params) do
     conn
-    |> put_flash(:error, "Failed to authenticate.")
+    |> put_flash(:error, "Failed to authenticate")
     |> redirect(to: "/")
   end
   def callback(%{assigns: %{ueberauth_auth: data}} = conn, _params) do

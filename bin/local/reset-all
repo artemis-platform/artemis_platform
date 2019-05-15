@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 
-source .env && \
+set -a
+source .env
+set +a
+
 ./bin/local/reset-build && \
 ./bin/local/reset-database && \
 ./bin/local/reset-tests && \

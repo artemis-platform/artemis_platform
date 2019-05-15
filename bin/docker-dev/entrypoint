@@ -1,6 +1,9 @@
 #!/bin/bash
 
+set -a
 source .env
+set +a
+
 export MIX_ENV=dev
 
 if [ ! -d ./apps/artemis_web/assets/node_modules ]; then

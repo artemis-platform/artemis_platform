@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
+set -a
 source .env
+set +a
 
 # Accepts the following ENV variables:
 #

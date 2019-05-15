@@ -99,7 +99,22 @@ bin/docker-dev/test
 Comprehensive unit tests are included in Artemis. To run them use:
 
 ```bash
-bin/local/test
+bin/local/test <app> <file>:<line-number>
+```
+
+For example:
+
+```bash
+bin/local/test # Run all tests on all applications
+bin/local/test artemis_web # Only run tests for artemis_web application
+bin/local/test artemis_web test/artemis_web/controllers/feature_controller_test.exs:14 # Only run a specific test
+```
+
+Or if you prefer to use `mix test` directly, make sure environmental variables are exported first:
+
+```bash
+$ set -a && source .env && set +a
+$ mix test
 ```
 
 #### Browser Tests

@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
+set -a
 source .env
+set +a
 
 root_dir=$(pwd)
 assets_dir="${root_dir}/apps/artemis_web/assets"

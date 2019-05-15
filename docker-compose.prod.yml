@@ -1,7 +1,7 @@
 version: "3.7"
 
 services:
-  db:
+  postgres:
     image: postgres:11.1
     environment:
       POSTGRES_USER: postgres
@@ -19,7 +19,7 @@ services:
     build: .
     command: bin/docker-prod/entrypoint
     depends_on:
-      - db
+      - postgres
     environment:
       MIX_ENV: prod
     env_file:
