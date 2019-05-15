@@ -38,7 +38,9 @@ before_install:
   - sudo apt-get install chromium-chromedriver
   - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
   - cp .env.travis .env
+  - set -a
   - source .env
+  - set +a
   - mix local.rebar --force
 
 before_script:
