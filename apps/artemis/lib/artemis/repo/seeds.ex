@@ -155,5 +155,9 @@ defmodule Artemis.Repo.Seeds do
           :ok
       end
     end)
+
+    # Return Value
+
+    {:ok, []}
   end
 end

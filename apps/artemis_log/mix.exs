@@ -34,10 +34,10 @@ defmodule ArtemisLog.MixProject do
       {:postgrex, ">= 0.0.0"},
       {:jason, "~> 1.0"},
       {:scrivener_ecto, "~> 2.0"},
+      {:ex_machina, "~> 2.2"},
+      {:faker, "~> 0.11"},
       {:artemis, in_umbrella: true},
-      {:artemis_pubsub, in_umbrella: true},
-      {:ex_machina, "~> 2.2", only: :test},
-      {:faker, "~> 0.11", only: :test}
+      {:artemis_pubsub, in_umbrella: true}
     ]
   end
 
