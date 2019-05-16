@@ -88,11 +88,21 @@ defmodule ArtemisWeb.UserController do
 
   def delete(conn, %{"id" => id}) do
     authorize(conn, "users:delete", fn () ->
-      {:ok, _user} = DeleteUser.call(id, current_user(conn))
+      user = current_user(conn)
+      record = GetUser.call!(id, user)
 
-      conn
-      |> put_flash(:info, "User deleted successfully.")
-      |> redirect(to: Routes.user_path(conn, :index))
+      case record.id == user.id do
+        false ->
+          {:ok, _} = DeleteUser.call(id, user)
+
+          conn
+          |> put_flash(:info, "User deleted successfully.")
+          |> redirect(to: Routes.user_path(conn, :index))
+        true ->
+          conn
+          |> put_flash(:error, "Cannot delete own user")
+          |> redirect(to: Routes.user_path(conn, :show, user))
+      end
     end)
   end
 end
