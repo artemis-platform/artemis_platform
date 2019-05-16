@@ -5,7 +5,7 @@
     </h1>
 
     <div class="actions">
-      <%= if has?(@conn, "users:delete") do %>
+      <%= if has?(@conn, "users:delete") && current_user(@conn).id != @user.id do %>
         <%= action "Delete", method: "delete", to: Routes.user_path(@conn, :delete, @user), data: [confirm: "Confirm Delete"] %>
       <% end %>
       <%= if current_user?(@conn) && current_user(@conn).id != @user.id do %>
