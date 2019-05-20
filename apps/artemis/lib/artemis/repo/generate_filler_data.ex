@@ -8,16 +8,31 @@ defmodule Artemis.Repo.GenerateFillerData do
   @moduledoc """
   Generate consistent data for development, QA, test, and demo environments.
 
-  Requires a verification phrase to be passed to prevent accidental execution
-  in a production environment.
+  Requires a verification phrase to be passed to prevent accidental execution.
   """
 
   @verification_phrase "confirming-generation-of-filler-data"
 
   def call(verification_phrase) do
+    with true <- enabled?(),
+         true <- verification_phrase?(verification_phrase) do
+      {:ok, generate_data()}
+    else
+      error -> error
+    end
+  end
+
+  defp enabled? do
+    case Application.fetch_env!(:artemis, :actions)[:repo_generate_filler_data][:enabled] do
+      false -> {:error, "Action not enabled in the application config"}
+      true -> true
+    end
+  end
+
+  defp verification_phrase?(verification_phrase) do
     case verification_phrase == @verification_phrase do
-      true -> {:ok, generate_data()}
-      false -> {:error, "Verification phrase required"}
+      false -> {:error, "Action requires valid verification phrase to be passed"}
+      true -> true
     end
   end
 

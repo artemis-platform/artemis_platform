@@ -122,8 +122,8 @@ defmodule Artemis.Repo.GenerateData do
     # Users
 
     users = [
-      Application.fetch_env!(:artemis, :root_user),
-      Application.fetch_env!(:artemis, :system_user)
+      Application.fetch_env!(:artemis, :users)[:root_user],
+      Application.fetch_env!(:artemis, :users)[:system_user]
     ]
 
     Enum.map(users, fn (params) ->
@@ -146,8 +146,8 @@ defmodule Artemis.Repo.GenerateData do
     role = Repo.get_by!(Role, slug: "developer")
 
     user_emails = [
-      Application.fetch_env!(:artemis, :root_user).email,
-      Application.fetch_env!(:artemis, :system_user).email
+      Application.fetch_env!(:artemis, :users)[:root_user].email,
+      Application.fetch_env!(:artemis, :users)[:system_user].email
     ]
     users = Enum.map(user_emails, &Repo.get_by!(User, email: &1))
 
