@@ -1,1 +1,1 @@
-Artemis.Repo.Seeds.call()
+Artemis.Repo.GenerateData.call()

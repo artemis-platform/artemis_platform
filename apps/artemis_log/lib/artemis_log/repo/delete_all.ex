@@ -1,4 +1,10 @@
 defmodule ArtemisLog.Repo.DeleteAll do
+  @moduledoc """
+  Delete all application data from the database.
+
+  Requires a verification phrase to be passed to prevent accidental execution.
+  """
+
   @schemas [
     ArtemisLog.EventLog
   ]
@@ -7,7 +13,7 @@ defmodule ArtemisLog.Repo.DeleteAll do
   def call(verification_phrase) do
     case verification_phrase == @verification_phrase do
       true -> {:ok, delete_all()}
-      false -> {:error, "Verification phrase required"}
+      false -> {:error, "Action requires valid verification phrase to be passed"}
     end
   end
 

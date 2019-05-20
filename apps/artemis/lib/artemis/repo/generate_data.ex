@@ -1,4 +1,4 @@
-defmodule Artemis.Repo.Seeds do
+defmodule Artemis.Repo.GenerateData do
   import Ecto.Query
 
   alias Artemis.Permission
@@ -6,6 +6,18 @@ defmodule Artemis.Repo.Seeds do
   alias Artemis.Role
   alias Artemis.User
   alias Artemis.UserRole
+
+  @moduledoc """
+  Defines the minimum data required for the application to run.
+
+  Should be run each time new code is deployed to ensure application integrity.
+
+  To prevent data collisions, each section must be idempotent - only attempting
+  to create data when it is not present.
+
+  Note: Filler data used for development, qa, test and demo environments should
+  be defined in `Artemis.Repo.GenerateFillerData` instead.
+  """
 
   def call() do
 
