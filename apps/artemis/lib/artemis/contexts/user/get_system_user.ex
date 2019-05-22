@@ -15,8 +15,10 @@ defmodule Artemis.GetSystemUser do
   end
 
   defp get_record(options, get_by) do
+    system_user = Application.fetch_env!(:artemis, :users)[:system_user]
+
     User
     |> preload(^Keyword.get(options, :preload, @default_preload))
-    |> get_by.(email: Application.fetch_env!(:artemis, :system_user).email)
+    |> get_by.(email: system_user.email)
   end
 end

@@ -21,14 +21,14 @@ defmodule Ueberauth.Strategy.SystemUser do
   alias Ueberauth.Auth.Extra
 
   def uid(_conn) do
-    Application.fetch_env!(:artemis, :system_user).email
+    get_system_user().email
   end
 
   def info(conn) do
     struct(
       Info,
-      email: Application.fetch_env!(:artemis, :system_user).email,
-      name: Application.fetch_env!(:artemis, :system_user).name,
+      email: get_system_user().email,
+      name: get_system_user().name,
       first_name: param_for(conn, :first_name_field),
       last_name: param_for(conn, :last_name_field),
       nickname: param_for(conn, :nickname_field),
@@ -81,4 +81,8 @@ defmodule Ueberauth.Strategy.SystemUser do
   defp scrub?(" " <> rest), do: scrub?(rest)
   defp scrub?(""), do: true
   defp scrub?(_), do: false
+
+  defp get_system_user do
+    Application.fetch_env!(:artemis, :users)[:system_user]
+  end
 end
