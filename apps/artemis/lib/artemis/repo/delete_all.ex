@@ -24,6 +24,8 @@ defmodule Artemis.Repo.DeleteAll do
     end
   end
 
+  def verification_phrase, do: @verification_phrase
+
   defp enabled? do
     case Application.fetch_env!(:artemis, :actions)[:repo_delete_all][:enabled] do
       false -> {:error, "Action not enabled in the application config"}
