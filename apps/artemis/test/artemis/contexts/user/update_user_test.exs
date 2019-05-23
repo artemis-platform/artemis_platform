@@ -7,10 +7,10 @@ defmodule Artemis.UpdateUserTest do
 
   describe "call!" do
     test "raises an exception when id not found" do
-      invalid_id = 50000000
+      invalid_id = 50_000_000
       params = params_for(:user)
 
-      assert_raise Artemis.Context.Error, fn () ->
+      assert_raise Artemis.Context.Error, fn ->
         UpdateUser.call!(invalid_id, params, Mock.system_user())
       end
     end
@@ -45,7 +45,7 @@ defmodule Artemis.UpdateUserTest do
 
   describe "call" do
     test "returns an error when id not found" do
-      invalid_id = 50000000
+      invalid_id = 50_000_000
       params = params_for(:user)
 
       {:error, _} = UpdateUser.call(invalid_id, params, Mock.system_user())
@@ -106,7 +106,8 @@ defmodule Artemis.UpdateUserTest do
     end
 
     test "removes associations when explicitly passed an empty value" do
-      user = :user
+      user =
+        :user
         |> insert
         |> with_user_roles
 

@@ -19,6 +19,7 @@ defmodule ArtemisWeb.AuthController do
     case current_user(conn) do
       nil ->
         render(conn, "new.html")
+
       _user ->
         conn
         |> put_flash(:info, "Already logged in")
@@ -37,11 +38,12 @@ defmodule ArtemisWeb.AuthController do
     |> put_flash(:error, "Failed to authenticate")
     |> redirect(to: "/")
   end
+
   def callback(%{assigns: %{ueberauth_auth: data}} = conn, _params) do
     with {:ok, user} <- GetUserByAuthProviderData.call(data),
          {:ok, session} <- CreateSession.call(user),
          {:ok, _} <- Event.broadcast(session, "session:created:web", user) do
-      Logger.debug "Log In with Auth Provider Session: " <> inspect(session)
+      Logger.debug("Log In with Auth Provider Session: " <> inspect(session))
 
       conn
       |> sign_in(user)
@@ -49,7 +51,7 @@ defmodule ArtemisWeb.AuthController do
       |> redirect(to: "/")
     else
       error ->
-        Logger.debug "Log In With Provider Error: " <> inspect(error)
+        Logger.debug("Log In With Provider Error: " <> inspect(error))
 
         conn
         |> put_flash(:error, "Error logging in")

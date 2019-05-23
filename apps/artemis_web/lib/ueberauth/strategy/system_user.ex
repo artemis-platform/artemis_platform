@@ -74,6 +74,7 @@ defmodule Ueberauth.Strategy.SystemUser do
   end
 
   defp scrub_param(param, false), do: param
+
   defp scrub_param(param, _) do
     if scrub?(param), do: nil, else: param
   end

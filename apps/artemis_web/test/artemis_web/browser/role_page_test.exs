@@ -78,7 +78,8 @@ defmodule ArtemisWeb.RolePageTest do
 
   describe "show" do
     setup do
-      role = :role
+      role =
+        :role
         |> insert()
         |> with_permissions()
 

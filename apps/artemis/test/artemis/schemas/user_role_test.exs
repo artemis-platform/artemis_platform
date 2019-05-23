@@ -27,7 +27,8 @@ defmodule Artemis.UserRoleTest do
 
       assert Repo.get(User, user_role.created_by.id) == nil
 
-      user_role = UserRole
+      user_role =
+        UserRole
         |> preload(^@preload)
         |> Repo.get(user_role.id)
 

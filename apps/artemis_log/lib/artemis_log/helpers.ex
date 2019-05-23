@@ -21,16 +21,19 @@ defmodule ArtemisLog.Helpers do
   """
   def keys_to_strings(map, options \\ [])
   def keys_to_strings(%_{} = struct, _options), do: struct
+
   def keys_to_strings(map, options) when is_map(map) do
     for {key, value} <- map, into: %{} do
-      key = case is_atom(key) do
-        false -> key
-        true -> Atom.to_string(key)
-      end
+      key =
+        case is_atom(key) do
+          false -> key
+          true -> Atom.to_string(key)
+        end
 
       {key, keys_to_strings(value, options)}
     end
   end
+
   def keys_to_strings(value, _), do: value
 
   @doc """
@@ -57,13 +60,16 @@ defmodule ArtemisLog.Helpers do
     {nested_keys, simple_keys} = Enum.split_with(keys, &is_tuple/1)
 
     simple = Map.take(map, simple_keys)
-    nested = Enum.reduce(nested_keys, %{}, fn ({key, keys}, acc) ->
-      value = map
-        |> Map.get(key)
-        |> deep_take(keys)
 
-      Map.put(acc, key, value)
-    end)
+    nested =
+      Enum.reduce(nested_keys, %{}, fn {key, keys}, acc ->
+        value =
+          map
+          |> Map.get(key)
+          |> deep_take(keys)
+
+        Map.put(acc, key, value)
+      end)
 
     Map.merge(simple, nested)
   end

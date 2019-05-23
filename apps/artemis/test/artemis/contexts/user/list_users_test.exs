@@ -21,7 +21,7 @@ defmodule Artemis.ListUsersTest do
     test "returns existing user" do
       user = insert(:user)
 
-      assert ListUsers.call(Mock.system_user())  == [user]
+      assert ListUsers.call(Mock.system_user()) == [user]
     end
 
     test "returns a list of users" do
@@ -58,7 +58,8 @@ defmodule Artemis.ListUsersTest do
         paginate: true
       }
 
-      response_keys = ListUsers.call(params, Mock.system_user())
+      response_keys =
+        ListUsers.call(params, Mock.system_user())
         |> Map.from_struct()
         |> Map.keys()
 

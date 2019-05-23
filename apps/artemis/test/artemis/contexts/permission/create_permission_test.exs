@@ -7,7 +7,7 @@ defmodule Artemis.CreatePermissionTest do
 
   describe "call!" do
     test "returns error when params are empty" do
-      assert_raise Artemis.Context.Error, fn () ->
+      assert_raise Artemis.Context.Error, fn ->
         CreatePermission.call!(%{}, Mock.system_user())
       end
     end

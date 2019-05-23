@@ -5,6 +5,7 @@ defmodule ArtemisApi.Public.SessionsTest do
   describe "create_session" do
     setup do
       user = Mock.system_user()
+
       query = """
         mutation createSession{
           createSession(
@@ -35,26 +36,28 @@ defmodule ArtemisApi.Public.SessionsTest do
     test "returns a token", %{conn: conn, query: query} do
       conn = post(conn, "/", %{query: query})
 
-      payload = conn.resp_body
+      payload =
+        conn.resp_body
         |> Jason.decode!()
         |> Map.get("data")
         |> Map.get("createSession")
-      
+
       assert payload["token"] != nil
     end
 
     test "returns a token expiration time", %{conn: conn, query: query} do
       conn = post(conn, "/", %{query: query})
 
-      payload = conn.resp_body
+      payload =
+        conn.resp_body
         |> Jason.decode!()
         |> Map.get("data")
         |> Map.get("createSession")
-      
+
       assert payload["token_creation"] != nil
       assert payload["token_expiration"] != nil
 
-      expires_in = String.to_integer(payload["token_expiration"]) - String.to_integer(payload["token_creation"]) 
+      expires_in = String.to_integer(payload["token_expiration"]) - String.to_integer(payload["token_creation"])
 
       assert expires_in == 60 * 60 * 18
     end
@@ -62,11 +65,12 @@ defmodule ArtemisApi.Public.SessionsTest do
     test "returns a user", %{conn: conn, query: query, user: user} do
       conn = post(conn, "/", %{query: query})
 
-      payload = conn.resp_body
+      payload =
+        conn.resp_body
         |> Jason.decode!()
         |> Map.get("data")
         |> Map.get("createSession")
-      
+
       assert payload["user"]["id"] == "#{user.id}"
     end
 

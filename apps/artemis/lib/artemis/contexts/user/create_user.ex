@@ -15,7 +15,7 @@ defmodule Artemis.CreateUser do
   def call(params, user) do
     params = default_params(params)
 
-    with_transaction(fn () ->
+    with_transaction(fn ->
       params
       |> insert_record()
       |> update_associations(params)
@@ -33,6 +33,6 @@ defmodule Artemis.CreateUser do
   defp insert_record(params) do
     %User{}
     |> User.changeset(params)
-    |> Repo.insert
+    |> Repo.insert()
   end
 end

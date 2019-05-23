@@ -16,7 +16,7 @@ defmodule Artemis.RoleTest do
     test "name must be unique" do
       existing = insert(:role)
 
-      assert_raise Ecto.ConstraintError, fn () ->
+      assert_raise Ecto.ConstraintError, fn ->
         insert(:role, name: existing.name)
       end
     end
@@ -24,7 +24,7 @@ defmodule Artemis.RoleTest do
     test "slug must be unique" do
       existing = insert(:role)
 
-      assert_raise Ecto.ConstraintError, fn () ->
+      assert_raise Ecto.ConstraintError, fn ->
         insert(:role, slug: existing.slug)
       end
     end
@@ -32,7 +32,8 @@ defmodule Artemis.RoleTest do
 
   describe "associations - permissions" do
     setup do
-      role = :role
+      role =
+        :role
         |> insert
         |> with_permissions
 
@@ -44,9 +45,10 @@ defmodule Artemis.RoleTest do
 
       assert length(role.permissions) == 3
 
-      {:ok, updated} = role
+      {:ok, updated} =
+        role
         |> Role.associations_changeset(%{permissions: [new_permission]})
-        |> Repo.update
+        |> Repo.update()
 
       assert length(updated.permissions) == 1
       assert updated.permissions == [new_permission]
@@ -55,9 +57,10 @@ defmodule Artemis.RoleTest do
     test "deleting has_many associations is possible by passing an empty list", %{role: role} do
       assert length(role.permissions) == 3
 
-      {:ok, updated} = role
+      {:ok, updated} =
+        role
         |> Role.associations_changeset(%{permissions: []})
-        |> Repo.update
+        |> Repo.update()
 
       assert length(updated.permissions) == 0
       assert updated.permissions == []
@@ -69,7 +72,8 @@ defmodule Artemis.RoleTest do
 
       Enum.map(role.permissions, &Repo.delete!(&1))
 
-      role = Role
+      role =
+        Role
         |> preload(^@preload)
         |> Repo.get(role.id)
 
@@ -91,7 +95,8 @@ defmodule Artemis.RoleTest do
 
   describe "associations - user roles" do
     setup do
-      role = :role
+      role =
+        :role
         |> insert
         |> with_user_roles
 
@@ -104,7 +109,8 @@ defmodule Artemis.RoleTest do
 
       Enum.map(role.user_roles, &Repo.delete(&1))
 
-      role = Role
+      role =
+        Role
         |> preload(^@preload)
         |> Repo.get(role.id)
 
@@ -120,7 +126,7 @@ defmodule Artemis.RoleTest do
 
       assert Repo.get(Role, role.id) == nil
 
-      Enum.map(role.user_roles, fn (user_role) ->
+      Enum.map(role.user_roles, fn user_role ->
         assert Repo.get(UserRole, user_role.id) == nil
       end)
     end

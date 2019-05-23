@@ -13,7 +13,7 @@ defmodule Artemis.CreateRole do
   end
 
   def call(params, user) do
-    with_transaction(fn () ->
+    with_transaction(fn ->
       params
       |> insert_record
       |> update_associations(params)
@@ -24,6 +24,6 @@ defmodule Artemis.CreateRole do
   defp insert_record(params) do
     %Role{}
     |> Role.changeset(params)
-    |> Repo.insert
+    |> Repo.insert()
   end
 end

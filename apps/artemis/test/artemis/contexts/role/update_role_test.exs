@@ -7,10 +7,10 @@ defmodule Artemis.UpdateRoleTest do
 
   describe "call!" do
     test "raises an exception when id not found" do
-      invalid_id = 50000000
+      invalid_id = 50_000_000
       params = params_for(:role)
 
-      assert_raise Artemis.Context.Error, fn () ->
+      assert_raise Artemis.Context.Error, fn ->
         UpdateRole.call!(invalid_id, params, Mock.system_user())
       end
     end
@@ -45,7 +45,7 @@ defmodule Artemis.UpdateRoleTest do
 
   describe "call" do
     test "returns an error when id not found" do
-      invalid_id = 50000000
+      invalid_id = 50_000_000
       params = params_for(:role)
 
       {:error, _} = UpdateRole.call(invalid_id, params, Mock.system_user())
@@ -105,7 +105,8 @@ defmodule Artemis.UpdateRoleTest do
     end
 
     test "removes associations when explicitly passed an empty value" do
-      role = :role
+      role =
+        :role
         |> insert
         |> with_permissions
 

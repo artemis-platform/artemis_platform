@@ -17,6 +17,7 @@ defmodule ArtemisLog.GetEventLog do
   defp get_record(value, user, get_by) when not is_list(value) do
     get_record([id: value], user, get_by)
   end
+
   defp get_record(value, user, get_by) do
     EventLog
     |> restrict_access(user)

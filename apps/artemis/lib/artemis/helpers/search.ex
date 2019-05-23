@@ -28,6 +28,7 @@ defmodule Artemis.Helpers.Search do
       false -> ecto_query
     end
   end
+
   def search_filter(ecto_query, _), do: ecto_query
 
   defp add_search_filters(ecto_query, search_query) do

@@ -11,7 +11,7 @@ defmodule ArtemisWeb.PermissionController do
   @preload []
 
   def index(conn, params) do
-    authorize(conn, "permissions:list", fn () ->
+    authorize(conn, "permissions:list", fn ->
       params = Map.put(params, :paginate, true)
       permissions = ListPermissions.call(params, current_user(conn))
 
@@ -20,7 +20,7 @@ defmodule ArtemisWeb.PermissionController do
   end
 
   def new(conn, _params) do
-    authorize(conn, "permissions:create", fn () ->
+    authorize(conn, "permissions:create", fn ->
       permission = %Permission{}
       changeset = Permission.changeset(permission)
 
@@ -29,7 +29,7 @@ defmodule ArtemisWeb.PermissionController do
   end
 
   def create(conn, %{"permission" => params}) do
-    authorize(conn, "permissions:create", fn () ->
+    authorize(conn, "permissions:create", fn ->
       case CreatePermission.call(params, current_user(conn)) do
         {:ok, permission} ->
           conn
@@ -45,7 +45,7 @@ defmodule ArtemisWeb.PermissionController do
   end
 
   def show(conn, %{"id" => id}) do
-    authorize(conn, "permissions:show", fn () ->
+    authorize(conn, "permissions:show", fn ->
       permission = GetPermission.call!(id, current_user(conn))
 
       render(conn, "show.html", permission: permission)
@@ -53,7 +53,7 @@ defmodule ArtemisWeb.PermissionController do
   end
 
   def edit(conn, %{"id" => id}) do
-    authorize(conn, "permissions:update", fn () ->
+    authorize(conn, "permissions:update", fn ->
       permission = GetPermission.call(id, current_user(conn), preload: @preload)
       changeset = Permission.changeset(permission)
 
@@ -62,7 +62,7 @@ defmodule ArtemisWeb.PermissionController do
   end
 
   def update(conn, %{"id" => id, "permission" => params}) do
-    authorize(conn, "permissions:update", fn () ->
+    authorize(conn, "permissions:update", fn ->
       case UpdatePermission.call(id, params, current_user(conn)) do
         {:ok, permission} ->
           conn
@@ -78,7 +78,7 @@ defmodule ArtemisWeb.PermissionController do
   end
 
   def delete(conn, %{"id" => id}) do
-    authorize(conn, "permissions:delete", fn () ->
+    authorize(conn, "permissions:delete", fn ->
       {:ok, _permission} = DeletePermission.call(id, current_user(conn))
 
       conn

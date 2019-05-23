@@ -43,6 +43,7 @@ defmodule ArtemisWeb do
         |> put_resp_header("content-disposition", "attachment; filename=#{filename}.csv")
         |> put_resp_content_type("text/csv")
       end
+
       defp render_format_headers(conn, _), do: conn
 
       defp authorize(conn, permission, render_controller) do

@@ -80,7 +80,8 @@ defmodule ArtemisWeb.UserPageTest do
 
   describe "show" do
     setup do
-      user = :user
+      user =
+        :user
         |> insert()
         |> with_permission("users:create")
         |> with_permission("users:list")

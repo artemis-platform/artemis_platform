@@ -34,7 +34,8 @@ defmodule ArtemisWeb.GetUserByAuthProviderDataTest do
 
       {:ok, user} = GetUserByAuthProviderData.call(data, options)
 
-      user = User
+      user =
+        User
         |> preload([:auth_providers, :roles])
         |> Repo.get(user.id)
 
@@ -55,7 +56,8 @@ defmodule ArtemisWeb.GetUserByAuthProviderDataTest do
 
       # Existing User
 
-      user = User
+      user =
+        User
         |> preload([:auth_providers, :roles])
         |> Repo.get(user.id)
 
@@ -70,7 +72,8 @@ defmodule ArtemisWeb.GetUserByAuthProviderDataTest do
 
       {:ok, user} = GetUserByAuthProviderData.call(data, options)
 
-      user = User
+      user =
+        User
         |> preload([:auth_providers, :roles])
         |> Repo.get(user.id)
 
@@ -93,7 +96,8 @@ defmodule ArtemisWeb.GetUserByAuthProviderDataTest do
 
       {:ok, user} = GetUserByAuthProviderData.call(data, options)
 
-      user = User
+      user =
+        User
         |> preload([:auth_providers, :roles])
         |> Repo.get(user.id)
 
@@ -117,7 +121,8 @@ defmodule ArtemisWeb.GetUserByAuthProviderDataTest do
 
       {:ok, user} = GetUserByAuthProviderData.call(data, options)
 
-      user = User
+      user =
+        User
         |> preload([:auth_providers, :roles])
         |> Repo.get(user.id)
 
@@ -143,7 +148,8 @@ defmodule ArtemisWeb.GetUserByAuthProviderDataTest do
 
       {:ok, user} = GetUserByAuthProviderData.call(data, options)
 
-      user = User
+      user =
+        User
         |> preload([:auth_providers, :roles])
         |> Repo.get(user.id)
 
@@ -169,8 +175,9 @@ defmodule ArtemisWeb.GetUserByAuthProviderDataTest do
 
       {:ok, user} = GetUserByAuthProviderData.call(data, options)
 
-      user_count = User
-        |> Repo.all() 
+      user_count =
+        User
+        |> Repo.all()
         |> length()
 
       # Finds existing user by auth provider uid, not email
@@ -182,8 +189,9 @@ defmodule ArtemisWeb.GetUserByAuthProviderDataTest do
 
       {:ok, updated_user} = GetUserByAuthProviderData.call(updated_data, options)
 
-      updated_user_count = User
-        |> Repo.all() 
+      updated_user_count =
+        User
+        |> Repo.all()
         |> length()
 
       assert user.email == original_email

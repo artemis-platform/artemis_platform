@@ -12,7 +12,7 @@ defmodule Artemis.CreateFeature do
   end
 
   def call(params, user) do
-    with_transaction(fn () ->
+    with_transaction(fn ->
       params
       |> insert_record
       |> Event.broadcast("feature:created", user)
@@ -22,6 +22,6 @@ defmodule Artemis.CreateFeature do
   defp insert_record(params) do
     %Feature{}
     |> Feature.changeset(params)
-    |> Repo.insert
+    |> Repo.insert()
   end
 end

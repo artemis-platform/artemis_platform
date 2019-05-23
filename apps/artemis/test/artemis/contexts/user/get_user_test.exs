@@ -34,7 +34,7 @@ defmodule Artemis.GetUserTest do
 
   describe "call" do
     test "returns nil user not found" do
-      invalid_id = 50000000
+      invalid_id = 50_000_000
 
       assert GetUser.call(invalid_id, Mock.system_user()) == nil
     end
@@ -67,9 +67,9 @@ defmodule Artemis.GetUserTest do
 
   describe "call!" do
     test "raises an exception user not found" do
-      invalid_id = 50000000
+      invalid_id = 50_000_000
 
-      assert_raise Ecto.NoResultsError, fn () ->
+      assert_raise Ecto.NoResultsError, fn ->
         GetUser.call!(invalid_id, Mock.system_user()) == nil
       end
     end

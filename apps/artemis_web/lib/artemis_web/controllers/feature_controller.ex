@@ -11,7 +11,7 @@ defmodule ArtemisWeb.FeatureController do
   @preload []
 
   def index(conn, params) do
-    authorize(conn, "features:list", fn () ->
+    authorize(conn, "features:list", fn ->
       params = Map.put(params, :paginate, true)
       features = ListFeatures.call(params, current_user(conn))
 
@@ -20,7 +20,7 @@ defmodule ArtemisWeb.FeatureController do
   end
 
   def new(conn, _params) do
-    authorize(conn, "features:create", fn () ->
+    authorize(conn, "features:create", fn ->
       feature = %Feature{}
       changeset = Feature.changeset(feature)
 
@@ -29,7 +29,7 @@ defmodule ArtemisWeb.FeatureController do
   end
 
   def create(conn, %{"feature" => params}) do
-    authorize(conn, "features:create", fn () ->
+    authorize(conn, "features:create", fn ->
       case CreateFeature.call(params, current_user(conn)) do
         {:ok, feature} ->
           conn
@@ -45,7 +45,7 @@ defmodule ArtemisWeb.FeatureController do
   end
 
   def show(conn, %{"id" => id}) do
-    authorize(conn, "features:show", fn () ->
+    authorize(conn, "features:show", fn ->
       feature = GetFeature.call!(id, current_user(conn))
 
       render(conn, "show.html", feature: feature)
@@ -53,7 +53,7 @@ defmodule ArtemisWeb.FeatureController do
   end
 
   def edit(conn, %{"id" => id}) do
-    authorize(conn, "features:update", fn () ->
+    authorize(conn, "features:update", fn ->
       feature = GetFeature.call(id, current_user(conn), preload: @preload)
       changeset = Feature.changeset(feature)
 
@@ -62,7 +62,7 @@ defmodule ArtemisWeb.FeatureController do
   end
 
   def update(conn, %{"id" => id, "feature" => params}) do
-    authorize(conn, "features:update", fn () ->
+    authorize(conn, "features:update", fn ->
       case UpdateFeature.call(id, params, current_user(conn)) do
         {:ok, feature} ->
           conn
@@ -78,7 +78,7 @@ defmodule ArtemisWeb.FeatureController do
   end
 
   def delete(conn, %{"id" => id}) do
-    authorize(conn, "features:delete", fn () ->
+    authorize(conn, "features:delete", fn ->
       {:ok, _feature} = DeleteFeature.call(id, current_user(conn))
 
       conn

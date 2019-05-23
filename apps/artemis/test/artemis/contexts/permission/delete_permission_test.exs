@@ -8,9 +8,9 @@ defmodule Artemis.DeletePermissionTest do
 
   describe "call!" do
     test "raises an exception when id not found" do
-      invalid_id = 50000000
+      invalid_id = 50_000_000
 
-      assert_raise Artemis.Context.Error, fn () ->
+      assert_raise Artemis.Context.Error, fn ->
         DeletePermission.call!(invalid_id, Mock.system_user())
       end
     end
@@ -34,7 +34,7 @@ defmodule Artemis.DeletePermissionTest do
 
   describe "call" do
     test "returns an error when record not found" do
-      invalid_id = 50000000
+      invalid_id = 50_000_000
 
       {:error, _} = DeletePermission.call(invalid_id, Mock.system_user())
     end

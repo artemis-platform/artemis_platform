@@ -1,5 +1,4 @@
 defmodule ReleaseManager do
-
   def migrate do
     init(fn apps ->
       :ok = migrate_repositories(apps)
@@ -52,6 +51,7 @@ defmodule ReleaseManager do
     for {pid, repo} <- repos do
       repo.stop(pid)
     end
+
     :ok
   end
 end

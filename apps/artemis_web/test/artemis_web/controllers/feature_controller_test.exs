@@ -83,6 +83,7 @@ defmodule ArtemisWeb.FeatureControllerTest do
     test "deletes chosen feature", %{conn: conn, record: record} do
       conn = delete(conn, Routes.feature_path(conn, :delete, record))
       assert redirected_to(conn) == Routes.feature_path(conn, :index)
+
       assert_error_sent 404, fn ->
         get(conn, Routes.feature_path(conn, :show, record))
       end

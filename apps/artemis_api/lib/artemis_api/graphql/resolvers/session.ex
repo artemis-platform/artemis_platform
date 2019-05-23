@@ -5,11 +5,13 @@ defmodule ArtemisApi.GraphQL.Resolver.Session do
 
   def create_session(params, _context) do
     case GetUserByAuthProvider.call(params) do
-      {:ok, user} -> user
-        |> CreateSession.call
+      {:ok, user} ->
+        user
+        |> CreateSession.call()
         |> Event.broadcast("session:created:api", user)
-      error -> error
+
+      error ->
+        error
     end
   end
 end
-

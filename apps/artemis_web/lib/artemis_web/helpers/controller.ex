@@ -34,14 +34,16 @@ defmodule ArtemisWeb.Helpers.Controller do
       
   """
   def checkbox_to_params(%{"user_roles" => user_roles} = params, key) do
-    filtered = Enum.reduce(user_roles, [], fn ({_, values}, acc) ->
-      case Map.get(values, "checked") do
-        nil -> acc
-        _ -> [Map.delete(values, "checked")|acc]
-      end
-    end)
+    filtered =
+      Enum.reduce(user_roles, [], fn {_, values}, acc ->
+        case Map.get(values, "checked") do
+          nil -> acc
+          _ -> [Map.delete(values, "checked") | acc]
+        end
+      end)
 
     Map.put(params, key, filtered)
   end
+
   def checkbox_to_params(params, _key), do: params
 end

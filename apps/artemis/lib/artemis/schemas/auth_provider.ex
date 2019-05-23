@@ -13,24 +13,27 @@ defmodule Artemis.AuthProvider do
 
   # Callbacks
 
-  def updatable_fields, do: [
-    :data,
-    :type,
-    :uid,
-    :user_id
-  ]
+  def updatable_fields,
+    do: [
+      :data,
+      :type,
+      :uid,
+      :user_id
+    ]
 
-  def required_fields, do: [
-    :type,
-    :uid,
-    :user_id
-  ]
+  def required_fields,
+    do: [
+      :type,
+      :uid,
+      :user_id
+    ]
 
-  def event_log_fields, do: [
-    :id,
-    :type,
-    :user_id
-  ]
+  def event_log_fields,
+    do: [
+      :id,
+      :type,
+      :user_id
+    ]
 
   # Changesets
 

@@ -48,7 +48,7 @@ defmodule Artemis.Repo.GenerateFillerData do
     users = insert_list(30, :user)
     default_role = Repo.get_by(Role, slug: "default")
 
-    Enum.map(users, fn (user) ->
+    Enum.map(users, fn user ->
       insert(:user_role, created_by: system_user, role: default_role, user: user)
     end)
 

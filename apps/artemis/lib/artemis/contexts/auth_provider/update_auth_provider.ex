@@ -12,7 +12,7 @@ defmodule Artemis.UpdateAuthProvider do
   end
 
   def call(id, params, user) do
-    with_transaction(fn () ->
+    with_transaction(fn ->
       id
       |> get_record
       |> update_record(params)
@@ -24,9 +24,10 @@ defmodule Artemis.UpdateAuthProvider do
   def get_record(id), do: Repo.get(AuthProvider, id)
 
   defp update_record(nil, _params), do: {:error, "Record not found"}
+
   defp update_record(record, params) do
     record
     |> AuthProvider.changeset(params)
-    |> Repo.update
+    |> Repo.update()
   end
 end

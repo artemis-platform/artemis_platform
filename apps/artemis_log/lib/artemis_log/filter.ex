@@ -12,11 +12,12 @@ defmodule ArtemisLog.Filter do
       false -> data
     end
   end
+
   def call(data), do: data
 
   defp defined_log_fields?(struct) do
     struct.__info__(:functions)
-    |> Keyword.keys
+    |> Keyword.keys()
     |> Enum.member?(:event_log_fields)
   end
 end

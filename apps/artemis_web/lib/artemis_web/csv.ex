@@ -3,7 +3,7 @@ defmodule ArtemisWeb.CSV do
 
   def create(data) do
     data
-    |> CustomParser.dump_to_iodata
-    |> IO.iodata_to_binary 
+    |> CustomParser.dump_to_iodata()
+    |> IO.iodata_to_binary()
   end
 end

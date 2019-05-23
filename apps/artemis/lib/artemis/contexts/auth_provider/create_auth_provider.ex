@@ -12,7 +12,7 @@ defmodule Artemis.CreateAuthProvider do
   end
 
   def call(params, user) do
-    with_transaction(fn () ->
+    with_transaction(fn ->
       params
       |> insert_record
       |> Event.broadcast("auth-provider:created", user)
@@ -22,6 +22,6 @@ defmodule Artemis.CreateAuthProvider do
   defp insert_record(params) do
     %AuthProvider{}
     |> AuthProvider.changeset(params)
-    |> Repo.insert
+    |> Repo.insert()
   end
 end

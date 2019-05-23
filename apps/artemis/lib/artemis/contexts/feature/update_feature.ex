@@ -12,7 +12,7 @@ defmodule Artemis.UpdateFeature do
   end
 
   def call(id, params, user) do
-    with_transaction(fn () ->
+    with_transaction(fn ->
       id
       |> get_record
       |> update_record(params)
@@ -24,9 +24,10 @@ defmodule Artemis.UpdateFeature do
   def get_record(id), do: Repo.get(Feature, id)
 
   defp update_record(nil, _params), do: {:error, "Record not found"}
+
   defp update_record(record, params) do
     record
     |> Feature.changeset(params)
-    |> Repo.update
+    |> Repo.update()
   end
 end

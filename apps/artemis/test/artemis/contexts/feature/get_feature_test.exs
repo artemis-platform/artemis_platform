@@ -13,7 +13,7 @@ defmodule Artemis.GetFeatureTest do
 
   describe "call" do
     test "returns nil feature not found" do
-      invalid_id = 50000000
+      invalid_id = 50_000_000
 
       assert GetFeature.call(invalid_id, Mock.system_user()) == nil
     end
@@ -29,9 +29,9 @@ defmodule Artemis.GetFeatureTest do
 
   describe "call!" do
     test "raises an exception feature not found" do
-      invalid_id = 50000000
+      invalid_id = 50_000_000
 
-      assert_raise Ecto.NoResultsError, fn () ->
+      assert_raise Ecto.NoResultsError, fn ->
         GetFeature.call!(invalid_id, Mock.system_user()) == nil
       end
     end

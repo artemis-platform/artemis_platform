@@ -5,7 +5,7 @@ defmodule ArtemisApi.Application do
     import Supervisor.Spec
 
     children = [
-      supervisor(ArtemisApi.Endpoint, []),
+      supervisor(ArtemisApi.Endpoint, [])
     ]
 
     opts = [strategy: :one_for_one, name: ArtemisApi.Supervisor]

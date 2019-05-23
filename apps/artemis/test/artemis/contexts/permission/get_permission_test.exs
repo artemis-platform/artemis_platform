@@ -13,7 +13,7 @@ defmodule Artemis.GetPermissionTest do
 
   describe "call" do
     test "returns nil permission not found" do
-      invalid_id = 50000000
+      invalid_id = 50_000_000
 
       assert GetPermission.call(invalid_id, Mock.system_user()) == nil
     end
@@ -29,9 +29,9 @@ defmodule Artemis.GetPermissionTest do
 
   describe "call!" do
     test "raises an exception permission not found" do
-      invalid_id = 50000000
+      invalid_id = 50_000_000
 
-      assert_raise Ecto.NoResultsError, fn () ->
+      assert_raise Ecto.NoResultsError, fn ->
         GetPermission.call!(invalid_id, Mock.system_user()) == nil
       end
     end

@@ -12,22 +12,25 @@ defmodule Artemis.Feature do
 
   # Callbacks
 
-  def updatable_fields, do: [
-    :active,
-    :description,
-    :name,
-    :slug
-  ]
+  def updatable_fields,
+    do: [
+      :active,
+      :description,
+      :name,
+      :slug
+    ]
 
-  def required_fields, do: [
-    :slug
-  ]
+  def required_fields,
+    do: [
+      :slug
+    ]
 
-  def event_log_fields, do: [
-    :id,
-    :active,
-    :slug
-  ]
+  def event_log_fields,
+    do: [
+      :id,
+      :active,
+      :slug
+    ]
 
   # Changesets
 
@@ -41,6 +44,7 @@ defmodule Artemis.Feature do
   # Queries
 
   def active?(%Feature{} = feature), do: feature.active
+
   def active?(slug) do
     case Repo.get_by(Feature, slug: slug) do
       nil -> false

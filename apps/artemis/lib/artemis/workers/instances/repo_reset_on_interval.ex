@@ -26,7 +26,8 @@ defmodule Artemis.Worker.RepoResetOnInterval do
   # Helpers
 
   defp get_interval() do
-    hours = Application.fetch_env!(:artemis, :actions)
+    hours =
+      Application.fetch_env!(:artemis, :actions)
       |> Keyword.get(:repo_reset_on_interval)
       |> Keyword.get(:interval)
       |> String.to_integer()

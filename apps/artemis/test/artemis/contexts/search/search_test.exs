@@ -19,7 +19,8 @@ defmodule Artemis.SearchTest do
     end
 
     test "returns key when permissions are met" do
-      authorized_user = :user
+      authorized_user =
+        :user
         |> insert()
         |> with_permission("users:list")
 
@@ -29,11 +30,12 @@ defmodule Artemis.SearchTest do
 
       result = Search.call(params, authorized_user)
 
-      entries = result
+      entries =
+        result
         |> Map.get("users")
         |> Map.get(:entries)
 
-      user_names = Enum.map(entries, &(&1.name))
+      user_names = Enum.map(entries, & &1.name)
 
       assert is_list(entries)
       assert Enum.member?(user_names, authorized_user.name)
@@ -54,7 +56,8 @@ defmodule Artemis.SearchTest do
 
       result = Search.call(params, Mock.system_user())
 
-      entries = result
+      entries =
+        result
         |> Map.get("users")
         |> Map.get(:entries)
 
@@ -70,11 +73,12 @@ defmodule Artemis.SearchTest do
 
       result = Search.call(params, Mock.system_user())
 
-      entries = result
+      entries =
+        result
         |> Map.get("users")
         |> Map.get(:entries)
 
-      user_names = Enum.map(entries, &(&1.name))
+      user_names = Enum.map(entries, & &1.name)
 
       assert is_list(entries)
       assert Enum.member?(user_names, user.name)
