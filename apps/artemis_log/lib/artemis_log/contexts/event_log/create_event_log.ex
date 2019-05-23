@@ -15,6 +15,6 @@ defmodule ArtemisLog.CreateEventLog do
 
     %EventLog{}
     |> EventLog.changeset(params)
-    |> Repo.insert
+    |> Repo.insert()
   end
 end

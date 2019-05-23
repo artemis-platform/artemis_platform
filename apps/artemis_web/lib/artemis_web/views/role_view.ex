@@ -20,18 +20,21 @@ defmodule ArtemisWeb.RoleView do
   """
   def find_permission(match, form, record) do
     existing_permissions = record.permissions
-    submitted_permissions = case form.params["permissions"] do
-      nil -> nil
-      values -> Enum.map(values, &struct(Permission, keys_to_atoms(&1, [])))
-    end
+
+    submitted_permissions =
+      case form.params["permissions"] do
+        nil -> nil
+        values -> Enum.map(values, &struct(Permission, keys_to_atoms(&1, [])))
+      end
 
     permissions = submitted_permissions || existing_permissions
 
-    Enum.find(permissions, fn (%{id: id}) ->
-      id = case is_bitstring(id) do
-        true -> String.to_integer(id)
-        _ -> id
-      end
+    Enum.find(permissions, fn %{id: id} ->
+      id =
+        case is_bitstring(id) do
+          true -> String.to_integer(id)
+          _ -> id
+        end
 
       id == match
     end)

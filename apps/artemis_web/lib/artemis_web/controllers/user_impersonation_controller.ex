@@ -8,7 +8,7 @@ defmodule ArtemisWeb.UserImpersonationController do
   alias ArtemisWeb.CreateSession
 
   def create(conn, %{"user_id" => id}) do
-    authorize(conn, "user-impersonations:create", fn () ->
+    authorize(conn, "user-impersonations:create", fn ->
       user = GetUser.call!(id, current_user(conn))
 
       with {:ok, _} <- CreateSession.call(user),

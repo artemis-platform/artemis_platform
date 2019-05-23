@@ -28,11 +28,14 @@ defmodule ArtemisWeb.ViewHelper.Tables do
     query_params = Map.get(conn, :query_params, %{})
     current_value = Map.get(query_params, "order", "")
     current_fields = String.split(current_value, delimiter)
-    updated_fields = cond do
-      Enum.member?(current_fields, value) -> replace_item(current_fields, value, inverse)
-      Enum.member?(current_fields, inverse) -> replace_item(current_fields, inverse, value)
-      true -> [value]
-    end
+
+    updated_fields =
+      cond do
+        Enum.member?(current_fields, value) -> replace_item(current_fields, value, inverse)
+        Enum.member?(current_fields, inverse) -> replace_item(current_fields, inverse, value)
+        true -> [value]
+      end
+
     updated_value = Enum.join(updated_fields, delimiter)
 
     Map.put(query_params, "order", updated_value)
@@ -43,7 +46,7 @@ defmodule ArtemisWeb.ViewHelper.Tables do
   defp replace_item(list, current, next) do
     case Enum.find_index(list, &(&1 == current)) do
       nil -> list
-      index -> List.update_at(list, index, fn (_) -> next end)
+      index -> List.update_at(list, index, fn _ -> next end)
     end
   end
 
@@ -175,6 +178,7 @@ defmodule ArtemisWeb.ViewHelper.Tables do
   def render_data_table(conn, data, options \\ []) do
     format = Phoenix.Controller.get_format(conn)
     columns = get_data_table_columns(conn, options)
+
     params = [
       columns: columns,
       conn: conn,
@@ -191,17 +195,20 @@ defmodule ArtemisWeb.ViewHelper.Tables do
   """
   def get_data_table_columns(conn, options) do
     allowed_columns = Keyword.get(options, :allowed_columns, [])
-    requested_columns = case Map.get(conn.query_params, "columns") do
-      nil -> Keyword.get(options, :default_columns, [])
-      columns -> String.split(columns, ",")
-    end
 
-    filtered = Enum.reduce(requested_columns, [], fn (key, acc) ->
-      case Map.get(allowed_columns, key) do
-        nil -> acc
-        column -> [column|acc]
+    requested_columns =
+      case Map.get(conn.query_params, "columns") do
+        nil -> Keyword.get(options, :default_columns, [])
+        columns -> String.split(columns, ",")
       end
-    end)
+
+    filtered =
+      Enum.reduce(requested_columns, [], fn key, acc ->
+        case Map.get(allowed_columns, key) do
+          nil -> acc
+          column -> [column | acc]
+        end
+      end)
 
     Enum.reverse(filtered)
   end

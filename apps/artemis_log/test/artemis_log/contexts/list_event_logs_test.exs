@@ -15,7 +15,8 @@ defmodule ArtemisLog.ListEventLogsTest do
 
   describe "call" do
     test "always returns paginated results" do
-      response_keys = ListEventLogs.call(Mock.system_user())
+      response_keys =
+        ListEventLogs.call(Mock.system_user())
         |> Map.from_struct()
         |> Map.keys()
 
@@ -76,7 +77,8 @@ defmodule ArtemisLog.ListEventLogsTest do
         paginate: true
       }
 
-      response_keys = ListEventLogs.call(params, Mock.system_user())
+      response_keys =
+        ListEventLogs.call(params, Mock.system_user())
         |> Map.from_struct()
         |> Map.keys()
 

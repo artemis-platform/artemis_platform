@@ -11,11 +11,12 @@ defmodule Artemis.UserRole do
 
   # Callbacks
 
-  def updatable_fields, do: [
-    :created_by_id,
-    :role_id,
-    :user_id
-  ]
+  def updatable_fields,
+    do: [
+      :created_by_id,
+      :role_id,
+      :user_id
+    ]
 
   def required_fields, do: []
 

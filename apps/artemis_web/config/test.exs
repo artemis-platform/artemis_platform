@@ -12,7 +12,8 @@ config :logger, level: :info
 
 config :artemis_web, ArtemisWeb.Endpoint,
   http: [port: 4002],
-  server: true # Enable for use in browser testing with hound
+  # Enable for use in browser testing with hound
+  server: true
 
 config :hound,
   browser: "chrome_headless",

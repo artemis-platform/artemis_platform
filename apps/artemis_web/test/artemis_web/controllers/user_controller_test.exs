@@ -83,6 +83,7 @@ defmodule ArtemisWeb.UserControllerTest do
     test "deletes chosen user", %{conn: conn, record: record} do
       conn = delete(conn, Routes.user_path(conn, :delete, record))
       assert redirected_to(conn) == Routes.user_path(conn, :index)
+
       assert_error_sent 404, fn ->
         get(conn, Routes.user_path(conn, :show, record))
       end

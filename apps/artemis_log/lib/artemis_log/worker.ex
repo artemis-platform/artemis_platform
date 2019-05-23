@@ -2,7 +2,7 @@ defmodule ArtemisLog.Worker do
   use GenServer
 
   import ArtemisPubSub
-  
+
   alias ArtemisLog.CreateEventLog
 
   @subscribe_to_events Application.get_env(:artemis_log, :subscribe_to_events, true)
@@ -30,6 +30,7 @@ defmodule ArtemisLog.Worker do
 
     {:noreply, state}
   end
+
   def handle_info(_, state) do
     {:noreply, state}
   end

@@ -4,8 +4,8 @@ defmodule Artemis.Helpers do
   """
   def random_string(string_length) do
     string_length
-    |> :crypto.strong_rand_bytes
-    |> Base.url_encode64
+    |> :crypto.strong_rand_bytes()
+    |> Base.url_encode64()
     |> binary_part(0, string_length)
   end
 
@@ -25,6 +25,7 @@ defmodule Artemis.Helpers do
     |> Keyword.get(key)
     |> present?
   end
+
   def present?(entry, key) when is_map(entry) do
     entry
     |> Map.get(key)
@@ -46,7 +47,7 @@ defmodule Artemis.Helpers do
   to each grouping's values. Returns a map.
   """
   def reduce_group_by(grouped_data, function) do
-    Enum.reduce(grouped_data, %{}, fn ({key, values}, acc) ->
+    Enum.reduce(grouped_data, %{}, fn {key, values}, acc ->
       Map.put(acc, key, function.(values))
     end)
   end
@@ -54,8 +55,9 @@ defmodule Artemis.Helpers do
   @doc """
   Takes a collection of values and an attribute and returns the max value for that attribute.
   """
-  def max_by_attribute(values, attribute, fun \\ fn (x) -> x end)
+  def max_by_attribute(values, attribute, fun \\ fn x -> x end)
   def max_by_attribute([], _, _), do: nil
+
   def max_by_attribute(values, attribute, fun) do
     values
     |> Enum.max_by(&fun.(Map.get(&1, attribute)))
@@ -65,8 +67,9 @@ defmodule Artemis.Helpers do
   @doc """
   Takes a collection of values and an attribute and returns the min value for that attribute.
   """
-  def min_by_attribute(values, attribute, fun \\ fn (x) -> x end)
+  def min_by_attribute(values, attribute, fun \\ fn x -> x end)
   def min_by_attribute([], _, _), do: []
+
   def min_by_attribute(values, attribute, fun) do
     values
     |> Enum.min_by(&fun.(Map.get(&1, attribute)))
@@ -114,7 +117,7 @@ defmodule Artemis.Helpers do
   Output: %{one: %{two: 2, three: 3}}
   """
   def nested_list_to_map(nested_list) do
-    Enum.reduce(nested_list, %{}, fn (item, acc) ->
+    Enum.reduce(nested_list, %{}, fn item, acc ->
       deep_merge(acc, list_to_map(item))
     end)
   end
@@ -125,9 +128,9 @@ defmodule Artemis.Helpers do
   Input: [:one, :two, 3]
   Output: %{one: %{two: 2}}
   """
-  def list_to_map([head|tail]) when tail == [], do: head
-  def list_to_map([head|tail]) when is_integer(head), do: list_to_map([Integer.to_string(head)|tail])
-  def list_to_map([head|tail]), do: Map.put(%{}, head, list_to_map(tail))
+  def list_to_map([head | tail]) when tail == [], do: head
+  def list_to_map([head | tail]) when is_integer(head), do: list_to_map([Integer.to_string(head) | tail])
+  def list_to_map([head | tail]), do: Map.put(%{}, head, list_to_map(tail))
 
   @doc """
   Deep merges two maps
@@ -143,6 +146,7 @@ defmodule Artemis.Helpers do
     # These can be merged recursively.
     deep_merge(left, right)
   end
+
   defp deep_resolve(_key, _left, right) do
     # Key exists in both maps, but at least one of the values is
     # NOT a map. We fall back to standard merge behavior, preferring
@@ -183,13 +187,15 @@ defmodule Artemis.Helpers do
     |> Enum.map(&Task.async(&1))
     |> Enum.map(&Task.await/1)
   end
+
   def async_await_many(tasks) when is_map(tasks) do
-    values = tasks
-      |> Map.values
+    values =
+      tasks
+      |> Map.values()
       |> async_await_many
 
     tasks
-    |> Map.keys
+    |> Map.keys()
     |> Enum.zip(values)
     |> Enum.into(%{})
   end
@@ -211,22 +217,31 @@ defmodule Artemis.Helpers do
   """
   def keys_to_atoms(map, options \\ [])
   def keys_to_atoms(%_{} = struct, _options), do: struct
+
   def keys_to_atoms(map, options) when is_map(map) do
     for {key, value} <- map, into: %{} do
-      key = case is_bitstring(key) do
-        false -> key
-        true -> case Keyword.get(options, :whitelist) do
-          nil -> String.to_atom(key)
-          whitelist -> case Enum.member?(whitelist, key) do
-            false -> key
-            true -> String.to_atom(key)
-          end
+      key =
+        case is_bitstring(key) do
+          false ->
+            key
+
+          true ->
+            case Keyword.get(options, :whitelist) do
+              nil ->
+                String.to_atom(key)
+
+              whitelist ->
+                case Enum.member?(whitelist, key) do
+                  false -> key
+                  true -> String.to_atom(key)
+                end
+            end
         end
-      end
 
       {key, keys_to_atoms(value, options)}
     end
   end
+
   def keys_to_atoms(value, _), do: value
 
   @doc """
@@ -243,16 +258,19 @@ defmodule Artemis.Helpers do
   """
   def keys_to_strings(map, options \\ [])
   def keys_to_strings(%_{} = struct, _options), do: struct
+
   def keys_to_strings(map, options) when is_map(map) do
     for {key, value} <- map, into: %{} do
-      key = case is_atom(key) do
-        false -> key
-        true -> Atom.to_string(key)
-      end
+      key =
+        case is_atom(key) do
+          false -> key
+          true -> Atom.to_string(key)
+        end
 
       {key, keys_to_strings(value, options)}
     end
   end
+
   def keys_to_strings(value, _), do: value
 
   @doc """
@@ -260,18 +278,19 @@ defmodule Artemis.Helpers do
   """
   def serialize_pid(pid) when is_pid(pid) do
     pid
-    |> :erlang.pid_to_list
-    |> :erlang.list_to_binary
+    |> :erlang.pid_to_list()
+    |> :erlang.list_to_binary()
   end
 
   @doc """
   Deserialize process id (pid) string to pid
   """
   def deserialize_pid("#PID" <> string), do: deserialize_pid(string)
+
   def deserialize_pid(string) do
     string
-    |> :erlang.binary_to_list
-    |> :erlang.list_to_pid
+    |> :erlang.binary_to_list()
+    |> :erlang.list_to_pid()
   end
 
   @doc """
@@ -296,10 +315,11 @@ defmodule Artemis.Helpers do
   def deep_delete(data, delete_key) when is_map(data) do
     data
     |> Map.delete(delete_key)
-    |> Enum.reduce(%{}, fn ({key, value}, acc) ->
+    |> Enum.reduce(%{}, fn {key, value}, acc ->
       Map.put(acc, key, deep_delete(value, delete_key))
     end)
   end
+
   def deep_delete(data, _), do: data
 
   @doc """
@@ -320,7 +340,8 @@ defmodule Artemis.Helpers do
 
   """
   def deep_get(data, keys, default \\ nil)
-  def deep_get(data, [current_key|remaining_keys], default) when is_map(data) do
+
+  def deep_get(data, [current_key | remaining_keys], default) when is_map(data) do
     value = Map.get(data, current_key)
 
     case remaining_keys do
@@ -328,6 +349,7 @@ defmodule Artemis.Helpers do
       _ -> deep_get(value, remaining_keys, default)
     end
   end
+
   def deep_get(_data, _, default), do: default
 
   @doc """
@@ -354,13 +376,16 @@ defmodule Artemis.Helpers do
     {nested_keys, simple_keys} = Enum.split_with(keys, &is_tuple/1)
 
     simple = Map.take(map, simple_keys)
-    nested = Enum.reduce(nested_keys, %{}, fn ({key, keys}, acc) ->
-      value = map
-        |> Map.get(key)
-        |> deep_take(keys)
 
-      Map.put(acc, key, value)
-    end)
+    nested =
+      Enum.reduce(nested_keys, %{}, fn {key, keys}, acc ->
+        value =
+          map
+          |> Map.get(key)
+          |> deep_take(keys)
+
+        Map.put(acc, key, value)
+      end)
 
     Map.merge(simple, nested)
   end

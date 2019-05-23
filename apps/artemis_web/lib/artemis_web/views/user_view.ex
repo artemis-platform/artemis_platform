@@ -20,18 +20,21 @@ defmodule ArtemisWeb.UserView do
   """
   def find_user_role(match, form, record) do
     existing_user_roles = record.user_roles
-    submitted_user_roles = case form.params["user_roles"] do
-      nil -> nil
-      values -> Enum.map(values, &struct(UserRole, keys_to_atoms(&1, [])))
-    end
+
+    submitted_user_roles =
+      case form.params["user_roles"] do
+        nil -> nil
+        values -> Enum.map(values, &struct(UserRole, keys_to_atoms(&1, [])))
+      end
 
     user_roles = submitted_user_roles || existing_user_roles
 
-    Enum.find(user_roles, fn (%{role_id: role_id}) ->
-      role_id = case is_bitstring(role_id) do
-        true -> String.to_integer(role_id)
-        _ -> role_id
-      end
+    Enum.find(user_roles, fn %{role_id: role_id} ->
+      role_id =
+        case is_bitstring(role_id) do
+          true -> String.to_integer(role_id)
+          _ -> role_id
+        end
 
       role_id == match
     end)

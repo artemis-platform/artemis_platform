@@ -83,6 +83,7 @@ defmodule ArtemisWeb.RoleControllerTest do
     test "deletes chosen role", %{conn: conn, record: record} do
       conn = delete(conn, Routes.role_path(conn, :delete, record))
       assert redirected_to(conn) == Routes.role_path(conn, :index)
+
       assert_error_sent 404, fn ->
         get(conn, Routes.role_path(conn, :show, record))
       end

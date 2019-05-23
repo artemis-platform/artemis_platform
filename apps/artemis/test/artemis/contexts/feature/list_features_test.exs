@@ -21,7 +21,7 @@ defmodule Artemis.ListFeaturesTest do
     test "returns existing feature" do
       feature = insert(:feature)
 
-      assert ListFeatures.call(Mock.system_user())  == [feature]
+      assert ListFeatures.call(Mock.system_user()) == [feature]
     end
 
     test "returns a list of features" do
@@ -58,7 +58,8 @@ defmodule Artemis.ListFeaturesTest do
         paginate: true
       }
 
-      response_keys = ListFeatures.call(params, Mock.system_user())
+      response_keys =
+        ListFeatures.call(params, Mock.system_user())
         |> Map.from_struct()
         |> Map.keys()
 

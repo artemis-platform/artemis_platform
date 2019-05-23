@@ -17,7 +17,7 @@ defmodule ArtemisWeb.BrowserHelpers do
   def fill_inputs(identifier, params) do
     form = find_element(:css, identifier)
 
-    Enum.each(params, fn ({name, value}) ->
+    Enum.each(params, fn {name, value} ->
       form
       |> find_within_element(:name, name)
       |> fill_input(value)
@@ -39,6 +39,7 @@ defmodule ArtemisWeb.BrowserHelpers do
     |> Regex.compile!()
     |> visible_in_page?
   end
+
   def visible?(value) when is_integer(value), do: visible?(Integer.to_string(value))
   def visible?(value), do: visible_in_page?(value)
 end

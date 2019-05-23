@@ -32,13 +32,15 @@ defmodule Artemis.Ecto.Helpers do
   def print_errors(error), do: print_error(error)
 
   defp print_error({field_name, message}) when is_bitstring(message) do
-    human_field_name = field_name
-      |> Atom.to_string
+    human_field_name =
+      field_name
+      |> Atom.to_string()
       |> String.replace("_", " ")
-      |> String.capitalize
+      |> String.capitalize()
 
     human_field_name <> " " <> message
   end
+
   defp print_error({field_name, {message, variables}}) do
     compound_message = interpolate(message, variables)
 
@@ -50,6 +52,7 @@ defmodule Artemis.Ecto.Helpers do
     |> String.replace("%{#{name}}", as_string(value))
     |> interpolate(rest)
   end
+
   defp interpolate(string, []), do: string
 
   defp as_string(value) when is_integer(value), do: Integer.to_string(value)

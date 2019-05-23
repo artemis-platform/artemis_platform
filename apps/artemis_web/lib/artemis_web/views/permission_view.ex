@@ -6,27 +6,27 @@ defmodule ArtemisWeb.PermissionView do
   def allowed_columns() do
     %{
       "actions" => [
-        label: fn (_conn) -> nil end,
-        value: fn (_conn, _row) -> nil end,
-        value_html: &actions_column_html/2,
+        label: fn _conn -> nil end,
+        value: fn _conn, _row -> nil end,
+        value_html: &actions_column_html/2
       ],
       "name" => [
-        label: fn (_conn) -> "Name" end,
-        label_html: fn (conn) ->
+        label: fn _conn -> "Name" end,
+        label_html: fn conn ->
           sortable_table_header(conn, "name", "Name")
         end,
-        value: fn (_conn, row) -> row.name end,
-        value_html: fn (conn, row) ->
+        value: fn _conn, row -> row.name end,
+        value_html: fn conn, row ->
           link(row.name, to: Routes.permission_path(conn, :show, row))
         end
       ],
       "slug" => [
-        label: fn (_conn) -> "Slug" end,
-        label_html: fn (conn) ->
+        label: fn _conn -> "Slug" end,
+        label_html: fn conn ->
           sortable_table_header(conn, "slug", "Slug")
         end,
-        value: fn (_conn, row) -> row.slug end,
-        value_html: fn (_conn, row) ->
+        value: fn _conn, row -> row.slug end,
+        value_html: fn _conn, row ->
           content_tag(:code, row.slug)
         end
       ]
@@ -45,13 +45,18 @@ defmodule ArtemisWeb.PermissionView do
       ],
       [
         verify: has?(conn, "permissions:delete"),
-        link: link("Delete", to: Routes.permission_path(conn, :delete, row), method: :delete, data: [confirm: "Are you sure?"])
+        link:
+          link("Delete",
+            to: Routes.permission_path(conn, :delete, row),
+            method: :delete,
+            data: [confirm: "Are you sure?"]
+          )
       ]
     ]
 
-    Enum.reduce(allowed_actions, [], fn (action, acc) ->
+    Enum.reduce(allowed_actions, [], fn action, acc ->
       case Keyword.get(action, :verify) do
-        true -> [acc|Keyword.get(action, :link)]
+        true -> [acc | Keyword.get(action, :link)]
         _ -> acc
       end
     end)

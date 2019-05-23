@@ -17,13 +17,14 @@ defmodule ArtemisWeb.AuthView do
       }
     }
 
-    enabled_providers = :artemis_web
+    enabled_providers =
+      :artemis_web
       |> Application.get_env(:auth_providers, [])
       |> Keyword.get(:enabled, "")
       |> String.split(",")
 
     available_providers
     |> Map.take(enabled_providers)
-    |> Enum.map(fn ({_key, value}) -> value end)
+    |> Enum.map(fn {_key, value} -> value end)
   end
 end

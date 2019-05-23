@@ -11,4 +11,3 @@ defmodule ArtemisLog.Context do
     end
   end
 end
-

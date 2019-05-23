@@ -13,7 +13,7 @@ defmodule Artemis.GetAuthProviderTest do
 
   describe "call" do
     test "returns nil auth_provider not found" do
-      invalid_id = 50000000
+      invalid_id = 50_000_000
 
       assert GetAuthProvider.call(invalid_id, Mock.system_user()) == nil
     end
@@ -23,15 +23,16 @@ defmodule Artemis.GetAuthProviderTest do
     end
 
     test "finds user keyword list", %{auth_provider: auth_provider} do
-      assert GetAuthProvider.call([type: auth_provider.type, uid: auth_provider.uid], Mock.system_user()) == auth_provider
+      assert GetAuthProvider.call([type: auth_provider.type, uid: auth_provider.uid], Mock.system_user()) ==
+               auth_provider
     end
   end
 
   describe "call!" do
     test "raises an exception auth_provider not found" do
-      invalid_id = 50000000
+      invalid_id = 50_000_000
 
-      assert_raise Ecto.NoResultsError, fn () ->
+      assert_raise Ecto.NoResultsError, fn ->
         GetAuthProvider.call!(invalid_id, Mock.system_user()) == nil
       end
     end

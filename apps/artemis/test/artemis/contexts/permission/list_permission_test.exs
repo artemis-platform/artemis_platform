@@ -21,7 +21,7 @@ defmodule Artemis.ListPermissionsTest do
     test "returns existing permission" do
       permission = insert(:permission)
 
-      assert ListPermissions.call(Mock.system_user())  == [permission]
+      assert ListPermissions.call(Mock.system_user()) == [permission]
     end
 
     test "returns a list of permissions" do
@@ -58,7 +58,8 @@ defmodule Artemis.ListPermissionsTest do
         paginate: true
       }
 
-      response_keys = ListPermissions.call(params, Mock.system_user())
+      response_keys =
+        ListPermissions.call(params, Mock.system_user())
         |> Map.from_struct()
         |> Map.keys()
 

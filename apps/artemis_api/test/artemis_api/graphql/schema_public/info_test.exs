@@ -27,11 +27,12 @@ defmodule ArtemisApi.InfoTest do
     test "returns a payload", %{conn: conn, query: query} do
       conn = post(conn, "/", %{query: query})
 
-      payload = conn.resp_body
+      payload =
+        conn.resp_body
         |> Jason.decode!()
         |> Map.get("data")
         |> Map.get("info")
-      
+
       assert payload["release_branch"] != nil
       assert payload["release_hash"] != nil
       assert payload["release_version"] != nil

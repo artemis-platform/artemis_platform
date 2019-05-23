@@ -51,6 +51,7 @@ defmodule ArtemisApi.Plug.ClientCredentials do
       false -> Base.decode64(credentials, ignore: :whitespace)
     end
   end
+
   defp decode_credentials(_), do: {:skip, :credentials_not_readable}
 
   defp get_credential_parts(credentials) when is_bitstring(credentials) do
@@ -60,6 +61,7 @@ defmodule ArtemisApi.Plug.ClientCredentials do
   rescue
     _ -> {:skip, :credential_parts_unreadable}
   end
+
   defp get_credential_parts(_), do: {:skip, :credential_parts_not_present}
 
   defp get_user(client_key, client_secret) do
@@ -75,7 +77,7 @@ defmodule ArtemisApi.Plug.ClientCredentials do
   defp remove_basic_auth_header(conn) do
     {:ok, delete_req_header(conn, "authorization")}
   end
-  
+
   defp add_bearer_auth_header(conn, %{token: token}) do
     {:ok, put_req_header(conn, "authorization", "Bearer #{token}")}
   end

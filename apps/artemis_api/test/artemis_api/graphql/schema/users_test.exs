@@ -93,12 +93,14 @@ defmodule ArtemisApi.UsersTest do
       user = Mock.system_user()
       conn = post(conn, "/data", %{query: query})
 
-      payload = conn.resp_body
+      payload =
+        conn.resp_body
         |> Jason.decode!()
         |> Map.get("data")
         |> Map.get("listUsers")
 
-      entry_ids = payload
+      entry_ids =
+        payload
         |> Map.get("entries")
         |> Enum.map(&Map.get(&1, "id"))
 
@@ -113,6 +115,7 @@ defmodule ArtemisApi.UsersTest do
   describe "show" do
     setup %{conn: conn} do
       user = Mock.system_user()
+
       query = """
         query getUser{
           getUser(
@@ -150,7 +153,8 @@ defmodule ArtemisApi.UsersTest do
     test "returns user attributes", %{conn: conn, query: query, user: user} do
       conn = post(conn, "/data", %{query: query})
 
-      payload = conn.resp_body
+      payload =
+        conn.resp_body
         |> Jason.decode!()
         |> Map.get("data")
         |> Map.get("getUser")
@@ -167,7 +171,8 @@ defmodule ArtemisApi.UsersTest do
     test "returns user associations", %{conn: conn, query: query} do
       conn = post(conn, "/data", %{query: query})
 
-      payload = conn.resp_body
+      payload =
+        conn.resp_body
         |> Jason.decode!()
         |> Map.get("data")
         |> Map.get("getUser")
@@ -211,7 +216,8 @@ defmodule ArtemisApi.UsersTest do
     test "returns user attributes", %{conn: conn, query: query} do
       conn = post(conn, "/data", %{query: query})
 
-      payload = conn.resp_body
+      payload =
+        conn.resp_body
         |> Jason.decode!()
         |> Map.get("data")
         |> Map.get("createUser")
@@ -224,6 +230,7 @@ defmodule ArtemisApi.UsersTest do
   describe "update" do
     setup %{conn: conn} do
       user = Mock.system_user()
+
       query = """
         mutation updateUser{
           updateUser(
@@ -257,7 +264,8 @@ defmodule ArtemisApi.UsersTest do
     test "returns user attributes", %{conn: conn, query: query, user: user} do
       conn = post(conn, "/data", %{query: query})
 
-      payload = conn.resp_body
+      payload =
+        conn.resp_body
         |> Jason.decode!()
         |> Map.get("data")
         |> Map.get("updateUser")
@@ -271,6 +279,7 @@ defmodule ArtemisApi.UsersTest do
   describe "delete" do
     setup %{conn: conn} do
       user = Mock.system_user()
+
       query = """
         mutation deleteUser{
           deleteUser(
@@ -300,7 +309,8 @@ defmodule ArtemisApi.UsersTest do
     test "returns user attributes", %{conn: conn, query: query, user: user} do
       conn = post(conn, "/data", %{query: query})
 
-      payload = conn.resp_body
+      payload =
+        conn.resp_body
         |> Jason.decode!()
         |> Map.get("data")
         |> Map.get("deleteUser")

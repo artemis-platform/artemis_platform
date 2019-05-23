@@ -7,10 +7,10 @@ defmodule Artemis.UpdatePermissionTest do
 
   describe "call!" do
     test "raises an exception when id not found" do
-      invalid_id = 50000000
+      invalid_id = 50_000_000
       params = params_for(:permission)
 
-      assert_raise Artemis.Context.Error, fn () ->
+      assert_raise Artemis.Context.Error, fn ->
         UpdatePermission.call!(invalid_id, params, Mock.system_user())
       end
     end
@@ -45,7 +45,7 @@ defmodule Artemis.UpdatePermissionTest do
 
   describe "call" do
     test "returns an error when id not found" do
-      invalid_id = 50000000
+      invalid_id = 50_000_000
       params = params_for(:permission)
 
       {:error, _} = UpdatePermission.call(invalid_id, params, Mock.system_user())

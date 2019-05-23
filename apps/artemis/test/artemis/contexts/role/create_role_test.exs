@@ -7,7 +7,7 @@ defmodule Artemis.CreateRoleTest do
 
   describe "call!" do
     test "returns error when params are empty" do
-      assert_raise Artemis.Context.Error, fn () ->
+      assert_raise Artemis.Context.Error, fn ->
         CreateRole.call!(%{}, Mock.system_user())
       end
     end
@@ -37,7 +37,8 @@ defmodule Artemis.CreateRoleTest do
     end
 
     test "creates role with associations" do
-      params = :role
+      params =
+        :role
         |> params_for
         |> Map.put(:permissions, [params_for(:permission), params_for(:permission)])
 

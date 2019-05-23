@@ -1,10 +1,10 @@
 defmodule ArtemisPubSub do
-
   @server ArtemisPubSub
 
   def subscribe(topic) when is_binary(topic) do
     Phoenix.PubSub.subscribe(@server, topic, [])
   end
+
   def subscribe(topic, opts) when is_binary(topic) and is_list(opts) do
     Phoenix.PubSub.subscribe(@server, topic, opts)
   end

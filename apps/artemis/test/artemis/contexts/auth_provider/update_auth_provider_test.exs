@@ -7,10 +7,10 @@ defmodule Artemis.UpdateAuthProviderTest do
 
   describe "call!" do
     test "raises an exception when id not found" do
-      invalid_id = 50000000
+      invalid_id = 50_000_000
       params = params_for(:auth_provider)
 
-      assert_raise Artemis.Context.Error, fn () ->
+      assert_raise Artemis.Context.Error, fn ->
         UpdateAuthProvider.call!(invalid_id, params, Mock.system_user())
       end
     end
@@ -48,7 +48,7 @@ defmodule Artemis.UpdateAuthProviderTest do
 
   describe "call" do
     test "returns an error when id not found" do
-      invalid_id = 50000000
+      invalid_id = 50_000_000
       params = params_for(:auth_provider)
 
       {:error, _} = UpdateAuthProvider.call(invalid_id, params, Mock.system_user())

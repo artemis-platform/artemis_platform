@@ -16,7 +16,7 @@ defmodule ArtemisLog.CreateEventLogTest do
     test "raises an exception when missing required params" do
       payload = %{}
 
-      assert_raise FunctionClauseError, fn () ->
+      assert_raise FunctionClauseError, fn ->
         CreateEventLog.call("event", payload)
       end
     end
@@ -41,6 +41,7 @@ defmodule ArtemisLog.CreateEventLogTest do
 
     test "creates a record when passed valid params", %{user: user} do
       event = "test:event"
+
       data = %{
         custom: :meta_data,
         multiple: %{

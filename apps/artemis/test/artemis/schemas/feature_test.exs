@@ -11,7 +11,7 @@ defmodule Artemis.FeatureTest do
     test "slug must be unique" do
       existing = insert(:feature)
 
-      assert_raise Ecto.ConstraintError, fn () ->
+      assert_raise Ecto.ConstraintError, fn ->
         insert(:feature, slug: existing.slug)
       end
     end

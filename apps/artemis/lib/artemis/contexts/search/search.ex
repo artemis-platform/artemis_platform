@@ -12,7 +12,8 @@ defmodule Artemis.Search do
   }
 
   def call(params, user) do
-    params = params
+    params =
+      params
       |> Artemis.Helpers.keys_to_strings()
       |> Map.put("paginate", true)
       |> Map.put_new("page_size", @default_page_size)
@@ -27,7 +28,7 @@ defmodule Artemis.Search do
   defp search(params, user) do
     resources = filter_resources_by_user_permissions(params, user)
 
-    Enum.reduce(resources, %{}, fn ({key, options}, acc) ->
+    Enum.reduce(resources, %{}, fn {key, options}, acc ->
       function = Keyword.get(options, :function)
       value = function.(params, user)
 
@@ -39,7 +40,7 @@ defmodule Artemis.Search do
     requested_keys = Map.get(params, "resources", Map.keys(@searchable_resources))
     requested_resources = Map.take(@searchable_resources, requested_keys)
 
-    Enum.filter(requested_resources, fn ({_key, options}) ->
+    Enum.filter(requested_resources, fn {_key, options} ->
       permissions = Keyword.get(options, :permissions)
 
       has_all?(user, permissions)

@@ -83,6 +83,7 @@ defmodule ArtemisWeb.PermissionControllerTest do
     test "deletes chosen permission", %{conn: conn, record: record} do
       conn = delete(conn, Routes.permission_path(conn, :delete, record))
       assert redirected_to(conn) == Routes.permission_path(conn, :index)
+
       assert_error_sent 404, fn ->
         get(conn, Routes.permission_path(conn, :show, record))
       end

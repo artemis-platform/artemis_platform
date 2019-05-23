@@ -15,7 +15,7 @@ defmodule Artemis.PermissionTest do
     test "name must be unique" do
       existing = insert(:permission)
 
-      assert_raise Ecto.ConstraintError, fn () ->
+      assert_raise Ecto.ConstraintError, fn ->
         insert(:permission, slug: existing.slug)
       end
     end
@@ -23,7 +23,8 @@ defmodule Artemis.PermissionTest do
 
   describe "associations - roles" do
     setup do
-      permission = :permission
+      permission =
+        :permission
         |> insert
         |> with_roles
 
@@ -36,7 +37,8 @@ defmodule Artemis.PermissionTest do
 
       Enum.map(permission.roles, &Repo.delete!(&1))
 
-      permission = Permission
+      permission =
+        Permission
         |> preload(^@preload)
         |> Repo.get(permission.id)
 

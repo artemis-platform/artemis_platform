@@ -12,7 +12,7 @@ defmodule ArtemisWeb.RoleController do
   @preload [:permissions]
 
   def index(conn, params) do
-    authorize(conn, "roles:list", fn () ->
+    authorize(conn, "roles:list", fn ->
       params = Map.put(params, :paginate, true)
       roles = ListRoles.call(params, current_user(conn))
 
@@ -21,7 +21,7 @@ defmodule ArtemisWeb.RoleController do
   end
 
   def new(conn, _params) do
-    authorize(conn, "roles:create", fn () ->
+    authorize(conn, "roles:create", fn ->
       role = %Role{permissions: []}
       changeset = Role.changeset(role)
       permissions = ListPermissions.call(current_user(conn))
@@ -31,7 +31,7 @@ defmodule ArtemisWeb.RoleController do
   end
 
   def create(conn, %{"role" => params}) do
-    authorize(conn, "roles:create", fn () ->
+    authorize(conn, "roles:create", fn ->
       params = Map.put_new(params, "permissions", [])
 
       case CreateRole.call(params, current_user(conn)) do
@@ -50,7 +50,7 @@ defmodule ArtemisWeb.RoleController do
   end
 
   def show(conn, %{"id" => id}) do
-    authorize(conn, "roles:show", fn () ->
+    authorize(conn, "roles:show", fn ->
       role = GetRole.call!(id, current_user(conn), preload: [:permissions])
 
       render(conn, "show.html", role: role)
@@ -58,7 +58,7 @@ defmodule ArtemisWeb.RoleController do
   end
 
   def edit(conn, %{"id" => id}) do
-    authorize(conn, "roles:update", fn () ->
+    authorize(conn, "roles:update", fn ->
       role = GetRole.call(id, current_user(conn), preload: @preload)
       changeset = Role.changeset(role)
       permissions = ListPermissions.call(current_user(conn))
@@ -68,7 +68,7 @@ defmodule ArtemisWeb.RoleController do
   end
 
   def update(conn, %{"id" => id, "role" => params}) do
-    authorize(conn, "roles:update", fn () ->
+    authorize(conn, "roles:update", fn ->
       params = Map.put_new(params, "permissions", [])
 
       case UpdateRole.call(id, params, current_user(conn)) do
@@ -87,7 +87,7 @@ defmodule ArtemisWeb.RoleController do
   end
 
   def delete(conn, %{"id" => id}) do
-    authorize(conn, "roles:delete", fn () ->
+    authorize(conn, "roles:delete", fn ->
       {:ok, _role} = DeleteRole.call(id, current_user(conn))
 
       conn

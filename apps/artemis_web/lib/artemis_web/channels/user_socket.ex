@@ -28,6 +28,7 @@ defmodule ArtemisWeb.UserSocket do
       {:error, _} -> {:error, "Error decoding user token"}
     end
   end
+
   defp get_user(_), do: :error
 
   defp decode_token(token) do

@@ -20,13 +20,16 @@ defmodule ArtemisWeb.GetUserByAuthProviderData do
   end
 
   defp auth_provider_enabled?(_data, enable_all_providers: true), do: true
+
   defp auth_provider_enabled?(data, _options) do
-    enabled_auth_providers = :artemis_web
+    enabled_auth_providers =
+      :artemis_web
       |> Application.get_env(:auth_providers, [])
       |> Keyword.get(:enabled, "")
       |> String.split(",")
 
-    auth_provider = data
+    auth_provider =
+      data
       |> Map.get(:provider)
       |> Artemis.Helpers.to_string()
 
@@ -42,19 +45,20 @@ defmodule ArtemisWeb.GetUserByAuthProviderData do
     auth_provider_params = get_auth_provider_params(data, user_params)
     auth_provider = get_auth_provider(auth_provider_params, system_user)
 
-    result = if auth_provider do
-      update_auth_provider!(auth_provider, auth_provider_params, system_user)
-      update_user!(auth_provider.user, user_params, system_user)
-    else
-      user_record = create_or_update_user!(user, user_params, system_user)
-      create_auth_provider!(auth_provider_params, user_record, system_user)
-      user_record
-    end
+    result =
+      if auth_provider do
+        update_auth_provider!(auth_provider, auth_provider_params, system_user)
+        update_user!(auth_provider.user, user_params, system_user)
+      else
+        user_record = create_or_update_user!(user, user_params, system_user)
+        create_auth_provider!(auth_provider_params, user_record, system_user)
+        user_record
+      end
 
     {:ok, result}
   rescue
-    error -> 
-      Logger.debug "Get User by Auth Provider Data Error: " <> inspect(error)
+    error ->
+      Logger.debug("Get User by Auth Provider Data Error: " <> inspect(error))
       {:error, "Error processing auth provider data"}
   end
 
@@ -89,14 +93,15 @@ defmodule ArtemisWeb.GetUserByAuthProviderData do
 
   defp update_user!(user, user_params, system_user) do
     params = Map.take(user_params, ["last_log_in_at"])
-    
+
     UpdateUser.call!(user.id, params, system_user)
   end
 
   # Helpers - Auth Provider
 
   defp get_auth_provider_params(data, user_params) do
-    provider_data = data
+    provider_data =
+      data
       |> Map.get(:extra, user_params)
       |> Artemis.Helpers.deep_delete(:__struct__)
 

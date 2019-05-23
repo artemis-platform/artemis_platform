@@ -21,7 +21,7 @@ defmodule Artemis.ListRolesTest do
     test "returns existing role" do
       role = insert(:role)
 
-      assert ListRoles.call(Mock.system_user())  == [role]
+      assert ListRoles.call(Mock.system_user()) == [role]
     end
 
     test "returns a list of roles" do
@@ -58,7 +58,8 @@ defmodule Artemis.ListRolesTest do
         paginate: true
       }
 
-      response_keys = ListRoles.call(params, Mock.system_user())
+      response_keys =
+        ListRoles.call(params, Mock.system_user())
         |> Map.from_struct()
         |> Map.keys()
 

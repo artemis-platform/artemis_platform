@@ -103,20 +103,23 @@ defmodule Artemis.IntervalWorker do
       def handle_call(:log, _from, state) do
         {:reply, state.log, state}
       end
+
       def handle_call(:pause, _from, state) do
         if state.timer do
           Process.cancel_timer(state.timer)
         end
 
-        {:reply, true, %State{state|timer: nil}}
+        {:reply, true, %State{state | timer: nil}}
       end
+
       def handle_call(:resume, _from, state) do
         if state.timer do
           Process.cancel_timer(state.timer)
         end
 
-        {:reply, true, %State{state|timer: schedule_update()}}
+        {:reply, true, %State{state | timer: schedule_update()}}
       end
+
       def handle_call(:state, _from, state) do
         {:reply, state, state}
       end
@@ -127,13 +130,15 @@ defmodule Artemis.IntervalWorker do
         result = call(state.data, state.meta)
         ended_at = Timex.now()
 
-        state = state
+        state =
+          state
           |> Map.put(:data, parse_data(state, result))
           |> Map.put(:log, update_log(state, result, started_at, ended_at))
           |> Map.put(:timer, schedule_update_unless_paused(state))
 
         {:noreply, state}
       end
+
       def handle_info(_, state) do
         {:noreply, state}
       end
@@ -164,7 +169,7 @@ defmodule Artemis.IntervalWorker do
         log_limit = get_option(:log_limit, @default_log_limit)
         truncated = Enum.slice(log, 0, log_limit)
 
-        [entry|truncated]
+        [entry | truncated]
       end
 
       defp success?({:ok, _}), do: true
