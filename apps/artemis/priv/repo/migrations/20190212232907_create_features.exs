@@ -7,7 +7,7 @@ defmodule Artemis.Repo.Migrations.CreateFeatures do
       add :description, :text
       add :name, :string
       add :slug, :string
-      timestamps()
+      timestamps(type: :utc_datetime)
     end
 
     create index(:features, [:active])

@@ -6,7 +6,7 @@ defmodule Artemis.Repo.Migrations.CreatePermissions do
       add :description, :text
       add :name, :string
       add :slug, :string
-      timestamps()
+      timestamps(type: :utc_datetime)
     end
 
     create unique_index(:permissions, [:slug])
