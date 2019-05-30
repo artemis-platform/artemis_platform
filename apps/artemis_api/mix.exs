@@ -46,7 +46,7 @@ defmodule ArtemisApi.Mixfile do
       {:guardian, "~> 1.2"},
       {:absinthe, "~> 1.4.0"},
       {:absinthe_plug, "~> 1.4.0"},
-      {:timex, "~> 3.1"},
+      {:timex, "~> 3.0"},
       {:cors_plug, "~> 1.4"},
       {:oauth2, "~> 0.9"},
       {:artemis, in_umbrella: true},
