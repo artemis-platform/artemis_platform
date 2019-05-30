@@ -75,9 +75,9 @@ defmodule Artemis.ListFeaturesTest do
     end
 
     test "query - search" do
-      insert(:feature, name: "John Smith", slug: "john-smith")
-      insert(:feature, name: "Jill Smith", slug: "jill-smith")
-      insert(:feature, name: "John Doe", slug: "john-doe")
+      insert(:feature, name: "Four Six", slug: "four-six")
+      insert(:feature, name: "Four Two", slug: "four-two")
+      insert(:feature, name: "Five Six", slug: "five-six")
 
       user = Mock.system_user()
       features = ListFeatures.call(user)
@@ -87,7 +87,7 @@ defmodule Artemis.ListFeaturesTest do
       # Succeeds when given a word part of a larger phrase
 
       params = %{
-        query: "smit"
+        query: "Six"
       }
 
       features = ListFeatures.call(params, user)
@@ -97,7 +97,7 @@ defmodule Artemis.ListFeaturesTest do
       # Succeeds with partial value when it is start of a word
 
       params = %{
-        query: "john-"
+        query: "four-"
       }
 
       features = ListFeatures.call(params, user)
@@ -107,7 +107,7 @@ defmodule Artemis.ListFeaturesTest do
       # Fails with partial value when it is not the start of a word
 
       params = %{
-        query: "mith"
+        query: "our"
       }
 
       features = ListFeatures.call(params, user)

@@ -74,10 +74,27 @@ defmodule Artemis.ListPermissionsTest do
       assert response_keys == pagination_keys
     end
 
+    test "preload" do
+      permissions = ListPermissions.call(Mock.system_user())
+      permission = hd(permissions)
+
+      assert !is_list(permission.roles)
+      assert permission.roles.__struct__ == Ecto.Association.NotLoaded
+
+      params = %{
+        preload: [:roles]
+      }
+
+      permissions = ListPermissions.call(params, Mock.system_user())
+      permission = hd(permissions)
+
+      assert is_list(permission.roles)
+    end
+
     test "query - search" do
-      insert(:permission, name: "John Smith", slug: "john-smith")
-      insert(:permission, name: "Jill Smith", slug: "jill-smith")
-      insert(:permission, name: "John Doe", slug: "john-doe")
+      insert(:permission, name: "Four Six", slug: "four-six")
+      insert(:permission, name: "Four Two", slug: "four-two")
+      insert(:permission, name: "Five Six", slug: "five-six")
 
       user = Mock.system_user()
       permissions = ListPermissions.call(user)
@@ -87,7 +104,7 @@ defmodule Artemis.ListPermissionsTest do
       # Succeeds when given a word part of a larger phrase
 
       params = %{
-        query: "smit"
+        query: "Six"
       }
 
       permissions = ListPermissions.call(params, user)
@@ -97,7 +114,7 @@ defmodule Artemis.ListPermissionsTest do
       # Succeeds with partial value when it is start of a word
 
       params = %{
-        query: "john-"
+        query: "four-"
       }
 
       permissions = ListPermissions.call(params, user)
@@ -107,7 +124,7 @@ defmodule Artemis.ListPermissionsTest do
       # Fails with partial value when it is not the start of a word
 
       params = %{
-        query: "mith"
+        query: "our"
       }
 
       permissions = ListPermissions.call(params, user)

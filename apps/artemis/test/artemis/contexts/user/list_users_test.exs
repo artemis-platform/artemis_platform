@@ -92,9 +92,9 @@ defmodule Artemis.ListUsersTest do
     end
 
     test "query - search" do
-      insert(:user, name: "John Smith", email: "johnn@smith.com")
-      insert(:user, name: "Jill Smith", email: "jill@smith.com")
-      insert(:user, name: "John Doe", email: "johnn@doe.com")
+      insert(:user, name: "Four Six", email: "four-six")
+      insert(:user, name: "Four Two", email: "four-two")
+      insert(:user, name: "Five Six", email: "five-six")
 
       users = ListUsers.call(Mock.system_user())
 
@@ -103,7 +103,7 @@ defmodule Artemis.ListUsersTest do
       # Succeeds when given a word part of a larger phrase
 
       params = %{
-        query: "smit"
+        query: "Six"
       }
 
       users = ListUsers.call(params, Mock.system_user())
@@ -113,7 +113,7 @@ defmodule Artemis.ListUsersTest do
       # Succeeds with partial value when it is start of a word
 
       params = %{
-        query: "johnn@"
+        query: "four-"
       }
 
       users = ListUsers.call(params, Mock.system_user())
@@ -123,7 +123,7 @@ defmodule Artemis.ListUsersTest do
       # Fails with partial value when it is not the start of a word
 
       params = %{
-        query: "mith.com"
+        query: "our"
       }
 
       users = ListUsers.call(params, Mock.system_user())
