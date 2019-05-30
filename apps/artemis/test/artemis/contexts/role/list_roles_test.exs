@@ -93,9 +93,9 @@ defmodule Artemis.ListRolesTest do
     end
 
     test "query - search" do
-      insert(:role, name: "John Smith", slug: "johnn-smith")
-      insert(:role, name: "Jill Smith", slug: "jill-smith")
-      insert(:role, name: "John Doe", slug: "johnn-doe")
+      insert(:role, name: "Four Six", slug: "four-six")
+      insert(:role, name: "Four Two", slug: "four-two")
+      insert(:role, name: "Five Six", slug: "five-six")
 
       user = Mock.system_user()
       roles = ListRoles.call(user)
@@ -105,7 +105,7 @@ defmodule Artemis.ListRolesTest do
       # Succeeds when given a word part of a larger phrase
 
       params = %{
-        query: "smit"
+        query: "Six"
       }
 
       roles = ListRoles.call(params, user)
@@ -115,7 +115,7 @@ defmodule Artemis.ListRolesTest do
       # Succeeds with partial value when it is start of a word
 
       params = %{
-        query: "johnn-"
+        query: "four-"
       }
 
       roles = ListRoles.call(params, user)
@@ -125,7 +125,7 @@ defmodule Artemis.ListRolesTest do
       # Fails with partial value when it is not the start of a word
 
       params = %{
-        query: "mith"
+        query: "our"
       }
 
       roles = ListRoles.call(params, user)
