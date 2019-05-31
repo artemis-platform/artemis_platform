@@ -40,7 +40,7 @@ defmodule ArtemisWeb.RolePageTest do
         query: role.name
       })
 
-      submit_form(".search-resource")
+      submit_search(".search-resource")
 
       assert visible?(role.name)
     end

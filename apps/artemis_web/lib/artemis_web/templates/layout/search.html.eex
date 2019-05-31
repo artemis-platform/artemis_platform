@@ -1,4 +1,6 @@
-<form class="search search-resource" action="<%= @conn.request_path %>" method="get">
-  <input name="query" id="query" type="text" value="<%= Map.get(@conn.query_params, "query") %>" />
-  <button type="submit">Search</button>
+<form class="ui form search search-resource <%= Keyword.get(@options, :size) %>" action="<%= @conn.request_path %>" method="get">
+  <div class="ui icon input">
+    <i class="search link icon"></i>
+    <input name="query" id="query" type="text" placeholder="<%= Keyword.get(@options, :placeholder, "Search") %>" value="<%= Map.get(@conn.query_params, "query") %>" />
+  </div>
 </form>

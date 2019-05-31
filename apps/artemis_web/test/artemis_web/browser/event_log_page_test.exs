@@ -40,7 +40,7 @@ defmodule ArtemisWeb.EventLogPageTest do
         query: event_log.action
       })
 
-      submit_form(".search-resource")
+      submit_search(".search-resource")
 
       assert visible?(event_log.action)
     end
