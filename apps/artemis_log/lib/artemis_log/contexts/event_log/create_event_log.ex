@@ -9,6 +9,7 @@ defmodule ArtemisLog.CreateEventLog do
     params = %{
       action: event,
       meta: Filter.call(data),
+      session_id: user && Map.get(user, :session_id),
       user_id: user && Map.get(user, :id),
       user_name: user && Map.get(user, :name)
     }

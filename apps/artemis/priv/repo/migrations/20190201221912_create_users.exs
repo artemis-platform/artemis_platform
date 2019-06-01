@@ -12,6 +12,7 @@ defmodule Artemis.Repo.Migrations.CreateUsers do
       add :last_log_in_at, :utc_datetime
       add :last_name, :string
       add :name, :string
+      add :session_id, :string
       timestamps(type: :utc_datetime)
     end
 

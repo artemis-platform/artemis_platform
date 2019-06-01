@@ -19,30 +19,16 @@ defmodule ArtemisWeb.Plug.BroadcastRequest do
   end
 
   defp broadcast_request(conn) do
+    user = current_user(conn)
     payload = %{
       endpoint: "web",
       node: Atom.to_string(node()),
       path: conn.request_path,
-      query_string: conn.query_string,
-      session_id: get_session_id(conn)
+      query_string: conn.query_string
     }
 
-    HttpRequest.broadcast(payload, current_user(conn))
+    HttpRequest.broadcast(payload, user)
 
     conn
-  end
-
-  # Uses the `verify signature` section of the JWT token as a pseudo session
-  # identifier. It is not guaranteed to be unique.
-  #
-  # Can be used to analyze the http requests a specific user made during a
-  # single session / log in without having to guess on log in boundaries based
-  # on timestamps.
-  defp get_session_id(conn) do
-    conn
-    |> Guardian.Plug.current_token()
-    |> String.split(".")
-    |> Enum.at(2)
-    |> String.slice(0..10)
   end
 end

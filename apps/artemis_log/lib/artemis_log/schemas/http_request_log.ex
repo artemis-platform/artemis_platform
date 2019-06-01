@@ -31,7 +31,6 @@ defmodule ArtemisLog.HttpRequestLog do
       :endpoint,
       :node,
       :path,
-      :session_id,
       :user_id,
       :user_name
     ]

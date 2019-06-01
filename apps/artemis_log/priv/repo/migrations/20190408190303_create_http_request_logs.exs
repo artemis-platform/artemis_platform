@@ -16,8 +16,6 @@ defmodule ArtemisLog.Repo.Migrations.CreateHttpRequestLogs do
     create index(:http_request_logs, :endpoint)
     create index(:http_request_logs, [:endpoint, :user_id])
     create index(:http_request_logs, [:endpoint, :user_name])
-    create index(:http_request_logs, [:endpoint, :user_id, :session_id])
-    create index(:http_request_logs, [:endpoint, :user_name, :session_id])
     create index(:http_request_logs, :node)
     create index(:http_request_logs, :path)
     create index(:http_request_logs, :session_id)

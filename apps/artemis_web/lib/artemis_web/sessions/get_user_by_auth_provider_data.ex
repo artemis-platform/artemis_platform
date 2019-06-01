@@ -68,6 +68,7 @@ defmodule ArtemisWeb.GetUserByAuthProviderData do
     data
     |> Map.get(:info, %{})
     |> Map.put(:last_log_in_at, DateTime.to_string(DateTime.utc_now()))
+    |> Map.put(:session_id, Artemis.Helpers.UUID.call())
     |> Artemis.Helpers.deep_delete(:__struct__)
     |> Artemis.Helpers.keys_to_strings()
   end
@@ -92,7 +93,7 @@ defmodule ArtemisWeb.GetUserByAuthProviderData do
   end
 
   defp update_user!(user, user_params, system_user) do
-    params = Map.take(user_params, ["last_log_in_at"])
+    params = Map.take(user_params, ["last_log_in_at", "session_id"])
 
     UpdateUser.call!(user.id, params, system_user)
   end

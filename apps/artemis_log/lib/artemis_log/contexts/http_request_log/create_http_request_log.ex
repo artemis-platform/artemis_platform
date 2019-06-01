@@ -7,6 +7,7 @@ defmodule ArtemisLog.CreateHttpRequestLog do
   def call(%{data: data, user: user}) do
     params =
       data
+      |> Map.put(:session_id, user && Map.get(user, :session_id))
       |> Map.put(:user_id, user && Map.get(user, :id))
       |> Map.put(:user_name, user && Map.get(user, :name))
 
