@@ -40,7 +40,7 @@ defmodule ArtemisWeb.FeaturePageTest do
         query: feature.slug
       })
 
-      submit_form(".search-resource")
+      submit_search(".search-resource")
 
       assert visible?(feature.slug)
     end

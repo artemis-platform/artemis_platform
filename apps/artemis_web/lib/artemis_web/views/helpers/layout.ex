@@ -184,8 +184,8 @@ defmodule ArtemisWeb.ViewHelper.Layout do
   @doc """
   Generates search form
   """
-  def render_search(conn) do
-    Phoenix.View.render(ArtemisWeb.LayoutView, "search.html", conn: conn)
+  def render_search(conn, options \\ []) do
+    Phoenix.View.render(ArtemisWeb.LayoutView, "search.html", conn: conn, options: options)
   end
 
   @doc """

@@ -1,9 +1,9 @@
 defmodule Artemis.Event do
   @moduledoc """
-
+  Broadcast events that change data
   """
 
-  @broadcast_topic "private:artemis"
+  @broadcast_topic "private:artemis:events"
 
   def get_broadcast_topic, do: @broadcast_topic
 

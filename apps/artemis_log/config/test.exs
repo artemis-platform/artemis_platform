@@ -18,4 +18,5 @@ config :artemis_log, ArtemisLog.Repo,
   pool: Ecto.Adapters.SQL.Sandbox
 
 config :artemis_log,
-  subscribe_to_events: false
+  subscribe_to_events: false,
+  subscribe_to_http_requests: false

@@ -40,7 +40,7 @@ defmodule ArtemisWeb.UserPageTest do
         query: user.email
       })
 
-      submit_form(".search-resource")
+      submit_search(".search-resource")
 
       assert visible?(user.name)
     end

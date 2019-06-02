@@ -40,7 +40,7 @@ defmodule ArtemisWeb.PermissionPageTest do
         query: permission.name
       })
 
-      submit_form(".search-resource")
+      submit_search(".search-resource")
 
       assert visible?(permission.name)
     end

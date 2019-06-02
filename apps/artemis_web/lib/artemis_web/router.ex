@@ -21,6 +21,7 @@ defmodule ArtemisWeb.Router do
     plug Guardian.Plug.VerifyHeader
     plug Guardian.Plug.VerifySession
     plug Guardian.Plug.LoadResource, allow_blank: true
+    plug ArtemisWeb.Plug.BroadcastRequest
   end
 
   pipeline :require_auth do
@@ -56,9 +57,4 @@ defmodule ArtemisWeb.Router do
       end
     end
   end
-
-  # Other scopes may use custom stacks.
-  # scope "/api", ArtemisWeb do
-  #   pipe_through :api
-  # end
 end

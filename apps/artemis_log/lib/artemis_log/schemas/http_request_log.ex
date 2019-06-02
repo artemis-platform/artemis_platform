@@ -1,9 +1,11 @@
-defmodule ArtemisLog.EventLog do
+defmodule ArtemisLog.HttpRequestLog do
   use ArtemisLog.Schema
 
-  schema "event_logs" do
-    field :action, :string
-    field :meta, :map
+  schema "http_request_logs" do
+    field :endpoint, :string
+    field :node, :string
+    field :path, :string
+    field :query_string, :string
     field :session_id, :string
     field :user_id, :integer
     field :user_name, :string
@@ -15,8 +17,10 @@ defmodule ArtemisLog.EventLog do
 
   def updatable_fields,
     do: [
-      :action,
-      :meta,
+      :endpoint,
+      :node,
+      :path,
+      :query_string,
       :session_id,
       :user_id,
       :user_name
@@ -24,7 +28,9 @@ defmodule ArtemisLog.EventLog do
 
   def required_fields,
     do: [
-      :action,
+      :endpoint,
+      :node,
+      :path,
       :user_id,
       :user_name
     ]

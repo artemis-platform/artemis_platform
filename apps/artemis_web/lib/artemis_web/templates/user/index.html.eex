@@ -23,6 +23,8 @@
     <thead>
       <tr>
         <th><%= sortable_table_header(@conn, "name", "Name") %></th>
+        <th><%= sortable_table_header(@conn, "email", "Email") %></th>
+        <th><%= sortable_table_header(@conn, "last_log_in_at", "Last Login") %></th>
         <th></th>
       </tr>
     </thead>
@@ -37,6 +39,8 @@
               <%= user.name %>
             <% end %>
           </td>
+          <td><%= user.email %></td>
+          <td><%= user.last_log_in_at %></td>
           <td>
             <%= if has?(@conn, "users:show") do %>
               <%= link "Show", to: Routes.user_path(@conn, :show, user) %>
