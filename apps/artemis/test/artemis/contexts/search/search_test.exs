@@ -19,10 +19,10 @@ defmodule Artemis.SearchTest do
     end
 
     test "returns key when permissions are met" do
-      authorized_user =
-        :user
-        |> insert()
-        |> with_permission("users:list")
+      authorized_user = Mock.user_with_permissions([
+        "users:access:all",
+        "users:list"
+      ])
 
       params = %{
         query: authorized_user.name

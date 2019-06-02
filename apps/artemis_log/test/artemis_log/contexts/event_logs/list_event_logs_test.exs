@@ -13,6 +13,44 @@ defmodule ArtemisLog.ListEventLogsTest do
     {:ok, []}
   end
 
+  describe "access permissions" do
+    setup do
+      insert_list(3, :event_log)
+
+      {:ok, []}
+    end
+
+    test "returns empty list with no permissions" do
+      user = Mock.user_without_permissions()
+      insert(:event_log, user_id: user.id)
+
+      params = %{"paginate" => false}
+      result = ListEventLogs.call(params, user)
+
+      assert length(result) == 0
+    end
+
+    test "requires access:self permission to return own record" do
+      user = Mock.user_with_permission("event-logs:access:self")
+      insert(:event_log, user_id: user.id)
+
+      params = %{"paginate" => false}
+      result = ListEventLogs.call(params, user)
+
+      assert length(result) == 1
+    end
+
+    test "requires access:all permission to return other records" do
+      user = Mock.user_with_permission("event-logs:access:all")
+
+      params = %{"paginate" => false}
+      result = ListEventLogs.call(params, user)
+      total = Repo.all(EventLog)
+
+      assert length(result) == length(total)
+    end
+  end
+
   describe "call" do
     test "always returns paginated results" do
       response_keys =

@@ -13,18 +13,22 @@ defmodule Artemis.GetUserTest do
   end
 
   describe "access permissions" do
-    test "returns nil with no permissions", %{user: user} do
+    test "returns nil with no permissions" do
+      user = Mock.user_without_permissions()
+      insert(:user_role, user: user)
+
       nil = GetUser.call(user.id, user)
     end
 
-    test "requires access:self permission to return own record", %{user: user} do
-      with_permission(user, "users:access:self")
+    test "requires access:self permission to return own record" do
+      user = Mock.user_with_permission("users:access:self")
+      insert(:user_role, user: user)
 
       assert GetUser.call(user.id, user).id == user.id
     end
 
-    test "requires access:all permission to return other records", %{user: user} do
-      with_permission(user, "users:access:all")
+    test "requires access:all permission to return other records" do
+      user = Mock.user_with_permission("users:access:all")
 
       other_user = insert(:user)
 
