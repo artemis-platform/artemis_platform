@@ -3,4 +3,3 @@ defmodule Artemis.Helpers.UUID do
     Ecto.UUID.generate()
   end
 end
-

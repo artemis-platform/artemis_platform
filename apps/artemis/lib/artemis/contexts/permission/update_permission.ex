@@ -1,6 +1,7 @@
 defmodule Artemis.UpdatePermission do
   use Artemis.Context
 
+  alias Artemis.GetPermission
   alias Artemis.Permission
   alias Artemis.Repo
 
@@ -14,14 +15,14 @@ defmodule Artemis.UpdatePermission do
   def call(id, params, user) do
     with_transaction(fn ->
       id
-      |> get_record
+      |> get_record(user)
       |> update_record(params)
       |> Event.broadcast("permission:updated", user)
     end)
   end
 
-  def get_record(record) when is_map(record), do: record
-  def get_record(id), do: Repo.get(Permission, id)
+  def get_record(%{id: id}, user), do: get_record(id, user)
+  def get_record(id, user), do: GetPermission.call(id, user)
 
   defp update_record(nil, _params), do: {:error, "Record not found"}
 

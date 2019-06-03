@@ -11,13 +11,14 @@ defmodule Artemis.ListUsers do
   @default_page_size 25
   @default_preload []
 
-  def call(params \\ %{}, _user) do
+  def call(params \\ %{}, user) do
     params = default_params(params)
 
     User
     |> preload(^Map.get(params, "preload"))
     |> search_filter(params)
     |> order_query(params)
+    |> restrict_access(user)
     |> get_records(params)
   end
 
@@ -31,4 +32,12 @@ defmodule Artemis.ListUsers do
 
   defp get_records(query, %{"paginate" => true} = params), do: Repo.paginate(query, pagination_params(params))
   defp get_records(query, _params), do: Repo.all(query)
+
+  defp restrict_access(query, user) do
+    cond do
+      has?(user, "users:access:all") -> query
+      has?(user, "users:access:self") -> where(query, [u], u.id == ^user.id)
+      true -> where(query, [u], is_nil(u.id))
+    end
+  end
 end
