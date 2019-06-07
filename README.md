@@ -30,18 +30,14 @@ UI Patterns:
 - Breadcrumbs
 - Pagination
 - Table Search
-
-In Flight:
-
-- Optional RabbitMQ Support
-- On-demand Caching
+- Table Export
+- Table Sorting
+- Table Filtering
 
 Planned:
 
 - Node Clustering
-- Table Sorting
-- Table Filtering
-- Table Export
+- On-demand Caching
 
 ## Demo
 
@@ -54,14 +50,18 @@ bin/demo/stop # Stop the demo environment
 bin/demo/remove # Remove the demo environment
 ```
 
-## Looking for a UI Design?
-
-> ### [Artemis Dashboard](https://github.com/chrislaskey/artemis_dashboard)
-
-Artemis Dashboard is an example of a complete application (including UI and design) built on top of Artemis Platform.
-
 ## Development
 
 Artemis can be used as a pattern reference for an existing application or as a starting point for a new one.
 
 To build a new application using Artemis, see the [`DEVELOPMENT.md`](DEVELOPMENT.md).
+
+## Looking for More?
+
+> ### [Artemis Dashboard](https://github.com/chrislaskey/artemis_dashboard)
+
+Artemis Dashboard is an example of a complete application (including UI and design) built on top of Artemis Platform.
+
+> ### [Artemis Teams](https://github.com/chrislaskey/artemis_teams)
+
+Collaborative Team-Based Tools written in Elixir and Phoenix.
