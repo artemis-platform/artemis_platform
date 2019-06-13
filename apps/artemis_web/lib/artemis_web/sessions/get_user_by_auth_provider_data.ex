@@ -101,15 +101,17 @@ defmodule ArtemisWeb.GetUserByAuthProviderData do
   # Helpers - Auth Provider
 
   defp get_auth_provider_params(data, user_params) do
-    provider_data =
-      data
-      |> Map.get(:extra, user_params)
-      |> Artemis.Helpers.deep_delete(:__struct__)
+    provider_data = %{
+      credentials: Map.get(data, :credentials),
+      extra: Map.get(data, :extra),
+      info: Map.get(data, :info)
+    }
 
     %{}
     |> Map.put(:data, provider_data)
     |> Map.put(:type, Artemis.Helpers.to_string(data.provider))
     |> Map.put(:uid, Artemis.Helpers.to_string(data.uid))
+    |> Artemis.Helpers.deep_delete(:__struct__)
     |> Artemis.Helpers.keys_to_strings()
   end
 
