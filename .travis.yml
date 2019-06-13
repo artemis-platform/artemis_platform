@@ -16,6 +16,9 @@ addons:
     packages:
       - google-chrome-stable
 
+services:
+  - xvfb
+
 cache:
   directories:
     - _build
@@ -46,9 +49,6 @@ before_install:
 before_script:
   - mix do ecto.create, ecto.migrate
   - export PATH=$PATH:/usr/lib/chromium-browser/
-  - export DISPLAY=:99.0
-  - sh -e /etc/init.d/xvfb start
-  - sleep 3 # give Web server some time to bind to sockets, etc
   - nohup chromedriver &
   - sleep 3 # give Web server some time to bind to sockets, etc
   - bin/local/reset-tests
