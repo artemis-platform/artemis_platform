@@ -42,7 +42,7 @@ defmodule ArtemisWeb.GetUserByAuthProviderData do
     user_params = get_user_params(data)
     user = get_user(user_params, system_user)
 
-    auth_provider_params = get_auth_provider_params(data, user_params)
+    auth_provider_params = get_auth_provider_params(data)
     auth_provider = get_auth_provider(auth_provider_params, system_user)
 
     result =
@@ -100,7 +100,7 @@ defmodule ArtemisWeb.GetUserByAuthProviderData do
 
   # Helpers - Auth Provider
 
-  defp get_auth_provider_params(data, user_params) do
+  defp get_auth_provider_params(data) do
     provider_data = %{
       credentials: Map.get(data, :credentials),
       extra: Map.get(data, :extra),
