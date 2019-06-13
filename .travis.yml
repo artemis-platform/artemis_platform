@@ -9,6 +9,7 @@ notifications:
     on_failure: never
 
 addons:
+  chrome: stable
   postgresql: "9.6"
   apt:
     sources:
