@@ -8,7 +8,7 @@ attempts=0
 
 until [ $attempts -ge 3 ]
 do
-  xvfb-run mix test $@ && exit 0
+  mix test $@ && exit 0
   attempts=$[$attempts + 1]
 done
 
