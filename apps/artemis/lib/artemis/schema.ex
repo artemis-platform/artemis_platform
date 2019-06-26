@@ -1,6 +1,6 @@
 defmodule Artemis.Schema do
-  @callback fields :: List.t()
-  @callback required :: List.t()
+  @callback required_fields :: List.t()
+  @callback updatable_fields :: List.t()
 
   defmacro __using__(_opts) do
     quote do
@@ -13,6 +13,8 @@ defmodule Artemis.Schema do
       alias __MODULE__
       alias Artemis.Repo
       alias Artemis.Schema
+
+      @behaviour Artemis.Schema
     end
   end
 end
