@@ -59,6 +59,7 @@ before_script:
 env:
   matrix:
     - TEST="--include browser"
+    - TEST="formatter"
 
 script:
   - bin/ci/test "${TEST}"
