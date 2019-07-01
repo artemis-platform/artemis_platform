@@ -12,6 +12,7 @@ defmodule ArtemisApi.GetUserByAuthProvider do
 
   defp get_from_client_credentials(%{client_key: key, client_secret: secret}) do
     system_user = GetSystemUser.call!()
+
     params = [
       client_key: key,
       client_secret: secret

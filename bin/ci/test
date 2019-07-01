@@ -4,6 +4,10 @@ set -a
 source .env
 set +a
 
+if [[ $1 = "formatter" ]]; then
+  mix format --check-formatted && exit 0
+fi
+
 attempts=0
 
 until [ $attempts -ge 3 ]

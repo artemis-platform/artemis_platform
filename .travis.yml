@@ -51,14 +51,15 @@ before_install:
 before_script:
   - mix do ecto.create, ecto.migrate
   - export PATH=$PATH:/usr/lib/chromium-browser/
-  - sleep 3 # give Web server some time to bind to sockets, etc
+  - sleep 3 # give server some time to bind to sockets, etc
   - nohup chromedriver &
-  - sleep 3 # give Web server some time to bind to sockets, etc
+  - sleep 3 # give server some time bring up chromedriver environment
   - bin/local/reset-tests
 
 env:
   matrix:
     - TEST="--include browser"
+    - TEST="formatter"
 
 script:
   - bin/ci/test "${TEST}"
