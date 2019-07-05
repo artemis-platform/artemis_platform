@@ -4,21 +4,34 @@ defmodule ArtemisWeb.ViewHelper.Tables do
   @default_delimiter ","
 
   @doc """
+  Generates empty table row if no records match
+  """
+  def render_table_row_if_empty(records, options \\ [])
+
+  def render_table_row_if_empty(%{entries: entries}, options), do: render_table_row_if_empty(entries, options)
+
+  def render_table_row_if_empty(records, options) when length(records) == 0 do
+    message = Keyword.get(options, :message, "No records found")
+
+    Phoenix.View.render(ArtemisWeb.LayoutView, "table_row_if_empty.html", message: message)
+  end
+
+  def render_table_row_if_empty(_records, _options), do: nil
+
+  @doc """
   Render sortable table header 
   """
   def sortable_table_header(conn, value, label, delimiter \\ @default_delimiter) do
     path = order_path(conn, value, delimiter)
     text = content_tag(:span, label)
-    icon = tag(:i, class: icon_class(conn, value, delimiter))
+    icon = content_tag(:i, "", class: icon_class(conn, value, delimiter))
 
-    content_tag(:a, href: path) do
-      [text, icon]
-    end
+    content_tag(:a, [text, icon], href: path)
   end
 
   defp order_path(conn, value, delimiter) do
     updated_query_params = update_query_param(conn, value, delimiter)
-    query_string = URI.encode_query(updated_query_params)
+    query_string = Plug.Conn.Query.encode(updated_query_params)
 
     "#{conn.request_path}?#{query_string}"
   end
@@ -233,5 +246,20 @@ defmodule ArtemisWeb.ViewHelper.Tables do
     render = Keyword.get(column, key, default)
 
     render.(conn, row)
+  end
+
+  @doc """
+  Generates export link with specified format
+  """
+  def export_path(conn, format) do
+    query_params =
+      conn
+      |> Map.get(:query_params, %{})
+      |> Map.put("_format", format)
+      |> Map.put("page_size", 50000)
+
+    query_string = URI.encode_query(query_params)
+
+    "#{conn.request_path}?#{query_string}"
   end
 end

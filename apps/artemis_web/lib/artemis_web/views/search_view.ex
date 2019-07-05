@@ -84,4 +84,10 @@ defmodule ArtemisWeb.SearchView do
     |> search_entries()
     |> length()
   end
+
+  # Helpers
+
+  def current_query_params(conn) do
+    Enum.into(conn.query_params, [])
+  end
 end

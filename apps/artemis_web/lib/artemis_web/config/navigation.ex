@@ -1,11 +1,7 @@
-defmodule ArtemisWeb.ViewData.Layout do
+defmodule ArtemisWeb.Config.Navigation do
   import ArtemisWeb.UserAccess
 
   alias ArtemisWeb.Router.Helpers, as: Routes
-
-  @moduledoc """
-  Collection of modifiable layout data
-  """
 
   @doc """
   List of possible nav items. Each entry should define:
@@ -14,7 +10,7 @@ defmodule ArtemisWeb.ViewData.Layout do
   - path: function that takes `conn` as the first argument and returns a string path
   - verify: function that takes the `current_user` as the first argument and returns a boolean
   """
-  def nav_items do
+  def get_nav_items do
     Enum.reverse(
       "Event Log": [
         [
