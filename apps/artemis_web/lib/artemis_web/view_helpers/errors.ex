@@ -5,8 +5,10 @@ defmodule ArtemisWeb.ViewHelper.Errors do
 
   use Phoenix.HTML
 
-  def label_with_errors(form, field) do
-    Phoenix.View.render(ArtemisWeb.LayoutView, "label_with_errors.html", field: field, form: form)
+  def label_with_errors(form, field, label \\ nil) do
+    label = label || humanize(field)
+
+    Phoenix.View.render(ArtemisWeb.LayoutView, "label_with_errors.html", field: field, form: form, label: label)
   end
 
   @doc """
