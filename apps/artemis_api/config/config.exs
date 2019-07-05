@@ -8,7 +8,7 @@ config :artemis_api,
   release_hash: System.cmd("git", ["rev-parse", "--short", "HEAD"]) |> elem(0) |> String.trim()
 
 config :artemis_api, ArtemisApi.Endpoint,
-  url: [host: "localhost"],
+  url: [host: System.get_env("ARTEMIS_API_HOSTNAME")],
   secret_key_base: System.get_env("ARTEMIS_SECRET_KEY"),
   render_errors: [view: ArtemisApi.ErrorView, accepts: ~w(json)],
   pubsub: [name: ArtemisPubSub]

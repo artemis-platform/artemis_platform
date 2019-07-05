@@ -6,7 +6,7 @@ config :artemis_web,
   auth_providers: [enabled: System.get_env("ARTEMIS_WEB_ENABLED_AUTH_PROVIDERS")]
 
 config :artemis_web, ArtemisWeb.Endpoint,
-  url: [host: "localhost"],
+  url: [host: System.get_env("ARTEMIS_WEB_HOSTNAME")],
   secret_key_base: System.get_env("ARTEMIS_SECRET_KEY"),
   render_errors: [view: ArtemisWeb.ErrorView, accepts: ~w(html json)],
   pubsub: [name: ArtemisPubSub]
