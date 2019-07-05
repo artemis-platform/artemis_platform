@@ -1,5 +1,7 @@
 #!/bin/bash
 
+cd /app/source
+
 set -a
 source .env
 set +a

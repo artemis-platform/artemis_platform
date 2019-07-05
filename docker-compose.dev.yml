@@ -17,7 +17,7 @@ services:
 
   server:
     build: .
-    command: bin/docker-dev/entrypoint
+    command: /app/source/bin/docker-dev/entrypoint
     depends_on:
       - postgres
     environment:
