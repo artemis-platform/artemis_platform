@@ -17,10 +17,11 @@ RUN mix local.hex --force && \
     mix local.rebar --force && \
     mix archive.install --force hex phx_new 1.4.1
 
-WORKDIR /app/source
+WORKDIR /app
 COPY . /app/source
 
-RUN MIX_ENV=${MIX_ENV} bin/local/reset-build && \
+RUN cd /app/source && \
+    MIX_ENV=${MIX_ENV} bin/local/reset-build && \
     MIX_ENV=${MIX_ENV} bin/local/reset-assets
 
 # Production uses the following structure:

@@ -25,7 +25,15 @@ defmodule Artemis.Repo.GenerateFillerData do
   def verification_phrase, do: @verification_phrase
 
   defp enabled? do
-    case Application.fetch_env!(:artemis, :actions)[:repo_generate_filler_data][:enabled] do
+    config =
+      :artemis
+      |> Application.fetch_env!(:actions)
+      |> Keyword.fetch!(:repo_generate_filler_data)
+      |> Keyword.fetch!(:enabled)
+      |> String.downcase()
+      |> String.equivalent?("true")
+
+    case config do
       false -> {:error, "Action not enabled in the application config"}
       true -> true
     end

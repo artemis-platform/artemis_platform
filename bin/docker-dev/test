@@ -6,4 +6,4 @@ set +a
 
 export MIX_ENV=dev
 
-docker-compose -f "docker-compose.${MIX_ENV}.yml" exec server bin/local/test
+docker-compose -f "docker-compose.${MIX_ENV}.yml" exec server bash -c "cd /app/source && bin/local/test"
