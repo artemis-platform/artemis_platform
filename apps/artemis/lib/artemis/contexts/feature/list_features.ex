@@ -1,5 +1,10 @@
 defmodule Artemis.ListFeatures do
-  use Artemis.Context
+  use Artemis.Context,
+    cache_reset_events: [
+      "feature:created",
+      "feature:deleted",
+      "feature:updated"
+    ]
 
   import Artemis.Helpers.Search
   import Ecto.Query

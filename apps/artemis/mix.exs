@@ -42,6 +42,7 @@ defmodule Artemis.MixProject do
       {:jason, "~> 1.0"},
       {:assoc, "~> 0.1"},
       {:config_tuples, "~> 0.2.0"},
+      {:cachex, "~> 3.1"},
       {:timex, "~> 3.0"},
       {:ex_machina, "~> 2.2"},
       {:faker, "~> 0.11"},
