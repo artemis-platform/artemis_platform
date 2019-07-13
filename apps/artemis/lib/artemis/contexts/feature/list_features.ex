@@ -1,5 +1,6 @@
 defmodule Artemis.ListFeatures do
   use Artemis.Context
+
   use Artemis.ContextCache,
     cache_clear_on_events: [
       "feature:created",

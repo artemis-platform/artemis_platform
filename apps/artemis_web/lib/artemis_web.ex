@@ -85,11 +85,13 @@ defmodule ArtemisWeb do
       import ArtemisWeb.Guardian.Helpers
       import ArtemisWeb.UserAccess
       import ArtemisWeb.ViewHelper.Breadcrumbs
+      import ArtemisWeb.ViewHelper.Cache
       import ArtemisWeb.ViewHelper.Errors
       import ArtemisWeb.ViewHelper.HTML
       import ArtemisWeb.ViewHelper.Navigation
       import ArtemisWeb.ViewHelper.Notifications
       import ArtemisWeb.ViewHelper.Pagination
+      import ArtemisWeb.ViewHelper.Print
       import ArtemisWeb.ViewHelper.Search
       import ArtemisWeb.ViewHelper.Tables
 

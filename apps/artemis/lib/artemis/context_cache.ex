@@ -24,15 +24,16 @@ defmodule Artemis.ContextCache do
       @doc """
       Generic wrapper function to add caching around `call`
       """
-      def cache(), do: call_with_cache([])
-      def cache(arg1), do: call_with_cache([arg1])
-      def cache(arg1, arg2), do: call_with_cache([arg1, arg2])
-      def cache(arg1, arg2, arg3), do: call_with_cache([arg1, arg2, arg3])
-      def cache(arg1, arg2, arg3, arg4), do: call_with_cache([arg1, arg2, arg3, arg4])
+      def call_with_cache(), do: get_cached([])
+      def call_with_cache(arg1), do: get_cached([arg1])
+      def call_with_cache(arg1, arg2), do: get_cached([arg1, arg2])
+      def call_with_cache(arg1, arg2, arg3), do: get_cached([arg1, arg2, arg3])
+      def call_with_cache(arg1, arg2, arg3, arg4), do: get_cached([arg1, arg2, arg3, arg4])
+      def call_with_cache(arg1, arg2, arg3, arg4, arg5), do: get_cached([arg1, arg2, arg3, arg4, arg5])
 
       # Helpers
 
-      defp call_with_cache(args) do
+      defp get_cached(args) do
         {:ok, _} = create_cache()
 
         getter = fn ->

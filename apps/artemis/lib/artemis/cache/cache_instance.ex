@@ -53,7 +53,7 @@ defmodule Artemis.CacheInstance do
       {:ok, nil} ->
         Logger.debug("#{get_cache_server_name(module)}: cache miss")
 
-        put_unless_error(module, key, getter.())
+        put(module, key, getter.())
 
       {:ok, value} ->
         Logger.debug("#{get_cache_server_name(module)}: cache hit")
@@ -68,20 +68,16 @@ defmodule Artemis.CacheInstance do
   def get(module, key), do: GenServer.call(get_cache_server_name(module), {:get, key})
 
   @doc """
-  Puts a value in the cache
+  Puts value into the cache, unless it is an error tuple
   """
+  def put(_module, _key, {:error, message}), do: %CacheEntry{data: {:error, message}}
+
   def put(module, key, value) do
     inserted_at = DateTime.utc_now() |> DateTime.to_unix()
     entry = %CacheEntry{data: value, inserted_at: inserted_at}
 
     GenServer.call(get_cache_server_name(module), {:put, key, entry})
   end
-
-  @doc """
-  Puts a value in the cache, unless it is an error tuple, `{:error, _}`
-  """
-  def put_unless_error(_, _, {:error, message}), do: %CacheEntry{data: {:error, message}}
-  def put_unless_error(module, key, value), do: put(module, key, value)
 
   def get_name(module), do: get_cache_server_name(module)
 
