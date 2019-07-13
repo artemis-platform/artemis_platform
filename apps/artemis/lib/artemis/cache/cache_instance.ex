@@ -5,6 +5,10 @@ defmodule Artemis.CacheInstance do
 
   require Logger
 
+  defmodule CacheEntry do
+    defstruct [:data, :inserted_at]
+  end
+
   @moduledoc """
   A thin wrapper around a Cachex instance. Encapsulates all the application
   specific logic like subscribing to events, reseting cache values automatically.
@@ -41,15 +45,15 @@ defmodule Artemis.CacheInstance do
 
   @doc """
   Fetches key from the cache. If it exists, the value is returned. If it does
-  not exist in the cache, the `getter` function is called, the result is returned
-  to the user, and stored in the cache for future calls.
+  not exist in the cache, the `getter` function is called. The result is returned
+  to the user. The result is stored in the cache unless it is an error.
   """
   def fetch(module, key, getter) do
     case get(module, key) do
       {:ok, nil} ->
         Logger.debug("#{get_cache_server_name(module)}: cache miss")
 
-        put(module, key, getter.())
+        put_unless_error(module, key, getter.())
 
       {:ok, value} ->
         Logger.debug("#{get_cache_server_name(module)}: cache hit")
@@ -66,7 +70,18 @@ defmodule Artemis.CacheInstance do
   @doc """
   Puts a value in the cache
   """
-  def put(module, key, value), do: GenServer.call(get_cache_server_name(module), {:put, key, value})
+  def put(module, key, value) do
+    inserted_at = DateTime.utc_now() |> DateTime.to_unix()
+    entry = %CacheEntry{data: value, inserted_at: inserted_at}
+
+    GenServer.call(get_cache_server_name(module), {:put, key, entry})
+  end
+
+  @doc """
+  Puts a value in the cache, unless it is an error tuple, `{:error, _}`
+  """
+  def put_unless_error(_, _, {:error, message}), do: %CacheEntry{data: {:error, message}}
+  def put_unless_error(module, key, value), do: put(module, key, value)
 
   def get_name(module), do: get_cache_server_name(module)
 
