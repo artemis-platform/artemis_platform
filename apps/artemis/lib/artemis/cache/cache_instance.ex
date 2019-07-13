@@ -31,7 +31,7 @@ defmodule Artemis.CacheInstance do
     initial_state = %{
       cachex_instance_name: get_cachex_instance_name(module),
       cache_server_name: get_cache_server_name(module),
-      cache_reset_events: Keyword.get(options, :cache_reset_events, [])
+      cache_clear_on_events: Keyword.get(options, :cache_clear_on_events, [])
     }
 
     GenServer.start_link(__MODULE__, initial_state, name: initial_state.cache_server_name)
@@ -107,7 +107,7 @@ defmodule Artemis.CacheInstance do
 
   @impl true
   def handle_info(%{event: event}, state) do
-    if Enum.member?(state.cache_reset_events, event) do
+    if Enum.member?(state.cache_clear_on_events, event) do
       Logger.debug("#{state.cachex_instance_name}: Cache reset by event #{event}")
 
       {:ok, _} = Cachex.clear(state.cachex_instance_name)

@@ -51,7 +51,7 @@ defmodule Artemis.ContextCache do
 
           false ->
             options = [
-              cache_reset_events: Keyword.get(unquote(options), :cache_reset_events, []),
+              cache_clear_on_events: Keyword.get(unquote(options), :cache_clear_on_events, []),
               module: __MODULE__
             ]
 
