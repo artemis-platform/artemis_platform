@@ -15,32 +15,48 @@ defmodule Artemis.ContextCache do
 
   """
 
+  @callback get_cache_key(any()) :: any()
+  @optional_callbacks get_cache_key: 1
+
   defmacro __using__(options) do
     quote do
       import Artemis.ContextCache
 
       alias Artemis.CacheInstance
+      alias Artemis.Repo
+
+      @behaviour Artemis.ContextCache
 
       @doc """
       Generic wrapper function to add caching around `call`
       """
-      def call_with_cache(), do: get_cached([])
-      def call_with_cache(arg1), do: get_cached([arg1])
-      def call_with_cache(arg1, arg2), do: get_cached([arg1, arg2])
-      def call_with_cache(arg1, arg2, arg3), do: get_cached([arg1, arg2, arg3])
-      def call_with_cache(arg1, arg2, arg3, arg4), do: get_cached([arg1, arg2, arg3, arg4])
-      def call_with_cache(arg1, arg2, arg3, arg4, arg5), do: get_cached([arg1, arg2, arg3, arg4, arg5])
+      def call_with_cache(), do: fetch_cached([])
+      def call_with_cache(arg1), do: fetch_cached([arg1])
+      def call_with_cache(arg1, arg2), do: fetch_cached([arg1, arg2])
+      def call_with_cache(arg1, arg2, arg3), do: fetch_cached([arg1, arg2, arg3])
+      def call_with_cache(arg1, arg2, arg3, arg4), do: fetch_cached([arg1, arg2, arg3, arg4])
+      def call_with_cache(arg1, arg2, arg3, arg4, arg5), do: fetch_cached([arg1, arg2, arg3, arg4, arg5])
+
+      @doc """
+      Clear all values from cache. Returns successfully if cache is not started.
+      """
+      def reset_cache() do
+        case Artemis.CacheInstance.started?(__MODULE__) do
+          true -> {:ok, Artemis.CacheInstance.reset(__MODULE__)}
+          false -> {:ok, :cache_not_started}
+        end
+      end
 
       # Helpers
 
-      defp get_cached(args) do
+      defp fetch_cached(args) do
         {:ok, _} = create_cache()
 
         getter = fn ->
           apply(__MODULE__, :call, args)
         end
 
-        key = create_cache_key(args)
+        key = get_cache_key(args)
 
         Artemis.CacheInstance.fetch(__MODULE__, key, getter)
       end
@@ -52,7 +68,8 @@ defmodule Artemis.ContextCache do
 
           false ->
             options = [
-              cache_clear_on_events: Keyword.get(unquote(options), :cache_clear_on_events, []),
+              cache_reset_on_events: Keyword.get(unquote(options), :cache_reset_on_events, []),
+              cachex_options: Keyword.get(unquote(options), :cachex_options, []),
               module: __MODULE__
             ]
 
@@ -60,16 +77,10 @@ defmodule Artemis.ContextCache do
         end
       end
 
-      defp create_cache_key(args) do
-        %{
-          other_args: get_non_user_args(args),
-          user_permissions: get_user_permissions(args)
-        }
-      end
-
       defp get_user_permissions(args) do
         args
         |> get_user_arg()
+        |> Repo.preload([:permissions])
         |> Map.get(:permissions)
         |> Enum.map(& &1.slug)
         |> Enum.sort()
@@ -102,6 +113,19 @@ defmodule Artemis.ContextCache do
       end
 
       defp user?(value), do: is_map(value) && value.__struct__ == Artemis.User
+
+      # Callbacks
+
+      def get_cache_key(args) do
+        %{
+          other_args: get_non_user_args(args),
+          user_permissions: get_user_permissions(args)
+        }
+      end
+
+      # Allow defined `@callback`s to be overwritten
+
+      defoverridable Artemis.ContextCache
     end
   end
 end

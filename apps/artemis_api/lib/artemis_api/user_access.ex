@@ -11,7 +11,7 @@ defmodule ArtemisApi.UserAccess do
 
   import Artemis.UserAccess
 
-  alias Artemis.Feature
+  alias Artemis.Helpers.Feature
 
   def authorize(request, permission, action) do
     with {:ok, user} <- fetch_user(request),

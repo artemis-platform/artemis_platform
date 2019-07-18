@@ -8,6 +8,7 @@ defmodule ArtemisWeb.FeaturePageTest do
   import ArtemisWeb.Router.Helpers
 
   @moduletag :browser
+  @moduletag :capture_log
   @url feature_url(ArtemisWeb.Endpoint, :index)
 
   hound_session()
@@ -80,6 +81,8 @@ defmodule ArtemisWeb.FeaturePageTest do
     setup do
       feature = insert(:feature)
 
+      Artemis.ListFeatures.reset_cache()
+
       browser_sign_in()
       navigate_to(@url)
 
@@ -97,6 +100,8 @@ defmodule ArtemisWeb.FeaturePageTest do
   describe "edit / update" do
     setup do
       feature = insert(:feature)
+
+      Artemis.ListFeatures.reset_cache()
 
       browser_sign_in()
       navigate_to(@url)

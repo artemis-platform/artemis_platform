@@ -16,18 +16,4 @@ defmodule Artemis.FeatureTest do
       end
     end
   end
-
-  describe "queries - active?" do
-    test "returns false when not active" do
-      feature = insert(:feature)
-
-      assert Feature.active?(feature) == false
-    end
-
-    test "returns true when active" do
-      feature = insert(:feature, active: true)
-
-      assert Feature.active?(feature) == true
-    end
-  end
 end

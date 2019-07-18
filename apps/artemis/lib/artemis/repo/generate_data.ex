@@ -1,6 +1,7 @@
 defmodule Artemis.Repo.GenerateData do
   import Ecto.Query
 
+  alias Artemis.Feature
   alias Artemis.Permission
   alias Artemis.Repo
   alias Artemis.Role
@@ -20,6 +21,24 @@ defmodule Artemis.Repo.GenerateData do
   """
 
   def call() do
+    # Features
+
+    features = [
+      %{slug: "global-search", name: "Global Search", active: true}
+    ]
+
+    Enum.map(features, fn params ->
+      case Repo.get_by(Feature, slug: params.slug) do
+        nil ->
+          %Feature{}
+          |> Feature.changeset(params)
+          |> Repo.insert!()
+
+        _ ->
+          :ok
+      end
+    end)
+
     # Roles
 
     roles = [

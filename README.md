@@ -18,6 +18,7 @@ General Patterns:
 - Full Text Search [⬈ Documentation](https://github.com/artemis-platform/artemis_platform/wiki/Full-Text-Search) [⬈ Discussion](https://github.com/artemis-platform/artemis_platform/issues/13)
 - Event Based Pub/Sub
 - Dedicated Audit Logging
+- Dynamic Caching
 - Feature Flipper
 - GraphQL API Endpoint
 - Phoenix Web Endpoint
@@ -37,7 +38,6 @@ UI Patterns:
 Planned:
 
 - Node Clustering
-- On-demand Caching
 
 ## Demo
 

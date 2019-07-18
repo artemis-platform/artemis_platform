@@ -6,7 +6,7 @@ defmodule Artemis.CacheInstance do
   require Logger
 
   defmodule CacheEntry do
-    defstruct [:data, :inserted_at]
+    defstruct [:data, :inserted_at, :key]
   end
 
   @moduledoc """
@@ -27,6 +27,16 @@ defmodule Artemis.CacheInstance do
   For more information on see the [Supervisor Documentation](https://hexdocs.pm/elixir/1.8.2/Supervisor.html#module-restart-values-restart).
   """
 
+  @default_cachex_options [
+    expiration:
+      expiration(
+        default: :timer.minutes(5),
+        interval: :timer.seconds(5)
+      ),
+    limit: 100,
+    stats: true
+  ]
+
   # Server Callbacks
 
   def start_link(options) do
@@ -34,14 +44,28 @@ defmodule Artemis.CacheInstance do
 
     initial_state = %{
       cachex_instance_name: get_cachex_instance_name(module),
+      cachex_options: Keyword.get(options, :cachex_options, []),
       cache_server_name: get_cache_server_name(module),
-      cache_clear_on_events: Keyword.get(options, :cache_clear_on_events, [])
+      cache_reset_on_events: Keyword.get(options, :cache_reset_on_events, [])
     }
 
     GenServer.start_link(__MODULE__, initial_state, name: initial_state.cache_server_name)
   end
 
   # Server Functions
+
+  @doc """
+  Detect if the cache instance GenServer has been started
+  """
+  def started?(module) do
+    name = get_cache_server_name(module)
+
+    cond do
+      Process.whereis(name) -> true
+      :global.whereis_name(name) != :undefined -> true
+      true -> false
+    end
+  end
 
   @doc """
   Fetches key from the cache. If it exists, the value is returned. If it does
@@ -74,16 +98,25 @@ defmodule Artemis.CacheInstance do
 
   def put(module, key, value) do
     inserted_at = DateTime.utc_now() |> DateTime.to_unix()
-    entry = %CacheEntry{data: value, inserted_at: inserted_at}
+    entry = %CacheEntry{data: value, inserted_at: inserted_at, key: key}
 
     GenServer.call(get_cache_server_name(module), {:put, key, entry})
   end
 
-  def get_name(module), do: get_cache_server_name(module)
-
   def get_cache_server_name(module), do: String.to_atom("#{module}.CacheServer")
 
   def get_cachex_instance_name(module), do: String.to_atom("#{module}.CachexInstance")
+
+  def get_cachex_options(module), do: GenServer.call(get_cache_server_name(module), :cachex_options)
+
+  def get_name(module), do: get_cache_server_name(module)
+
+  def default_cachex_options, do: @default_cachex_options
+
+  @doc """
+  Clear all cache data
+  """
+  def reset(module), do: GenServer.call(get_cache_server_name(module), :reset)
 
   @doc """
   Determines if a cache server has been created for the given module
@@ -96,14 +129,23 @@ defmodule Artemis.CacheInstance do
   def init(initial_state) do
     :ok = subscribe_to_events(initial_state)
 
-    {:ok, cachex_instance_pid} = create_cachex_instance(initial_state)
+    cachex_options = create_cachex_options(initial_state)
 
-    state = Map.put(initial_state, :cachex_instance_pid, cachex_instance_pid)
+    {:ok, cachex_instance_pid} = create_cachex_instance(initial_state, cachex_options)
+
+    state =
+      initial_state
+      |> Map.put(:cachex_instance_pid, cachex_instance_pid)
+      |> Map.put(:cachex_options, cachex_options)
 
     {:ok, state}
   end
 
   @impl true
+  def handle_call(:cachex_options, _from, state) do
+    {:reply, state.cachex_options, state}
+  end
+
   def handle_call({:get, key}, _from, state) do
     result = Cachex.get(state.cachex_instance_name, key)
 
@@ -116,12 +158,18 @@ defmodule Artemis.CacheInstance do
     {:reply, value, state}
   end
 
+  def handle_call(:reset, _from, state) do
+    {:ok, _} = Cachex.reset(state.cachex_instance_name)
+
+    {:reply, true, state}
+  end
+
   @impl true
   def handle_info(%{event: event}, state) do
-    if Enum.member?(state.cache_clear_on_events, event) do
+    if Enum.member?(state.cache_reset_on_events, event) do
       Logger.debug("#{state.cachex_instance_name}: Cache reset by event #{event}")
 
-      {:ok, _} = Cachex.clear(state.cachex_instance_name)
+      {:ok, _} = Cachex.reset(state.cachex_instance_name)
     end
 
     {:noreply, state}
@@ -135,17 +183,25 @@ defmodule Artemis.CacheInstance do
     ArtemisPubSub.subscribe(topic)
   end
 
-  defp create_cachex_instance(state) do
-    cachex_instance_options = [
-      expiration:
-        expiration(
-          default: :timer.minutes(5),
-          interval: :timer.seconds(5)
-        ),
-      limit: 100,
-      stats: true
-    ]
+  defp create_cachex_options(state) do
+    passed_options = convert_expiration_option(state.cachex_options)
 
-    Cachex.start_link(state.cachex_instance_name, cachex_instance_options)
+    Keyword.merge(default_cachex_options(), passed_options)
   end
+
+  defp create_cachex_instance(state, options) do
+    Cachex.start_link(state.cachex_instance_name, options)
+  end
+
+  defp convert_expiration_option([{:expiration, value} | _] = options) do
+    converted =
+      expiration(
+        default: value,
+        interval: :timer.seconds(5)
+      )
+
+    Keyword.put(options, :expiration, converted)
+  end
+
+  defp convert_expiration_option(options), do: options
 end

@@ -13,6 +13,7 @@ defmodule ArtemisWeb.ViewHelper.Cache do
   end
 
   defp get_cache_timestamp(%{inserted_at: nil}), do: "Not cached"
+
   defp get_cache_timestamp(%{inserted_at: time}) do
     "Cached #{Print.render_relative_time(time)} on #{Print.render_date_time_with_seconds(time)}"
   end
