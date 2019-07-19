@@ -5,8 +5,8 @@ defmodule Artemis.IntervalSupervisor do
 
   use Supervisor
 
-  def start_link(opts \\ []) do
-    Supervisor.start_link(__MODULE__, :ok, name: opts[:name] || __MODULE__)
+  def start_link(options \\ []) do
+    Supervisor.start_link(__MODULE__, :ok, name: options[:name] || __MODULE__)
   end
 
   def init(:ok) do
@@ -16,8 +16,8 @@ defmodule Artemis.IntervalSupervisor do
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
-    opts = [strategy: :one_for_one]
+    options = [strategy: :one_for_one]
 
-    supervise(children, opts)
+    supervise(children, options)
   end
 end

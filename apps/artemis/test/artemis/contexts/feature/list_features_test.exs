@@ -115,4 +115,66 @@ defmodule Artemis.ListFeaturesTest do
       assert length(features) == 0
     end
   end
+
+  describe "cache" do
+    setup do
+      ListFeatures.reset_cache()
+      ListFeatures.call_with_cache(Mock.system_user())
+
+      {:ok, []}
+    end
+
+    test "uses default cache key callback" do
+      key = ListFeatures.call_with_cache(Mock.system_user()).key
+
+      assert is_map(key)
+      assert Map.keys(key) == [:other_args, :user_permissions]
+      assert key.other_args == []
+
+      params = %{
+        paginate: true
+      }
+
+      key = ListFeatures.call_with_cache(params, Mock.system_user()).key
+
+      assert is_map(key)
+      assert Map.keys(key) == [:other_args, :user_permissions]
+      assert key.other_args == [params]
+    end
+
+    test "uses default context cache options" do
+      defaults = Artemis.CacheInstance.default_cachex_options()
+      cachex_options = Artemis.CacheInstance.get_cachex_options(ListFeatures)
+
+      assert cachex_options[:expiration] == Keyword.fetch!(defaults, :expiration)
+      assert cachex_options[:limit] == Keyword.fetch!(defaults, :limit)
+    end
+
+    test "returns a cached result" do
+      initial_call = ListFeatures.call_with_cache(Mock.system_user())
+
+      assert initial_call.__struct__ == Artemis.CacheInstance.CacheEntry
+      assert is_list(initial_call.data)
+      assert initial_call.inserted_at != nil
+      assert initial_call.key != nil
+
+      cache_hit = ListFeatures.call_with_cache(Mock.system_user())
+
+      assert is_list(cache_hit.data)
+      assert cache_hit.inserted_at != nil
+      assert cache_hit.inserted_at == initial_call.inserted_at
+      assert cache_hit.key != nil
+
+      params = %{
+        paginate: true
+      }
+
+      different_key = ListFeatures.call_with_cache(params, Mock.system_user())
+
+      assert different_key.data.__struct__ == Scrivener.Page
+      assert is_list(different_key.data.entries)
+      assert different_key.inserted_at != nil
+      assert different_key.key != nil
+    end
+  end
 end

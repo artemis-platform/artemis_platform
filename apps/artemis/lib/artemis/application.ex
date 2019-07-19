@@ -10,6 +10,7 @@ defmodule Artemis.Application do
   def start(_type, _args) do
     children = [
       Artemis.Repo,
+      Artemis.CacheSupervisor,
       supervisor(Artemis.IntervalSupervisor, [])
     ]
 

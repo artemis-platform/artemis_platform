@@ -19,6 +19,8 @@
 
   <%= render_search @conn %>
 
+  <%= render_cache_meta_data @cache %>
+
   <table class="ui table selectable">
     <thead>
       <tr>

@@ -40,15 +40,4 @@ defmodule Artemis.Feature do
     |> validate_required(required_fields())
     |> unique_constraint(:slug)
   end
-
-  # Queries
-
-  def active?(%Feature{} = feature), do: feature.active
-
-  def active?(slug) do
-    case Repo.get_by(Feature, slug: slug) do
-      nil -> false
-      record -> record.active
-    end
-  end
 end

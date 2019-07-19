@@ -116,6 +116,10 @@ ul.form-checklist li {
   display: flex;
 }
 
+.cache-meta-data {
+  display: none;
+}
+
 /* Pagination */
 
 .pagination {

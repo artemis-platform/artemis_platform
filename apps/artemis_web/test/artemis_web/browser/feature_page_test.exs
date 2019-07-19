@@ -80,6 +80,8 @@ defmodule ArtemisWeb.FeaturePageTest do
     setup do
       feature = insert(:feature)
 
+      Artemis.ListFeatures.reset_cache()
+
       browser_sign_in()
       navigate_to(@url)
 
@@ -97,6 +99,8 @@ defmodule ArtemisWeb.FeaturePageTest do
   describe "edit / update" do
     setup do
       feature = insert(:feature)
+
+      Artemis.ListFeatures.reset_cache()
 
       browser_sign_in()
       navigate_to(@url)

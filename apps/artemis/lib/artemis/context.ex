@@ -3,7 +3,7 @@ defmodule Artemis.Context do
     defexception message: "Context Error"
   end
 
-  defmacro __using__(_opts) do
+  defmacro __using__(_options) do
     quote do
       import Artemis.Context
       import Artemis.Repo.Helpers
