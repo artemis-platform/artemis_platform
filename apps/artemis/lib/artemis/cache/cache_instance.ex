@@ -119,7 +119,7 @@ defmodule Artemis.CacheInstance do
   def exists?(module), do: Enum.member?(Process.registered(), get_cache_server_name(module))
 
   @doc """
-  Clear all cache data by stopping the cache instance
+  Clear all cache data
   """
   def reset(module), do: stop(module)
 
@@ -165,13 +165,15 @@ defmodule Artemis.CacheInstance do
 
   @impl true
   def handle_info(%{event: event}, state) do
-    if Enum.member?(state.cache_reset_on_events, event) do
-      Logger.debug("#{state.cachex_instance_name}: Cache reset by event #{event}")
+    case Enum.member?(state.cache_reset_on_events, event) do
+      true ->
+        Logger.debug("#{state.cachex_instance_name}: Cache reset by event #{event}")
 
-      {:ok, _} = Cachex.reset(state.cachex_instance_name)
+        {:stop, :normal, state}
+
+      false ->
+        {:noreply, state}
     end
-
-    {:noreply, state}
   end
 
   # Helpers
