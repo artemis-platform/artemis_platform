@@ -59,6 +59,24 @@ defmodule Artemis.ContextCache do
         key = get_cache_key(args)
 
         Artemis.CacheInstance.fetch(__MODULE__, key, getter)
+      rescue
+        # The CacheInstance contains two linked processes, a cache GenServer and a
+        # Cachex instance. When a CacheInstance is reset, the cache GenServer is
+        # stopped. Because they are linked, shortly after the Cachex instance is also
+        # stopped.
+        #
+        # There is a race condition when the GenServer is stopped and the Cachex instance
+        # is still in the process of stopping. If a new cache request is received during
+        # that window of time, the new cache GenServer will fail when trying to start a
+        # linked Cachex instance because the Cachex registered name is unavailable.
+        #
+        # This race condition is primarily hit in test scenarios, but could occur in
+        # production under a heavy request load.
+        #
+        # Instead of trying to resolve the race condition, let it crash. Return a valid
+        # uncached result in the meantime. Future requests after this window closes will
+        # successfully create a dynamic cache.
+        _ in MatchError -> %Artemis.CacheInstance.CacheEntry{data: apply(__MODULE__, :call, args)}
       end
 
       defp create_cache() do

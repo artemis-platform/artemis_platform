@@ -5,8 +5,6 @@ defmodule Artemis.FeatureTest do
   import Ecto.Repo
   import Artemis.Factories
 
-  alias Artemis.Feature
-
   describe "attributes - constraints" do
     test "slug must be unique" do
       existing = insert(:feature)

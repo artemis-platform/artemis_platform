@@ -118,6 +118,7 @@ defmodule Artemis.ListFeaturesTest do
 
   describe "cache" do
     setup do
+      ListFeatures.reset_cache()
       ListFeatures.call_with_cache(Mock.system_user())
 
       {:ok, []}

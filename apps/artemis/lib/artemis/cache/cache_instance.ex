@@ -114,14 +114,19 @@ defmodule Artemis.CacheInstance do
   def default_cachex_options, do: @default_cachex_options
 
   @doc """
-  Clear all cache data
-  """
-  def reset(module), do: GenServer.call(get_cache_server_name(module), :reset)
-
-  @doc """
   Determines if a cache server has been created for the given module
   """
   def exists?(module), do: Enum.member?(Process.registered(), get_cache_server_name(module))
+
+  @doc """
+  Clear all cache data by stopping the cache instance
+  """
+  def reset(module), do: stop(module)
+
+  @doc """
+  Stop the cache GenServer and the linked Cachex process
+  """
+  def stop(module), do: GenServer.stop(get_cache_server_name(module))
 
   # Instance Callbacks
 
@@ -156,12 +161,6 @@ defmodule Artemis.CacheInstance do
     {:ok, _} = Cachex.put(state.cachex_instance_name, key, value)
 
     {:reply, value, state}
-  end
-
-  def handle_call(:reset, _from, state) do
-    {:ok, _} = Cachex.reset(state.cachex_instance_name)
-
-    {:reply, true, state}
   end
 
   @impl true

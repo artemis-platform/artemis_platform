@@ -87,7 +87,7 @@ defmodule Artemis.GetSystemUserTest do
 
   describe "cache" do
     setup do
-      # Ensure cache instance is started
+      GetSystemUser.reset_cache()
       GetSystemUser.call_with_cache()
 
       {:ok, []}
@@ -104,6 +104,8 @@ defmodule Artemis.GetSystemUserTest do
     end
 
     test "defines custom cache options" do
+      GetSystemUser.call_with_cache()
+
       expiration = :timer.minutes(60)
       limit = 5
 
