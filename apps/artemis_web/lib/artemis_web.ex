@@ -86,6 +86,7 @@ defmodule ArtemisWeb do
       import ArtemisWeb.UserAccess
       import ArtemisWeb.ViewHelper.Breadcrumbs
       import ArtemisWeb.ViewHelper.Cache
+      import ArtemisWeb.ViewHelper.Conditionals
       import ArtemisWeb.ViewHelper.Errors
       import ArtemisWeb.ViewHelper.HTML
       import ArtemisWeb.ViewHelper.Navigation
