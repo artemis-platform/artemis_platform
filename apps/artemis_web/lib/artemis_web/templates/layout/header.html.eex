@@ -8,10 +8,12 @@
       <%= render_primary_nav(@conn, @user) %>
     </nav>
 
-    <form class="search" action="<%= Routes.search_path(@conn, :index) %>" method="get">
-      <input name="query" type="text" value="<%= Map.get(@conn.query_params, "query") %>" />
-      <button type="submit">Search</button>
-    </form>
+    <%= if active_feature?("global-search") do %>
+      <form class="search" action="<%= Routes.search_path(@conn, :index) %>" method="get">
+        <input name="query" type="text" value="<%= Map.get(@conn.query_params, "query") %>" />
+        <button type="submit">Search</button>
+      </form>
+    <% end %>
 
     <nav id="user-navigation">
       <ul>

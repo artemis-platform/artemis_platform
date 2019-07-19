@@ -26,6 +26,7 @@
       <tr>
         <th><%= sortable_table_header(@conn, "slug", "Slug") %></th>
         <th><%= sortable_table_header(@conn, "name", "Name") %></th>
+        <th><%= sortable_table_header(@conn, "active", "Status") %></th>
         <th></th>
       </tr>
     </thead>
@@ -41,6 +42,7 @@
             <% end %>
           </td>
           <td><%= feature.name %></td>
+          <td><%= if feature.active, do: "Active", else: "Inactive" %></td>
           <td>
             <%= if has?(@conn, "features:show") do %>
               <%= link "Show", to: Routes.feature_path(@conn, :show, feature) %>
