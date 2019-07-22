@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+set -a
+source .env
+set +a
+
+mix licenses | sort | uniq | tee licenses.tsv
