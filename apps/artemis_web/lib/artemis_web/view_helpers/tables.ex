@@ -263,7 +263,7 @@ defmodule ArtemisWeb.ViewHelper.Tables do
       |> Map.put("_format", format)
       |> Map.merge(additional_params)
 
-    query_string = URI.encode_query(query_params)
+    query_string = Plug.Conn.Query.encode(query_params)
 
     "#{conn.request_path}?#{query_string}"
   end
