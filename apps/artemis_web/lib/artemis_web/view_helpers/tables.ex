@@ -208,8 +208,7 @@ defmodule ArtemisWeb.ViewHelper.Tables do
   """
   def get_data_table_columns(conn, options) do
     allowed_columns = Keyword.get(options, :allowed_columns, [])
-    columns_query_param = Map.get(conn.query_params, "columns")
-    requested_columns = get_requested_columns(columns_query_param, options)
+    requested_columns = parse_data_table_requested_columns(conn, options)
 
     filtered =
       Enum.reduce(requested_columns, [], fn key, acc ->
@@ -222,9 +221,18 @@ defmodule ArtemisWeb.ViewHelper.Tables do
     Enum.reverse(filtered)
   end
 
-  defp get_requested_columns(nil, options), do: Keyword.get(options, :default_columns, [])
-  defp get_requested_columns(value, _) when is_bitstring(value), do: String.split(value, ",")
-  defp get_requested_columns(value, _) when is_list(value), do: value
+  @doc """
+  Parse query params and return requested data table columns
+  """
+  def parse_data_table_requested_columns(conn, options \\ []) do
+    conn.query_params
+    |> Map.get("columns")
+    |> get_data_table_requested_columns(options)
+  end
+
+  defp get_data_table_requested_columns(nil, options), do: Keyword.get(options, :default_columns, [])
+  defp get_data_table_requested_columns(value, _) when is_bitstring(value), do: String.split(value, ",")
+  defp get_data_table_requested_columns(value, _) when is_list(value), do: value
 
   @doc """
   Renders the label for a data center column.
