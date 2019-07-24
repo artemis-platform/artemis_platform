@@ -208,12 +208,7 @@ defmodule ArtemisWeb.ViewHelper.Tables do
   """
   def get_data_table_columns(conn, options) do
     allowed_columns = Keyword.get(options, :allowed_columns, [])
-
-    requested_columns =
-      case Map.get(conn.query_params, "columns") do
-        nil -> Keyword.get(options, :default_columns, [])
-        columns -> String.split(columns, ",")
-      end
+    requested_columns = parse_data_table_requested_columns(conn, options)
 
     filtered =
       Enum.reduce(requested_columns, [], fn key, acc ->
@@ -225,6 +220,19 @@ defmodule ArtemisWeb.ViewHelper.Tables do
 
     Enum.reverse(filtered)
   end
+
+  @doc """
+  Parse query params and return requested data table columns
+  """
+  def parse_data_table_requested_columns(conn, options \\ []) do
+    conn.query_params
+    |> Map.get("columns")
+    |> get_data_table_requested_columns(options)
+  end
+
+  defp get_data_table_requested_columns(nil, options), do: Keyword.get(options, :default_columns, [])
+  defp get_data_table_requested_columns(value, _) when is_bitstring(value), do: String.split(value, ",")
+  defp get_data_table_requested_columns(value, _) when is_list(value), do: value
 
   @doc """
   Renders the label for a data center column.
@@ -251,14 +259,19 @@ defmodule ArtemisWeb.ViewHelper.Tables do
   @doc """
   Generates export link with specified format
   """
-  def export_path(conn, format) do
+  def export_path(conn, format, params \\ []) do
+    additional_params =
+      params
+      |> Enum.into(%{})
+      |> Artemis.Helpers.keys_to_strings()
+
     query_params =
       conn
       |> Map.get(:query_params, %{})
       |> Map.put("_format", format)
-      |> Map.put("page_size", 50000)
+      |> Map.merge(additional_params)
 
-    query_string = URI.encode_query(query_params)
+    query_string = Plug.Conn.Query.encode(query_params)
 
     "#{conn.request_path}?#{query_string}"
   end

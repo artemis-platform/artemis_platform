@@ -1,1 +1,8 @@
-<%= render_data_table @conn, @permissions.entries, allowed_columns: allowed_columns(), default_columns: ["name", "slug", "actions"] %>
+<%=
+  render_data_table(
+    @conn,
+    @permissions.entries,
+    allowed_columns: data_table_allowed_columns(),
+    default_columns: ["name", "slug"]
+  )
+%>

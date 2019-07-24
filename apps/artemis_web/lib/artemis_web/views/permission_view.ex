@@ -3,12 +3,12 @@ defmodule ArtemisWeb.PermissionView do
 
   import ArtemisWeb.UserAccess
 
-  def allowed_columns() do
+  def data_table_allowed_columns() do
     %{
       "actions" => [
         label: fn _conn -> nil end,
         value: fn _conn, _row -> nil end,
-        value_html: &actions_column_html/2
+        value_html: &data_table_actions_column_html/2
       ],
       "name" => [
         label: fn _conn -> "Name" end,
@@ -33,7 +33,7 @@ defmodule ArtemisWeb.PermissionView do
     }
   end
 
-  defp actions_column_html(conn, row) do
+  defp data_table_actions_column_html(conn, row) do
     allowed_actions = [
       [
         verify: has?(conn, "permissions:show"),
