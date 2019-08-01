@@ -26,8 +26,7 @@ defmodule ArtemisWeb.ViewHelper.Breadcrumbs do
       title =
         sections
         |> Enum.at(index)
-        |> String.replace("-", " ")
-        |> Artemis.Helpers.titlecase()
+        |> get_title()
 
       path =
         sections
@@ -36,5 +35,25 @@ defmodule ArtemisWeb.ViewHelper.Breadcrumbs do
 
       [title, "/#{path}"]
     end)
+  end
+
+  defp get_title(value) do
+    case Map.get(get_custom_titles(), value, :not_found) do
+      :not_found -> pretty_print(value)
+      custom_title -> custom_title
+    end
+  end
+
+  defp get_custom_titles() do
+    :artemis_web
+    |> Application.fetch_env!(__MODULE__)
+    |> Keyword.get(:custom_titles)
+  end
+
+  defp pretty_print(value) do
+    value
+    |> String.replace("-", " ")
+    |> String.replace("_", " ")
+    |> Artemis.Helpers.titlecase()
   end
 end
