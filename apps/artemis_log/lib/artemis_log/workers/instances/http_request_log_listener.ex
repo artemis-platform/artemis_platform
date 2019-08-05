@@ -1,4 +1,4 @@
-defmodule ArtemisLog.Worker.HttpRequest do
+defmodule ArtemisLog.Worker.HttpRequestLogListener do
   use GenServer
 
   import ArtemisPubSub

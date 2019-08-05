@@ -8,6 +8,8 @@ defmodule ArtemisLog.Context do
       import Artemis.UserAccess
       import ArtemisLog.Context
       import ArtemisLog.Repo.Order
+
+      alias Artemis.Event
     end
   end
 end

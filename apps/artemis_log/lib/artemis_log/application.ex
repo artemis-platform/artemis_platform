@@ -6,8 +6,9 @@ defmodule ArtemisLog.Application do
 
     children = [
       supervisor(ArtemisLog.Repo, []),
-      worker(ArtemisLog.Worker.Event, []),
-      worker(ArtemisLog.Worker.HttpRequest, [])
+      worker(ArtemisLog.Worker.EventLogListener, []),
+      worker(ArtemisLog.Worker.HttpRequestLogListener, []),
+      supervisor(ArtemisLog.IntervalSupervisor, [])
     ]
 
     opts = [strategy: :one_for_one, name: ArtemisLog.Supervisor]

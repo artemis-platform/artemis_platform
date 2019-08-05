@@ -1,4 +1,4 @@
-defmodule ArtemisLog.Worker.Event do
+defmodule ArtemisLog.Worker.EventLogListener do
   use GenServer
 
   import ArtemisPubSub
