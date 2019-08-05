@@ -56,7 +56,7 @@ defmodule ArtemisLog.IntervalWorker do
         ]
       end
 
-      @behaviour Artemis.IntervalWorker
+      @behaviour ArtemisLog.IntervalWorker
       @default_interval 60_000
       @default_log_limit 500
 

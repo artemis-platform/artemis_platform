@@ -72,6 +72,7 @@ defmodule ArtemisLog.DeleteAllHttpRequestLogsOlderThanTest do
     end
   end
 
+  @tag :pending
   describe "broadcasts" do
     test "publishes event and record" do
       now = Timex.now()

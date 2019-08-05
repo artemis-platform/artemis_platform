@@ -1,9 +1,7 @@
 defmodule ArtemisLog.Worker.DeleteHttpRequestLogsOnInterval do
-  use Artemis.IntervalWorker,
+  use ArtemisLog.IntervalWorker,
     enabled: enabled?(),
-    # TODO: reenable
-    # interval: :timer.hours(4),
-    interval: :timer.seconds(5),
+    interval: :timer.hours(4),
     log_limit: 128,
     name: :http_request_log_history_on_interval
 
