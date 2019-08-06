@@ -20,3 +20,13 @@ config :artemis_log, ArtemisLog.Repo,
 config :artemis_log,
   subscribe_to_events: false,
   subscribe_to_http_requests: false
+
+config :artemis_log, :actions,
+  delete_event_logs_on_interval: [
+    enabled: "false",
+    max_days: System.get_env("ARTEMIS_LOG_ACTION_DELETE_EVENT_LOGS_ON_INTERVAL_MAX_DAYS")
+  ],
+  delete_http_request_logs_on_interval: [
+    enabled: "false",
+    max_days: System.get_env("ARTEMIS_LOG_ACTION_DELETE_HTTP_REQUEST_LOGS_ON_INTERVAL_MAX_DAYS")
+  ]
