@@ -55,6 +55,7 @@ defmodule ArtemisLog.DeleteAllHttpRequestLogsOlderThanTest do
 
       {:ok, result} = DeleteAllHttpRequestLogsOlderThan.call(one_week_ago, Mock.system_user())
 
+      assert result.timestamp == one_week_ago
       assert result.total == 2
     end
 
@@ -68,6 +69,7 @@ defmodule ArtemisLog.DeleteAllHttpRequestLogsOlderThanTest do
 
       {:ok, result} = DeleteAllHttpRequestLogsOlderThan.call(two_weeks_ago, Mock.system_user())
 
+      assert result.timestamp == two_weeks_ago
       assert result.total == 0
     end
   end

@@ -27,7 +27,7 @@ defmodule ArtemisLog.DeleteAllEventLogsOlderThan do
 
     case result do
       {:error, message} -> {:error, message}
-      {total, _entries} -> {:ok, %{total: total}}
+      {total, _entries} -> {:ok, %{timestamp: timestamp, total: total}}
     end
   end
 
