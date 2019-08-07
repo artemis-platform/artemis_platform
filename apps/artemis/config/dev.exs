@@ -15,4 +15,5 @@ config :artemis, Artemis.Repo,
   password: System.get_env("ARTEMIS_POSTGRES_PASS"),
   database: System.get_env("ARTEMIS_POSTGRES_DB"),
   hostname: System.get_env("ARTEMIS_POSTGRES_HOST"),
+  port: System.get_env("ARTEMIS_POSTGRES_PORT"),
   pool_size: 10

@@ -1,5 +1,6 @@
 defmodule ArtemisLog.Worker.DeleteHttpRequestLogsOnInterval do
   use ArtemisLog.IntervalWorker,
+    delayed_start: true,
     enabled: enabled?(),
     interval: :timer.hours(4),
     log_limit: 128,
