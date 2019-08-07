@@ -1,4 +1,4 @@
-defmodule ArtemisLog.Worker.Event do
+defmodule ArtemisLog.Worker.EventLogListener do
   use GenServer
 
   import ArtemisPubSub
@@ -36,5 +36,12 @@ defmodule ArtemisLog.Worker.Event do
 
   # Helpers
 
-  defp enabled?(), do: Application.fetch_env!(:artemis_log, :subscribe_to_events)
+  defp enabled?() do
+    :artemis_log
+    |> Application.fetch_env!(:actions)
+    |> Keyword.fetch!(:subscribe_to_events)
+    |> Keyword.fetch!(:enabled)
+    |> String.downcase()
+    |> String.equivalent?("true")
+  end
 end

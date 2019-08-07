@@ -58,10 +58,7 @@ before_script:
 
 env:
   matrix:
-    # NOTE: Temporarily disabling until headless chrome bug on Travis CI stops
-    # returning session_id failure
-    # - TEST="--include browser"
-    - TEST=""
+    - TEST="--include browser"
     - TEST="formatter"
 
 script:

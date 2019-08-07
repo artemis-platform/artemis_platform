@@ -1,4 +1,4 @@
-defmodule Artemis.IntervalWorker do
+defmodule ArtemisLog.IntervalWorker do
   @moduledoc """
   A `use` able module for creating GenServer instances that perform tasks on a
   set interval.
@@ -22,7 +22,7 @@ defmodule Artemis.IntervalWorker do
 
   For example:
 
-    use Artemis.IntervalWorker,
+    use ArtemisLog.IntervalWorker,
       interval: 15_000,
       log_limit: 500,
       name: :repo_reset_on_interval
@@ -59,7 +59,7 @@ defmodule Artemis.IntervalWorker do
         ]
       end
 
-      @behaviour Artemis.IntervalWorker
+      @behaviour ArtemisLog.IntervalWorker
       @default_interval 60_000
       @default_log_limit 500
 
@@ -253,7 +253,7 @@ defmodule Artemis.IntervalWorker do
 
       # Allow defined `@callback`s to be overwritten
 
-      defoverridable Artemis.IntervalWorker
+      defoverridable ArtemisLog.IntervalWorker
     end
   end
 end

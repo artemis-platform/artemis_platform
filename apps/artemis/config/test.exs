@@ -10,6 +10,11 @@ use Mix.Config
 #
 config :logger, level: :info
 
+config :artemis, :actions,
+  repo_delete_all: [enabled: "false"],
+  repo_generate_filler_data: [enabled: "false"],
+  repo_reset_on_interval: [enabled: "false"]
+
 config :artemis, Artemis.Repo,
   username: System.get_env("ARTEMIS_POSTGRES_USER"),
   password: System.get_env("ARTEMIS_POSTGRES_PASS"),

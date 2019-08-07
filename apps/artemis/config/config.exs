@@ -4,6 +4,7 @@ config :artemis,
   ecto_repos: [Artemis.Repo]
 
 config :artemis, :actions,
+  # NOTE: When adding action entries, also update `config/test.exs`
   repo_delete_all: [
     enabled: System.get_env("ARTEMIS_ACTION_REPO_DELETE_ALL_ENABLED")
   ],
