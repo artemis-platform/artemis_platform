@@ -15,6 +15,8 @@ config :artemis_log, ArtemisLog.Repo,
   password: System.get_env("ARTEMIS_LOG_POSTGRES_PASS"),
   database: System.get_env("ARTEMIS_LOG_POSTGRES_DB") <> "_test",
   hostname: System.get_env("ARTEMIS_LOG_POSTGRES_HOST"),
+  port: System.get_env("ARTEMIS_LOG_POSTGRES_PORT"),
+  ssl: Enum.member?(["true", "\"true\""], System.get_env("ARTEMIS_LOG_POSTGRES_SSL_ENABLED")),
   pool: Ecto.Adapters.SQL.Sandbox
 
 config :artemis_log, :actions,
