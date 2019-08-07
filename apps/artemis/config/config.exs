@@ -3,6 +3,7 @@ use Mix.Config
 config :artemis,
   ecto_repos: [Artemis.Repo]
 
+# NOTE: When adding action entries, also update `config/test.exs`
 config :artemis, :actions,
   repo_delete_all: [
     enabled: System.get_env("ARTEMIS_ACTION_REPO_DELETE_ALL_ENABLED")
