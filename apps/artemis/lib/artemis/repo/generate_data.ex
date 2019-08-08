@@ -84,6 +84,7 @@ defmodule Artemis.Repo.GenerateData do
       %{slug: "roles:list", name: "Roles - List"},
       %{slug: "roles:show", name: "Roles - Show"},
       %{slug: "roles:update", name: "Roles - Update"},
+      %{slug: "user-anonymizations:create", name: "User Anonymizations - Create"},
       %{slug: "user-impersonations:create", name: "User Impersonations - Create"},
       %{slug: "users:access:all", name: "Users - Access All"},
       %{slug: "users:access:self", name: "Users - Access Self"},
