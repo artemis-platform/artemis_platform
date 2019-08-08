@@ -50,6 +50,15 @@ defmodule Artemis.GetUserTest do
     test "finds user keyword list", %{user: user} do
       assert GetUser.call([email: user.email, name: user.name], Mock.system_user()) == user
     end
+
+    test "finds user by case insensitive email", %{user: user} do
+      upcased = String.upcase(user.email)
+
+      assert user.email != upcased
+
+      assert GetUser.call([email: upcased, name: user.name], Mock.system_user()) == user
+      assert GetUser.call([email: upcased], Mock.system_user()) == user
+    end
   end
 
   describe "call - options" do

@@ -57,9 +57,22 @@ defmodule Artemis.User do
   # Changesets
 
   def changeset(struct, params \\ %{}) do
+    params =
+      params
+      |> Artemis.Helpers.keys_to_strings()
+      |> downcase_email_param()
+
     struct
     |> cast(params, updatable_fields())
     |> validate_required(required_fields())
     |> unique_constraint(:email)
   end
+
+  # Helpers
+
+  defp downcase_email_param(%{"email" => email} = params) when is_bitstring(email) do
+    Map.put(params, "email", String.downcase(email))
+  end
+
+  defp downcase_email_param(params), do: params
 end
