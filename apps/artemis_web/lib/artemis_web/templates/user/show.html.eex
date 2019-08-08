@@ -8,7 +8,10 @@
       <%= if has?(@conn, "users:delete") && current_user(@conn).id != @user.id do %>
         <%= action "Delete", method: "delete", to: Routes.user_path(@conn, :delete, @user), data: [confirm: "Confirm Delete"] %>
       <% end %>
-      <%= if current_user?(@conn) && current_user(@conn).id != @user.id do %>
+      <%= if has?(@conn, "user-anonymizations:create") && current_user(@conn).id != @user.id do %>
+        <%= action "Anonymize", method: "post", to: Routes.user_anonymization_path(@conn, :create, @user), data: [confirm: "Confirm Anonymization"] %>
+      <% end %>
+      <%= if has?(@conn, "user-impersonations:create") && current_user(@conn).id != @user.id do %>
         <%= action "Impersonate", method: "post", to: Routes.user_impersonation_path(@conn, :create, @user) %>
       <% end %>
       <%= if has?(@conn, "users:update") do %>

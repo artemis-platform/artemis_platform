@@ -151,4 +151,26 @@ defmodule ArtemisWeb.UserPageTest do
     #   assert not visible?(user.name)
     # end
   end
+
+  describe "anonymize" do
+    setup do
+      user = insert(:user)
+
+      browser_sign_in()
+      navigate_to(@url)
+
+      {:ok, user: user}
+    end
+
+    @tag :uses_browser_alert_box
+    # test "anonymizes record and redirects to show", %{user: user} do
+    #   click_link(user.name)
+    #   click_button("Anonymize")
+    #   accept_dialog()
+
+    #   assert current_url() == "#{@url}/#{user.id}"
+    #   assert not visible?(user.name)
+    #   assert visible?("Anonymized User")
+    # end
+  end
 end

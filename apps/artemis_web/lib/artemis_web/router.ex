@@ -53,6 +53,7 @@ defmodule ArtemisWeb.Router do
       resources "/search", SearchController, only: [:index]
 
       resources "/users", UserController do
+        resources "/anonymization", UserAnonymizationController, as: "anonymization", only: [:create]
         resources "/impersonation", UserImpersonationController, as: "impersonation", only: [:create]
       end
     end
