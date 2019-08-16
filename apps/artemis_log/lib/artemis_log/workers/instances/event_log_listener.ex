@@ -6,6 +6,11 @@ defmodule ArtemisLog.Worker.EventLogListener do
   alias ArtemisLog.CreateEventLog
 
   @topic "private:artemis:events"
+  @events_blacklist [
+    "event-log:created",
+    "event-log:updated",
+    "event-log:deleted"
+  ]
 
   def start_link() do
     initial_state = %{}
@@ -25,7 +30,9 @@ defmodule ArtemisLog.Worker.EventLogListener do
   end
 
   def handle_info(%{event: event, payload: payload}, state) do
-    {:ok, _} = CreateEventLog.call(event, payload)
+    unless Enum.member?(@events_blacklist, event) do
+      {:ok, _} = CreateEventLog.call(event, payload)
+    end
 
     {:noreply, state}
   end

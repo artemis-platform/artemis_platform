@@ -5,6 +5,8 @@ defmodule ArtemisLog.Repo.Migrations.CreateEventLogs do
     create table(:event_logs) do
       add :action, :string
       add :meta, :map
+      add :resource_id, :string
+      add :resource_type, :string
       add :session_id, :string
       add :user_id, :integer
       add :user_name, :string
@@ -15,6 +17,10 @@ defmodule ArtemisLog.Repo.Migrations.CreateEventLogs do
     create index(:event_logs, [:action, :session_id])
     create index(:event_logs, [:action, :user_id])
     create index(:event_logs, [:action, :user_name])
+    create index(:event_logs, :resource_id)
+    create index(:event_logs, :resource_type)
+    create index(:event_logs, [:resource_id, :resource_type])
+    create index(:event_logs, [:resource_type, :resource_id])
     create index(:event_logs, :session_id)
     create index(:event_logs, :user_id)
     create index(:event_logs, :user_name)
