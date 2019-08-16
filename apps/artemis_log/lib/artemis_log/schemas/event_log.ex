@@ -4,6 +4,8 @@ defmodule ArtemisLog.EventLog do
   schema "event_logs" do
     field :action, :string
     field :meta, :map
+    field :resource_id, :string
+    field :resource_type, :string
     field :session_id, :string
     field :user_id, :integer
     field :user_name, :string
@@ -17,6 +19,8 @@ defmodule ArtemisLog.EventLog do
     do: [
       :action,
       :meta,
+      :resource_id,
+      :resource_type,
       :session_id,
       :user_id,
       :user_name

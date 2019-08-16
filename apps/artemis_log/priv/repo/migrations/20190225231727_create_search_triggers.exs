@@ -25,6 +25,7 @@ defmodule ArtemisLog.Repo.Migrations.CreateSearchTriggers do
           to_tsvector(
             'pg_catalog.english',
             coalesce(new.action, ' ') || ' ' ||
+            coalesce(new.resource_type, ' ') || ' ' ||
             coalesce(new.user_name, ' ')
           );
         return new;
