@@ -4,4 +4,15 @@ defmodule Artemis.Repo do
     adapter: Ecto.Adapters.Postgres
 
   use Scrivener, page_size: 10
+
+  def init(_type, static_config) do
+    config_file = Application.fetch_env!(:artemis, Artemis.Repo)
+
+    ssl_enabled = Keyword.get(config_file, :ssl_enabled)
+    ssl_enabled? = Enum.member?(["true", "\"true\""], ssl_enabled)
+
+    dynamic_config = Keyword.put(static_config, :ssl, ssl_enabled?)
+
+    {:ok, dynamic_config}
+  end
 end
