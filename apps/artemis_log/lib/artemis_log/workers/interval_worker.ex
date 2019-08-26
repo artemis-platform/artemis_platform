@@ -24,7 +24,7 @@ defmodule ArtemisLog.IntervalWorker do
 
     use ArtemisLog.IntervalWorker,
       interval: 15_000,
-      log_limit: 500,
+      log_limit: 20,
       name: :repo_reset_on_interval
 
   """
@@ -61,7 +61,7 @@ defmodule ArtemisLog.IntervalWorker do
 
       @behaviour ArtemisLog.IntervalWorker
       @default_interval 60_000
-      @default_log_limit 500
+      @default_log_limit_fallback 10
 
       def start_link(config \\ []) do
         initial_state = %State{
@@ -206,7 +206,14 @@ defmodule ArtemisLog.IntervalWorker do
 
       defp update_state(state) do
         started_at = Timex.now()
-        result = call(state.data, state.config)
+
+        # Call the update function in a separate task to minimize potential
+        # memory growth in GenServer.
+        #
+        # See: https://elixirforum.com/t/extremely-high-memory-usage-in-genservers/4035/27
+        task = Task.async(fn -> call(state.data, state.config) end)
+        result = Task.await(task)
+
         ended_at = Timex.now()
 
         state
@@ -242,10 +249,26 @@ defmodule ArtemisLog.IntervalWorker do
           success: success?(result)
         }
 
-        log_limit = get_option(:log_limit, @default_log_limit)
+        log_limit = get_log_limit()
         truncated = Enum.slice(log, 0, log_limit)
 
         [entry | truncated]
+      end
+
+      defp get_log_limit() do
+        case get_option(:log_limit) do
+          nil -> get_default_log_limit()
+          limit -> limit
+        end
+      end
+
+      defp get_default_log_limit() do
+        :artemis
+        |> Application.fetch_env!(:interval_worker)
+        |> Keyword.fetch!(:default_log_limit)
+        |> Artemis.Helpers.to_integer()
+      rescue
+        _ -> @default_log_limit_fallback
       end
 
       defp success?({:ok, _}), do: true

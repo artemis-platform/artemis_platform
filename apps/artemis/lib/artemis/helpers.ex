@@ -104,7 +104,15 @@ defmodule Artemis.Helpers do
   end
 
   @doc """
-  Converts an atom or integer as a bitstring
+  Converts an atom or string to an integer
+  """
+  def to_integer(value) when is_float(value), do: Kernel.trunc(value)
+  def to_integer(value) when is_atom(value), do: to_integer(Atom.to_string(value))
+  def to_integer(value) when is_bitstring(value), do: String.to_integer(value)
+  def to_integer(value), do: value
+
+  @doc """
+  Converts an atom or integer to a bitstring
   """
   def to_string(value) when is_atom(value), do: Atom.to_string(value)
   def to_string(value) when is_integer(value), do: Integer.to_string(value)
