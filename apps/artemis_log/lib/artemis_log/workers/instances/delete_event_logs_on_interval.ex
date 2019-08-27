@@ -3,7 +3,6 @@ defmodule ArtemisLog.Worker.DeleteEventLogsOnInterval do
     delayed_start: true,
     enabled: enabled?(),
     interval: :timer.hours(4),
-    log_limit: 128,
     name: :event_log_history_on_interval
 
   alias Artemis.GetSystemUser

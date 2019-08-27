@@ -26,4 +26,6 @@ config :artemis, :users,
     email: System.get_env("ARTEMIS_SYSTEM_EMAIL")
   }
 
+config :artemis, :interval_worker, default_log_limit: System.get_env("ARTEMIS_INTERVAL_WORKER_DEFAULT_LOG_LIMIT")
+
 import_config "#{Mix.env()}.exs"

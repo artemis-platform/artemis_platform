@@ -3,7 +3,6 @@ defmodule ArtemisLog.Worker.DeleteHttpRequestLogsOnInterval do
     delayed_start: true,
     enabled: enabled?(),
     interval: :timer.hours(4),
-    log_limit: 128,
     name: :http_request_log_history_on_interval
 
   alias Artemis.GetSystemUser

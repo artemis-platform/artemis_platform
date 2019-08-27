@@ -19,4 +19,7 @@ config :artemis_log, :actions,
     enabled: System.get_env("ARTEMIS_LOG_ACTION_SUBSCRIBE_TO_HTTP_REQUESTS_ENABLED")
   ]
 
+config :artemis_log, :interval_worker,
+  default_log_limit: System.get_env("ARTEMIS_LOG_INTERVAL_WORKER_DEFAULT_LOG_LIMIT")
+
 import_config "#{Mix.env()}.exs"
