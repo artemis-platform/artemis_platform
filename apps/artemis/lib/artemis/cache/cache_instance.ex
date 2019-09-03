@@ -158,12 +158,7 @@ defmodule Artemis.CacheInstance do
   end
 
   def handle_call({:put, key, value}, _from, state) do
-    # Call the put function in a separate task to minimize potential memory
-    # growth in GenServer.
-    #
-    # See: https://elixirforum.com/t/extremely-high-memory-usage-in-genservers/4035/27
-    task = Task.async(fn -> Cachex.put(state.cachex_instance_name, key, value) end)
-    {:ok, _} = Task.await(task)
+    {:ok, _} = Cachex.put(state.cachex_instance_name, key, value)
 
     {:reply, value, state}
   end

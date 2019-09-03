@@ -206,14 +206,7 @@ defmodule Artemis.IntervalWorker do
 
       defp update_state(state) do
         started_at = Timex.now()
-
-        # Call the update function in a separate task to minimize potential
-        # memory growth in GenServer.
-        #
-        # See: https://elixirforum.com/t/extremely-high-memory-usage-in-genservers/4035/27
-        task = Task.async(fn -> call(state.data, state.config) end)
-        result = Task.await(task)
-
+        result = call(state.data, state.config)
         ended_at = Timex.now()
 
         state
