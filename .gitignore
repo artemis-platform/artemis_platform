@@ -26,3 +26,5 @@ screenshot*
 .env
 .env.pre-demo-backup
 licenses.tsv
+
+licenses/*
