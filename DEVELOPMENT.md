@@ -32,7 +32,8 @@ If using Puma Dev, this can be accomplished by creating a new puma dev config fi
 
 ```
 source .env
-echo $ARTEMIS_PORT > ~/.puma-dev/artemis
+echo $ARTEMIS_WEB_PORT > ~/.puma-dev/artemis
+echo $ARTEMIS_API_PORT > ~/.puma-dev/artemis-api
 ```
 
 ## Docker Environment
