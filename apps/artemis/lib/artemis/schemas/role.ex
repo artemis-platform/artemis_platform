@@ -7,6 +7,8 @@ defmodule Artemis.Role do
     field :name, :string
     field :slug, :string
 
+    field :user_count, :integer, virtual: true
+
     has_many :user_roles, Artemis.UserRole, on_delete: :delete_all, on_replace: :delete
     has_many :users, through: [:user_roles, :user]
 

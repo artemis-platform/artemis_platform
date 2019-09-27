@@ -21,7 +21,9 @@ defmodule Artemis.ListRolesTest do
     test "returns existing role" do
       role = insert(:role)
 
-      assert ListRoles.call(Mock.system_user()) == [role]
+      result = ListRoles.call(Mock.system_user())
+
+      assert hd(result).id == role.id
     end
 
     test "returns a list of roles" do
@@ -31,6 +33,14 @@ defmodule Artemis.ListRolesTest do
       roles = ListRoles.call(Mock.system_user())
 
       assert length(roles) == count
+    end
+
+    test "returns virtual fields" do
+      insert(:user_role)
+
+      result = ListRoles.call(Mock.system_user())
+
+      assert hd(result).user_count == 1
     end
   end
 

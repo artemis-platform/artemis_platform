@@ -23,6 +23,8 @@
     <thead>
       <tr>
         <th><%= sortable_table_header(@conn, "name", "Name") %></th>
+        <th>Description</th>
+        <th>Total Users</th>
         <th></th>
       </tr>
     </thead>
@@ -35,6 +37,16 @@
               <%= link role.name, to: Routes.role_path(@conn, :show, role) %>
             <% else %>
               <%= role.name %>
+            <% end %>
+          </td>
+          <td>
+            <%= role.description %>
+          </td>
+          <td>
+            <%= if has?(@conn, "roles:show") do %>
+              <%= link role.user_count, to: Routes.role_path(@conn, :show, role) <> "#link-users" %>
+            <% else %>
+              <%= role.user_count %>
             <% end %>
           </td>
           <td>
