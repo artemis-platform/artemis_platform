@@ -42,8 +42,13 @@ defmodule Artemis.Repo.GenerateData do
     # Roles
 
     roles = [
-      %{slug: "developer", name: "Site Developer"},
-      %{slug: "default", name: "Default"}
+      %{slug: "default", name: "Default"},
+      %{slug: "site-developer", name: "Site Developer"},
+      %{
+        slug: "system-user",
+        name: "System User",
+        description: "WARNING. For the non-human privileged system user only."
+      }
     ]
 
     Enum.map(roles, fn params ->
@@ -107,14 +112,27 @@ defmodule Artemis.Repo.GenerateData do
       end
     end)
 
-    # Role Permissions - Developer Role
+    # Role Permissions - System Users Role
 
     permissions = Repo.all(Permission)
 
     role =
       Role
       |> preload([:permissions, :user_roles])
-      |> Repo.get_by(slug: "developer")
+      |> Repo.get_by(slug: "system-user")
+
+    role
+    |> Role.associations_changeset(%{permissions: permissions})
+    |> Repo.update!()
+
+    # Role Permissions - Site Developer Role
+
+    permissions = Repo.all(Permission)
+
+    role =
+      Role
+      |> preload([:permissions, :user_roles])
+      |> Repo.get_by(slug: "site-developer")
 
     role
     |> Role.associations_changeset(%{permissions: permissions})
@@ -166,13 +184,40 @@ defmodule Artemis.Repo.GenerateData do
       end
     end)
 
-    # User Roles
+    # User Roles - System User
 
-    role = Repo.get_by!(Role, slug: "developer")
+    role = Repo.get_by!(Role, slug: "system-user")
 
     user_emails = [
-      Application.fetch_env!(:artemis, :users)[:root_user].email,
       Application.fetch_env!(:artemis, :users)[:system_user].email
+    ]
+
+    users = Enum.map(user_emails, &Repo.get_by!(User, email: &1))
+
+    Enum.map(users, fn user ->
+      case Repo.get_by(UserRole, role_id: role.id, user_id: user.id) do
+        nil ->
+          params = %{
+            created_by_id: user.id,
+            role_id: role.id,
+            user_id: user.id
+          }
+
+          %UserRole{}
+          |> UserRole.changeset(params)
+          |> Repo.insert!()
+
+        _ ->
+          :ok
+      end
+    end)
+
+    # User Roles - Site Developer
+
+    role = Repo.get_by!(Role, slug: "site-developer")
+
+    user_emails = [
+      Application.fetch_env!(:artemis, :users)[:root_user].email
     ]
 
     users = Enum.map(user_emails, &Repo.get_by!(User, email: &1))

@@ -20,7 +20,15 @@ defmodule Artemis.GetRole do
 
   defp get_record(value, options, get_by) do
     Role
+    |> select_fields()
     |> preload(^Keyword.get(options, :preload, @default_preload))
     |> get_by.(value)
+  end
+
+  defp select_fields(query) do
+    query
+    |> group_by([role], role.id)
+    |> join(:left, [role], user_roles in assoc(role, :user_roles))
+    |> select([role, ..., user_roles], %Role{role | user_count: count(user_roles.id)})
   end
 end

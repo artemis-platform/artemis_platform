@@ -20,11 +20,11 @@ defmodule Artemis.GetRoleTest do
     end
 
     test "finds role by id", %{role: role} do
-      assert GetRole.call(role.id, Mock.system_user()) == role
+      assert GetRole.call(role.id, Mock.system_user()).id == role.id
     end
 
     test "finds user keyword list", %{role: role} do
-      assert GetRole.call([name: role.name, slug: role.slug], Mock.system_user()) == role
+      assert GetRole.call([name: role.name, slug: role.slug], Mock.system_user()).id == role.id
     end
   end
 
@@ -60,7 +60,7 @@ defmodule Artemis.GetRoleTest do
     end
 
     test "finds role by id", %{role: role} do
-      assert GetRole.call!(role.id, Mock.system_user()) == role
+      assert GetRole.call!(role.id, Mock.system_user()).id == role.id
     end
   end
 end
