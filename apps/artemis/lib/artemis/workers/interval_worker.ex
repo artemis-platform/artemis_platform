@@ -180,7 +180,7 @@ defmodule Artemis.IntervalWorker do
       end
 
       def handle_info_callback(_, state) do
-        {:no_reply, state}
+        {:noreply, state}
       end
 
       # Callback Helpers
@@ -198,8 +198,9 @@ defmodule Artemis.IntervalWorker do
             Map.put(state, :timer, schedule_update())
 
           false ->
-            # Make an asynchronous call instead of a blocking synchronous one.
-            # Important to prevent loading delays on application start.
+            # Call immediately using an asynchronous call instead of a blocking
+            # synchronous one. Important to prevent loading delays on
+            # application start.
             Map.put(state, :timer, schedule_update(10))
         end
       end
