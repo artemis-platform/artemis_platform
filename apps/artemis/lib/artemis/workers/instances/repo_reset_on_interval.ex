@@ -2,7 +2,7 @@ defmodule Artemis.Worker.RepoResetOnInterval do
   use Artemis.IntervalWorker,
     enabled: enabled?(),
     interval: get_interval(),
-    delayed_start: true,
+    delayed_start: get_interval(),
     name: :repo_reset_on_interval
 
   alias Artemis.Repo.DeleteAll
