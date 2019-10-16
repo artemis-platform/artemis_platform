@@ -25,6 +25,28 @@ defmodule Artemis.CacheInstance do
   value. This ensures the cache is only restarted if it was shutdown abnormally.
 
   For more information on see the [Supervisor Documentation](https://hexdocs.pm/elixir/1.8.2/Supervisor.html#module-restart-values-restart).
+
+  ## Reducing Cache Stampeding on Restart
+
+  When the cache is empty, the call to `fetch()` will evaluate the passed
+  getter function which is then cached. Until the getter function finishes
+  executing, the cache will remain empty.
+
+  If multiple requests are made in a short period of time, then it's possible
+  for the getter function to be called multiple times. This is especially
+  problematic if the getter function is expensive or takes a long time to
+  execute.
+
+  To limit the "thundering herd" scenario, the getter function is moved from
+  the `fetch()` module function into the `handle_call` GenServer callback.
+
+  Since the `handle_call` callbacks are blocking, any additional calls to the
+  cache that are received while the getter function is being executed will be
+  queued until after it completes.
+
+  The `handle_call` callback then stores the result in the cache. Many of the
+  queued calls will be able to read the value from the cache instead of executing
+  the getter function again.
   """
 
   @default_cachex_options [
@@ -77,7 +99,7 @@ defmodule Artemis.CacheInstance do
       {:ok, nil} ->
         Logger.debug("#{get_cache_server_name(module)}: cache miss")
 
-        put(module, key, getter.())
+        put(module, key, getter)
 
       {:ok, value} ->
         Logger.debug("#{get_cache_server_name(module)}: cache hit")
@@ -92,16 +114,11 @@ defmodule Artemis.CacheInstance do
   def get(module, key), do: GenServer.call(get_cache_server_name(module), {:get, key})
 
   @doc """
-  Puts value into the cache, unless it is an error tuple
+  Puts value into the cache, unless it is an error tuple. If it is a function, evaluate it
   """
   def put(_module, _key, {:error, message}), do: %CacheEntry{data: {:error, message}}
 
-  def put(module, key, value) do
-    inserted_at = DateTime.utc_now() |> DateTime.to_unix()
-    entry = %CacheEntry{data: value, inserted_at: inserted_at, key: key}
-
-    GenServer.call(get_cache_server_name(module), {:put, key, entry})
-  end
+  def put(module, key, value), do: GenServer.call(get_cache_server_name(module), {:put, key, value})
 
   def get_cache_server_name(module), do: String.to_atom("#{module}.CacheServer")
 
@@ -158,9 +175,13 @@ defmodule Artemis.CacheInstance do
   end
 
   def handle_call({:put, key, value}, _from, state) do
-    {:ok, _} = Cachex.put(state.cachex_instance_name, key, value)
+    value = if is_function(value), do: value.(), else: value
+    inserted_at = DateTime.utc_now() |> DateTime.to_unix()
+    entry = %CacheEntry{data: value, inserted_at: inserted_at, key: key}
 
-    {:reply, value, state}
+    {:ok, _} = Cachex.put(state.cachex_instance_name, key, entry)
+
+    {:reply, entry, state}
   end
 
   @impl true
