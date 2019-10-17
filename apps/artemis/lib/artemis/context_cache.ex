@@ -79,7 +79,7 @@ defmodule Artemis.ContextCache do
         fetch_cached(args)
       end
 
-      defp handle_match_error(args, error) do
+      defp handle_match_error(args, _error) do
         # The CacheInstance contains two linked processes, a cache GenServer and a
         # Cachex instance. When a CacheInstance is reset, the cache GenServer is
         # stopped. Because they are linked, shortly after the Cachex instance is also
