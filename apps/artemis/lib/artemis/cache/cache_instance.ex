@@ -26,27 +26,32 @@ defmodule Artemis.CacheInstance do
 
   For more information on see the [Supervisor Documentation](https://hexdocs.pm/elixir/1.8.2/Supervisor.html#module-restart-values-restart).
 
-  ## Reducing Cache Stampeding on Restart
+  ## Preventing Cache Stampeding
 
-  When the cache is empty, the call to `fetch()` will evaluate the passed
-  getter function which is then cached. Until the getter function finishes
-  executing, the cache will remain empty.
+  When the cache is empty, the first call to `fetch()` will execute the
+  `getter` function and insert the result into the cache.
 
-  If multiple requests are made in a short period of time, then it's possible
-  for the getter function to be called multiple times. This is especially
-  problematic if the getter function is expensive or takes a long time to
-  execute.
+  While the initial `getter` function is being evaluated but not yet completed,
+  any additional calls to `fetch` will also see an empty cache and start
+  executing the `getter` function. While inefficient, this duplication is
+  especially problematic if the getter function is expensive or takes a long time
+  to execute.
 
-  To limit the "thundering herd" scenario, the getter function is moved from
-  the `fetch()` module function into the `handle_call` GenServer callback.
+  The GenServer can be used as a simple queuing mechanism to prevent this
+  "thundering herd" scenario and ensure the `getter` function is only executed
+  once.
 
-  Since the `handle_call` callbacks are blocking, any additional calls to the
-  cache that are received while the getter function is being executed will be
-  queued until after it completes.
+  Since all GenServer callbacks are blocking, any additional calls to the
+  cache that are received while the `getter` function is being executed will be
+  queued until after the initial call completes.
 
-  The `handle_call` callback then stores the result in the cache. Many of the
-  queued calls will be able to read the value from the cache instead of executing
-  the getter function again.
+  With the `getter` execution completed and the value stored in the cached, all
+  subsequent calls in the queue can read directly from the cache.
+
+  Since the cache can support many different values under different keys, it's
+  important to note the `fetch` function will never queue requests for keys
+  that are already present in the cache. Only requests for keys that are
+  currently empty will be queued.
   """
 
   @default_cachex_options [
@@ -68,7 +73,8 @@ defmodule Artemis.CacheInstance do
       cachex_instance_name: get_cachex_instance_name(module),
       cachex_options: Keyword.get(options, :cachex_options, []),
       cache_server_name: get_cache_server_name(module),
-      cache_reset_on_events: Keyword.get(options, :cache_reset_on_events, [])
+      cache_reset_on_events: Keyword.get(options, :cache_reset_on_events, []),
+      module: module
     }
 
     GenServer.start_link(__MODULE__, initial_state, name: initial_state.cache_server_name)
@@ -90,35 +96,35 @@ defmodule Artemis.CacheInstance do
   end
 
   @doc """
-  Fetches key from the cache. If it exists, the value is returned. If it does
-  not exist in the cache, the `getter` function is called. The result is returned
-  to the user. The result is stored in the cache unless it is an error.
+  Fetch the key from the cache instance. If it exists, return the value.
+  If it does not, evaluate the `getter` function and cache the result.
+
+  If the `getter` function returns a `{:error, _}` tuple, it will not
+  be stored in the cache.
   """
   def fetch(module, key, getter) do
-    case get(module, key) do
-      {:ok, nil} ->
-        Logger.debug("#{get_cache_server_name(module)}: cache miss")
+    case get_from_cache(module, key) do
+      nil ->
+        Logger.debug("#{get_cachex_instance_name(module)}: cache miss")
 
-        put(module, key, getter)
+        GenServer.call(get_cache_server_name(module), {:fetch, key, getter})
 
-      {:ok, value} ->
-        Logger.debug("#{get_cache_server_name(module)}: cache hit")
+      value ->
+        Logger.debug("#{get_cachex_instance_name(module)}: cache hit")
 
         value
     end
   end
 
   @doc """
-  Gets the key from the cache. If it does not exist, returns `nil`.
+  Gets the key from the cache instance. If it does not exist, returns `nil`.
   """
-  def get(module, key), do: GenServer.call(get_cache_server_name(module), {:get, key})
+  def get(module, key), do: get_from_cache(module, key)
 
   @doc """
   Puts value into the cache, unless it is an error tuple. If it is a function, evaluate it
   """
-  def put(_module, _key, {:error, message}), do: %CacheEntry{data: {:error, message}}
-
-  def put(module, key, value), do: GenServer.call(get_cache_server_name(module), {:put, key, value})
+  def put(module, key, value), do: put_in_cache(module, key, value)
 
   def get_cache_server_name(module), do: String.to_atom("#{module}.CacheServer")
 
@@ -168,18 +174,8 @@ defmodule Artemis.CacheInstance do
     {:reply, state.cachex_options, state}
   end
 
-  def handle_call({:get, key}, _from, state) do
-    result = Cachex.get(state.cachex_instance_name, key)
-
-    {:reply, result, state}
-  end
-
-  def handle_call({:put, key, value}, _from, state) do
-    value = if is_function(value), do: value.(), else: value
-    inserted_at = DateTime.utc_now() |> DateTime.to_unix()
-    entry = %CacheEntry{data: value, inserted_at: inserted_at, key: key}
-
-    {:ok, _} = Cachex.put(state.cachex_instance_name, key, entry)
+  def handle_call({:fetch, key, getter}, _from, state) do
+    entry = fetch_from_cache(state.module, key, getter)
 
     {:reply, entry, state}
   end
@@ -194,6 +190,49 @@ defmodule Artemis.CacheInstance do
 
       false ->
         {:noreply, state}
+    end
+  end
+
+  # Cachex Helpers
+
+  defp get_from_cache(module, key) do
+    cachex_instance_name = get_cachex_instance_name(module)
+
+    Cachex.get!(cachex_instance_name, key)
+  rescue
+    _ -> nil
+  end
+
+  defp put_in_cache(_module, _key, {:error, message}), do: %CacheEntry{data: {:error, message}}
+
+  defp put_in_cache(module, key, value) do
+    cachex_instance_name = get_cachex_instance_name(module)
+    inserted_at = DateTime.utc_now() |> DateTime.to_unix()
+
+    entry = %CacheEntry{
+      data: value,
+      inserted_at: inserted_at,
+      key: key
+    }
+
+    {:ok, _} = Cachex.put(cachex_instance_name, key, entry)
+
+    entry
+  end
+
+  defp fetch_from_cache(module, key, getter) do
+    cachex_instance_name = get_cachex_instance_name(module)
+
+    case get_from_cache(module, key) do
+      nil ->
+        Logger.debug("#{cachex_instance_name}: fetch - updating cache")
+
+        put_in_cache(module, key, getter.())
+
+      value ->
+        Logger.debug("#{cachex_instance_name}: fetch - cache hit")
+
+        value
     end
   end
 
