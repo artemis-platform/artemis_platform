@@ -60,6 +60,26 @@ defmodule Artemis.ContextCache do
 
         Artemis.CacheInstance.fetch(__MODULE__, key, getter)
       rescue
+        error in MatchError -> handle_match_error(args, error)
+      end
+
+      defp handle_match_error(args, %MatchError{term: {:error, {:already_started, _}}}) do
+        # The CacheInstance contains two linked processes, a cache GenServer and a
+        # Cachex instance. The GenServer starts a linked Cachex instance on initialization.
+        #
+        # There is a race condition when the GenServer is started and the Cachex instance
+        # is still in the process of starting. If multiple requests are sent at
+        # the same time, it may result in multiple Cachex instances being started. The
+        # first instance to complete will succeed and all other requests will
+        # fail with an `:already_started` # error message.
+        #
+        # Since a Cachex instance is now running, resending the request to the
+        # GenServer will succeed.
+        #
+        fetch_cached(args)
+      end
+
+      defp handle_match_error(args, _error) do
         # The CacheInstance contains two linked processes, a cache GenServer and a
         # Cachex instance. When a CacheInstance is reset, the cache GenServer is
         # stopped. Because they are linked, shortly after the Cachex instance is also
@@ -76,7 +96,8 @@ defmodule Artemis.ContextCache do
         # Instead of trying to resolve the race condition, let it crash. Return a valid
         # uncached result in the meantime. Future requests after this window closes will
         # successfully create a dynamic cache.
-        _ in MatchError -> %Artemis.CacheInstance.CacheEntry{data: apply(__MODULE__, :call, args)}
+        #
+        %Artemis.CacheInstance.CacheEntry{data: apply(__MODULE__, :call, args)}
       end
 
       defp create_cache() do
