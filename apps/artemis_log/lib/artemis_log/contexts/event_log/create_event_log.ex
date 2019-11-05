@@ -15,7 +15,7 @@ defmodule ArtemisLog.CreateEventLog do
   defp get_create_params(event, data, user) do
     %{
       action: event,
-      meta: Filter.call(data),
+      data: Filter.call(data),
       resource_id: get_resource_id(data),
       resource_type: get_resource_type(data),
       session_id: user && Map.get(user, :session_id),
