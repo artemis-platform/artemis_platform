@@ -36,11 +36,11 @@ defmodule Artemis.ContextCache do
   user's permission.
 
   The first way is to use the built-in key generator by passing the
-  `cache_key_type` option:
+  `cache_key` option:
 
       defmodule MyApp.ExampleContext do
         use MyApp.ContextCache,
-          cache_key_type: :complex
+          cache_key: :complex
       end
 
   This generic built-in collects all of the users permissions and includes them in the
@@ -48,14 +48,13 @@ defmodule Artemis.ContextCache do
   because the built-in function does not understand which of the user's many
   permissions determine the context output.
 
-  A better approach is to define a custom cache key in the context itself using
-  the optional `get_cache_key/1` callback:
+  A better approach is to define a custom cache option:
 
       defmodule MyApp.ExampleContext do
-        use MyApp.ContextCache
+        use MyApp.ContextCache,
+          cache_key: &custom_cache_key/1
 
-        @impl true
-        def get_cache_key(args) do
+        def custom_cache_key(args) do
           # custom code here
         end
       end
@@ -66,17 +65,12 @@ defmodule Artemis.ContextCache do
   values in the cache.
   """
 
-  @callback get_cache_key(any()) :: any()
-  @optional_callbacks get_cache_key: 1
-
   defmacro __using__(options) do
     quote do
       import Artemis.ContextCache
 
       alias Artemis.CacheInstance
       alias Artemis.Repo
-
-      @behaviour Artemis.ContextCache
 
       @doc """
       Generic wrapper function to add caching around `call`
@@ -167,14 +161,22 @@ defmodule Artemis.ContextCache do
         end
       end
 
-      defp get_built_in_cache_key_type_complex(args) do
+      defp get_cache_key(args) do
+        case Keyword.get(unquote(options), :cache_key, :simple) do
+          :complex -> get_built_in_cache_key_complex(args)
+          :simple -> get_built_in_cache_key_simple(args)
+          custom -> custom.(args)
+        end
+      end
+
+      defp get_built_in_cache_key_complex(args) do
         %{
           other_args: get_non_user_args(args),
           user_permissions: get_user_permissions(args)
         }
       end
 
-      defp get_built_in_cache_key_type_simple(args), do: get_non_user_args(args)
+      defp get_built_in_cache_key_simple(args), do: get_non_user_args(args)
 
       defp get_user_permissions(args) do
         args
@@ -212,19 +214,6 @@ defmodule Artemis.ContextCache do
       end
 
       defp user?(value), do: is_map(value) && value.__struct__ == Artemis.User
-
-      # Callbacks
-
-      def get_cache_key(args) do
-        case Keyword.get(unquote(options), :cache_key_type, :simple) do
-          :complex -> get_built_in_cache_key_type_complex(args)
-          _ -> get_built_in_cache_key_type_simple(args)
-        end
-      end
-
-      # Allow defined `@callback`s to be overwritten
-
-      defoverridable Artemis.ContextCache
     end
   end
 end
