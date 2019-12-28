@@ -38,7 +38,7 @@ defmodule Artemis.Helpers.Search do
   end
 
   defp add_search_filter(value, ecto_query) do
-    value = value <> ":*"
+    value = "'#{value}':*"
 
     where(ecto_query, [table], fragment("? @@ ?", table.tsv_search, to_tsquery(^value)))
   end
