@@ -5,17 +5,18 @@ defmodule ArtemisLog.CreateEventLog do
   alias ArtemisLog.Filter
   alias ArtemisLog.Repo
 
-  def call(event, %{data: data, user: user}) do
+  def call(event, %{data: data, meta: meta, user: user}) do
     event
-    |> get_create_params(data, user)
+    |> get_create_params(data, meta, user)
     |> insert_record()
     |> Artemis.Event.broadcast("event-log:created", user)
   end
 
-  defp get_create_params(event, data, user) do
+  defp get_create_params(event, data, meta, user) do
     %{
       action: event,
-      meta: Filter.call(data),
+      data: Filter.call(data),
+      meta: meta,
       resource_id: get_resource_id(data),
       resource_type: get_resource_type(data),
       session_id: user && Map.get(user, :session_id),

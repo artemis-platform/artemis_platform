@@ -45,8 +45,8 @@
     </li>
 
     <li>
-      <strong>Meta</strong>
-      <pre><code><%= Jason.encode!(@event_log.meta, pretty: true) %></code></pre>
+      <strong>Data</strong>
+      <pre><code><%= Jason.encode!(@event_log.data, pretty: true) %></code></pre>
     </li>
 
   </ul>

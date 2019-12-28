@@ -25,6 +25,10 @@ screenshot*
 
 .env
 .env.pre-demo-backup
+.env.dev
+.env.local
+.env.stag
+.env.test
 licenses.tsv
 
 licenses/*

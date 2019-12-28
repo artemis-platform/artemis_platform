@@ -3,6 +3,7 @@ defmodule ArtemisLog.EventLog do
 
   schema "event_logs" do
     field :action, :string
+    field :data, :map
     field :meta, :map
     field :resource_id, :string
     field :resource_type, :string
@@ -18,6 +19,7 @@ defmodule ArtemisLog.EventLog do
   def updatable_fields,
     do: [
       :action,
+      :data,
       :meta,
       :resource_id,
       :resource_type,
