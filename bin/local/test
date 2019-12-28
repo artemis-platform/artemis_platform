@@ -12,4 +12,8 @@ if [ ! -z "$2" ]; then
   TEST_PATH="$2"
 fi
 
-MIX_ENV=test mix do ecto.create --quiet, ecto.migrate, cmd ${APP} mix test --color ${TEST_PATH}
+MIX_ENV=test
+
+mix ecto.create --quiet
+mix ecto.migrate
+mix cmd ${APP} mix test --color ${TEST_PATH} || mix test --color --failed ${TEST_PATH}
