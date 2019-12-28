@@ -93,16 +93,6 @@ defmodule Artemis.GetSystemUserTest do
       {:ok, []}
     end
 
-    test "defines a custom cache key" do
-      assert GetSystemUser.call_with_cache().key == [:system_user, options: []]
-
-      options = [
-        preload: [:auth_providers]
-      ]
-
-      assert GetSystemUser.call_with_cache(options).key == [:system_user, options: [options]]
-    end
-
     test "defines custom cache options" do
       GetSystemUser.call_with_cache()
 

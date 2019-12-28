@@ -38,9 +38,4 @@ defmodule Artemis.GetSystemUser do
     |> preload(^Keyword.get(options, :preload, @default_preload))
     |> get_by.(email: system_user.email)
   end
-
-  # Callbacks
-
-  @impl true
-  def get_cache_key(args), do: [:system_user, options: args]
 end

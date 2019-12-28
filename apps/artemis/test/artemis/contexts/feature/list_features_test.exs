@@ -124,22 +124,21 @@ defmodule Artemis.ListFeaturesTest do
       {:ok, []}
     end
 
-    test "uses default cache key callback" do
-      key = ListFeatures.call_with_cache(Mock.system_user()).key
+    test "uses default simple cache key callback" do
+      user = Mock.system_user()
+      key = ListFeatures.call_with_cache(user).key
 
-      assert is_map(key)
-      assert Map.keys(key) == [:other_args, :user_permissions]
-      assert key.other_args == []
+      assert key == []
+      assert length(key) == 0
 
       params = %{
         paginate: true
       }
 
-      key = ListFeatures.call_with_cache(params, Mock.system_user()).key
+      key = ListFeatures.call_with_cache(params, user).key
 
-      assert is_map(key)
-      assert Map.keys(key) == [:other_args, :user_permissions]
-      assert key.other_args == [params]
+      assert is_list(key)
+      assert key == [params]
     end
 
     test "uses default context cache options" do

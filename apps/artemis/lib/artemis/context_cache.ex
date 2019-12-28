@@ -2,21 +2,68 @@ defmodule Artemis.ContextCache do
   @moduledoc """
   Extends Context modules with cache functions
 
-  ## Cache Granularity
+  ## Cache Keys
 
-  By default, results will be stored under a highly granular cache key.
-  Consisting of two parts:
+  A single cache instance can store many values under different keys. By
+  default, a simple cache key based on the passed parameters is used.
 
-  - User permissions. Ensures only users who share the same permissions
-    can read cache values.
+  For example, these calls are stored under different keys:
 
-  - All other passed arguments. Ensures arguments like a resource id or
-    options like pagination page number are treated as distinct entries
+      MyApp.ExampleContext.call_with_cache(%{page: 1})
+      MyApp.ExampleContext.call_with_cache(%{page: 200})
 
+  By default, the simple cache key treats all users equally. As long as the
+  parameters match, the same data is returned:
+
+      MyApp.ExampleContext.call_with_cache(%{page: 1}, user_1)
+      MyApp.ExampleContext.call_with_cache(%{page: 1}, user_2)
+
+  Typically, permissions are checked before a cache is called. And that
+  upstream code determines whether a user has access to the context or not.
+
+  But there are cases where the user's permissions are also used within the
+  context to return different results.
+
+  For example, an admin user may be able to see a list of all resources, where
+  normal users can only see resources related to their user.
+
+  In these cases, a more complex cache key that includes the user's
+  permissions is needed.
+
+  ### Complex and Custom Cache Keys
+
+  There are two options to implement a cache key that takes into account the
+  user's permission.
+
+  The first way is to use the built-in key generator by passing the
+  `cache_key` option:
+
+      defmodule MyApp.ExampleContext do
+        use MyApp.ContextCache,
+          cache_key: :complex
+      end
+
+  This generic built-in collects all of the users permissions and includes them in the
+  cache key. While effective, the same data may be cached under different keys
+  because the built-in function does not understand which of the user's many
+  permissions determine the context output.
+
+  A better approach is to define a custom cache option:
+
+      defmodule MyApp.ExampleContext do
+        use MyApp.ContextCache,
+          cache_key: &custom_cache_key/1
+
+        def custom_cache_key(args) do
+          # custom code here
+        end
+      end
+
+  The custom cache key can filter user permissions to the exact ones used
+  within the context. This fine-grained control can ensure users only have
+  access to the proper data while also minimizing the amount of duplicate
+  values in the cache.
   """
-
-  @callback get_cache_key(any()) :: any()
-  @optional_callbacks get_cache_key: 1
 
   defmacro __using__(options) do
     quote do
@@ -24,8 +71,6 @@ defmodule Artemis.ContextCache do
 
       alias Artemis.CacheInstance
       alias Artemis.Repo
-
-      @behaviour Artemis.ContextCache
 
       @doc """
       Generic wrapper function to add caching around `call`
@@ -106,15 +151,32 @@ defmodule Artemis.ContextCache do
             {:ok, "Cache already exists"}
 
           false ->
-            options = [
+            child_options = [
               cache_reset_on_events: Keyword.get(unquote(options), :cache_reset_on_events, []),
               cachex_options: Keyword.get(unquote(options), :cachex_options, []),
               module: __MODULE__
             ]
 
-            Artemis.CacheSupervisor.start_child(options)
+            Artemis.CacheSupervisor.start_child(child_options)
         end
       end
+
+      defp get_cache_key(args) do
+        case Keyword.get(unquote(options), :cache_key, :simple) do
+          :complex -> get_built_in_cache_key_complex(args)
+          :simple -> get_built_in_cache_key_simple(args)
+          custom -> custom.(args)
+        end
+      end
+
+      defp get_built_in_cache_key_complex(args) do
+        %{
+          other_args: get_non_user_args(args),
+          user_permissions: get_user_permissions(args)
+        }
+      end
+
+      defp get_built_in_cache_key_simple(args), do: get_non_user_args(args)
 
       defp get_user_permissions(args) do
         args
@@ -152,19 +214,6 @@ defmodule Artemis.ContextCache do
       end
 
       defp user?(value), do: is_map(value) && value.__struct__ == Artemis.User
-
-      # Callbacks
-
-      def get_cache_key(args) do
-        %{
-          other_args: get_non_user_args(args),
-          user_permissions: get_user_permissions(args)
-        }
-      end
-
-      # Allow defined `@callback`s to be overwritten
-
-      defoverridable Artemis.ContextCache
     end
   end
 end
