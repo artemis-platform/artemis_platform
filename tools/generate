@@ -1,0 +1,211 @@
+#!/usr/bin/env bash
+
+# Examples:
+#
+#     ./tools/generate.sh feature machine
+#
+
+# Testing
+#
+# Useful debugging command to completely wipe `app` directory and rebuild from git:
+#
+#     git clean -fd && rm -rf apps/artemis && rm -rf apps/artemis_web/lib && rm -rf apps/artemis_web/test && git checkout -- apps/
+#
+
+SOURCE=${1}
+TARGET=${2}
+
+# Functions
+
+capitalize() {
+  FIRST=$(echo ${1:0:1} | tr '[:lower:]' '[:upper:]')
+
+  echo ${FIRST}${1:1}
+}
+
+uppercase() {
+  echo ${1} | tr a-z A-Z
+}
+
+lowercase() {
+  echo ${1} | tr A-Z a-z
+}
+
+pascalcase() {
+  echo ${1} | sed -r 's/(^|_)([a-z])/\U\2/g'
+}
+
+snakecase() {
+  echo ${1} | sed -r 's/([a-z0-9])([A-Z])/\1_\L\2/g'
+}
+
+hyphencase() {
+  echo ${1} | sed -r 's/([a-z0-9])([A-Z])/\1_\L\2/g' | tr _ -
+}
+
+spacecase() {
+  echo ${1} | sed -r 's/([a-z0-9])([A-Z])/\1_\L\2/g' | tr _ " "
+}
+
+replace() {
+  find $1 -type f -not -path '*node_modules*' | xargs sed -i'' -e "s/${2}/${3}/g"
+}
+
+rename() {
+  find ${1} -type d | grep "${2}" | while read DIR ; do
+    NEW_DIR=`echo ${DIR} | sed -e "s/${2}/${3}/g"`
+    mv "${DIR}/" "${NEW_DIR}"
+  done
+
+  find ${1} -type f | grep "${2}" | while read FILE ; do
+    NEW_FILE=`echo ${FILE} | sed -e "s/${2}/${3}/g"`
+    mv "${FILE}" "${NEW_FILE}"
+  done
+}
+
+# Schema
+
+ROOT_DIR="apps/artemis/lib/artemis/schemas"
+SOURCE_DIR="/$(lowercase ${SOURCE}).ex"
+TARGET_DIR="/$(lowercase ${TARGET}).ex"
+
+cp -pr ${ROOT_DIR}${SOURCE_DIR} ${ROOT_DIR}${TARGET_DIR}
+
+replace ${ROOT_DIR}${TARGET_DIR} ${SOURCE} ${TARGET}
+replace ${ROOT_DIR}${TARGET_DIR} $(capitalize ${SOURCE}) $(capitalize ${TARGET})
+replace ${ROOT_DIR}${TARGET_DIR} $(lowercase ${SOURCE}) $(lowercase ${TARGET})
+replace ${ROOT_DIR}${TARGET_DIR} $(pascalcase ${SOURCE}) $(pascalcase ${TARGET})
+replace ${ROOT_DIR}${TARGET_DIR} $(hyphencase ${SOURCE}) $(hyphencase ${TARGET})
+replace ${ROOT_DIR}${TARGET_DIR} $(snakecase ${SOURCE}) $(snakecase ${TARGET})
+replace ${ROOT_DIR}${TARGET_DIR} "$(spacecase ${SOURCE})" "$(spacecase ${TARGET})"
+
+# Schema Tests
+
+ROOT_DIR="apps/artemis/test/artemis/schemas"
+SOURCE_DIR="/$(lowercase ${SOURCE})_test.exs"
+TARGET_DIR="/$(lowercase ${TARGET})_test.exs"
+
+cp -pr ${ROOT_DIR}${SOURCE_DIR} ${ROOT_DIR}${TARGET_DIR}
+
+replace ${ROOT_DIR}${TARGET_DIR} ${SOURCE} ${TARGET}
+replace ${ROOT_DIR}${TARGET_DIR} $(capitalize ${SOURCE}) $(capitalize ${TARGET})
+replace ${ROOT_DIR}${TARGET_DIR} $(lowercase ${SOURCE}) $(lowercase ${TARGET})
+replace ${ROOT_DIR}${TARGET_DIR} $(pascalcase ${SOURCE}) $(pascalcase ${TARGET})
+replace ${ROOT_DIR}${TARGET_DIR} $(hyphencase ${SOURCE}) $(hyphencase ${TARGET})
+replace ${ROOT_DIR}${TARGET_DIR} $(snakecase ${SOURCE}) $(snakecase ${TARGET})
+replace ${ROOT_DIR}${TARGET_DIR} "$(spacecase ${SOURCE})" "$(spacecase ${TARGET})"
+
+# Contexts
+
+ROOT_DIR="apps/artemis/lib/artemis/contexts"
+SOURCE_DIR="/$(lowercase ${SOURCE})"
+TARGET_DIR="/$(lowercase ${TARGET})"
+
+cp -pr ${ROOT_DIR}${SOURCE_DIR} ${ROOT_DIR}${TARGET_DIR}
+rename ${ROOT_DIR}${TARGET_DIR} ${SOURCE} ${TARGET}
+
+replace ${ROOT_DIR}${TARGET_DIR} ${SOURCE} ${TARGET}
+replace ${ROOT_DIR}${TARGET_DIR} $(capitalize ${SOURCE}) $(capitalize ${TARGET})
+replace ${ROOT_DIR}${TARGET_DIR} $(lowercase ${SOURCE}) $(lowercase ${TARGET})
+replace ${ROOT_DIR}${TARGET_DIR} $(pascalcase ${SOURCE}) $(pascalcase ${TARGET})
+replace ${ROOT_DIR}${TARGET_DIR} $(hyphencase ${SOURCE}) $(hyphencase ${TARGET})
+replace ${ROOT_DIR}${TARGET_DIR} $(snakecase ${SOURCE}) $(snakecase ${TARGET})
+replace ${ROOT_DIR}${TARGET_DIR} "$(spacecase ${SOURCE})" "$(spacecase ${TARGET})"
+
+# Context Tests
+
+ROOT_DIR="apps/artemis/test/artemis/contexts"
+SOURCE_DIR="/$(lowercase ${SOURCE})"
+TARGET_DIR="/$(lowercase ${TARGET})"
+
+cp -pr ${ROOT_DIR}${SOURCE_DIR} ${ROOT_DIR}${TARGET_DIR}
+rename ${ROOT_DIR}${TARGET_DIR} ${SOURCE} ${TARGET}
+
+replace ${ROOT_DIR}${TARGET_DIR} ${SOURCE} ${TARGET}
+replace ${ROOT_DIR}${TARGET_DIR} $(capitalize ${SOURCE}) $(capitalize ${TARGET})
+replace ${ROOT_DIR}${TARGET_DIR} $(lowercase ${SOURCE}) $(lowercase ${TARGET})
+replace ${ROOT_DIR}${TARGET_DIR} $(pascalcase ${SOURCE}) $(pascalcase ${TARGET})
+replace ${ROOT_DIR}${TARGET_DIR} $(hyphencase ${SOURCE}) $(hyphencase ${TARGET})
+replace ${ROOT_DIR}${TARGET_DIR} $(snakecase ${SOURCE}) $(snakecase ${TARGET})
+replace ${ROOT_DIR}${TARGET_DIR} "$(spacecase ${SOURCE})" "$(spacecase ${TARGET})"
+
+# Controller
+
+ROOT_DIR="apps/artemis_web/lib/artemis_web/controllers"
+SOURCE_DIR="/$(lowercase ${SOURCE})_controller.ex"
+TARGET_DIR="/$(lowercase ${TARGET})_controller.ex"
+
+cp -pr ${ROOT_DIR}${SOURCE_DIR} ${ROOT_DIR}${TARGET_DIR}
+
+replace ${ROOT_DIR}${TARGET_DIR} ${SOURCE} ${TARGET}
+replace ${ROOT_DIR}${TARGET_DIR} $(capitalize ${SOURCE}) $(capitalize ${TARGET})
+replace ${ROOT_DIR}${TARGET_DIR} $(lowercase ${SOURCE}) $(lowercase ${TARGET})
+replace ${ROOT_DIR}${TARGET_DIR} $(pascalcase ${SOURCE}) $(pascalcase ${TARGET})
+replace ${ROOT_DIR}${TARGET_DIR} $(hyphencase ${SOURCE}) $(hyphencase ${TARGET})
+replace ${ROOT_DIR}${TARGET_DIR} $(snakecase ${SOURCE}) $(snakecase ${TARGET})
+replace ${ROOT_DIR}${TARGET_DIR} "$(spacecase ${SOURCE})" "$(spacecase ${TARGET})"
+
+# Controller Tests
+
+ROOT_DIR="apps/artemis_web/test/artemis_web/controllers"
+SOURCE_DIR="/$(lowercase ${SOURCE})_controller_test.exs"
+TARGET_DIR="/$(lowercase ${TARGET})_controller_test.exs"
+
+cp -pr ${ROOT_DIR}${SOURCE_DIR} ${ROOT_DIR}${TARGET_DIR}
+
+replace ${ROOT_DIR}${TARGET_DIR} ${SOURCE} ${TARGET}
+replace ${ROOT_DIR}${TARGET_DIR} $(capitalize ${SOURCE}) $(capitalize ${TARGET})
+replace ${ROOT_DIR}${TARGET_DIR} $(lowercase ${SOURCE}) $(lowercase ${TARGET})
+replace ${ROOT_DIR}${TARGET_DIR} $(pascalcase ${SOURCE}) $(pascalcase ${TARGET})
+replace ${ROOT_DIR}${TARGET_DIR} $(hyphencase ${SOURCE}) $(hyphencase ${TARGET})
+replace ${ROOT_DIR}${TARGET_DIR} $(snakecase ${SOURCE}) $(snakecase ${TARGET})
+replace ${ROOT_DIR}${TARGET_DIR} "$(spacecase ${SOURCE})" "$(spacecase ${TARGET})"
+
+# Views
+
+ROOT_DIR="apps/artemis_web/lib/artemis_web/views"
+SOURCE_DIR="/$(lowercase ${SOURCE})_view.ex"
+TARGET_DIR="/$(lowercase ${TARGET})_view.ex"
+
+cp -pr ${ROOT_DIR}${SOURCE_DIR} ${ROOT_DIR}${TARGET_DIR}
+
+replace ${ROOT_DIR}${TARGET_DIR} ${SOURCE} ${TARGET}
+replace ${ROOT_DIR}${TARGET_DIR} $(capitalize ${SOURCE}) $(capitalize ${TARGET})
+replace ${ROOT_DIR}${TARGET_DIR} $(lowercase ${SOURCE}) $(lowercase ${TARGET})
+replace ${ROOT_DIR}${TARGET_DIR} $(pascalcase ${SOURCE}) $(pascalcase ${TARGET})
+replace ${ROOT_DIR}${TARGET_DIR} $(hyphencase ${SOURCE}) $(hyphencase ${TARGET})
+replace ${ROOT_DIR}${TARGET_DIR} $(snakecase ${SOURCE}) $(snakecase ${TARGET})
+replace ${ROOT_DIR}${TARGET_DIR} "$(spacecase ${SOURCE})" "$(spacecase ${TARGET})"
+
+# Templates
+
+ROOT_DIR="apps/artemis_web/lib/artemis_web/templates"
+SOURCE_DIR="/$(lowercase ${SOURCE})"
+TARGET_DIR="/$(lowercase ${TARGET})"
+
+cp -pr ${ROOT_DIR}${SOURCE_DIR} ${ROOT_DIR}${TARGET_DIR}
+rename ${ROOT_DIR}${TARGET_DIR} ${SOURCE} ${TARGET}
+
+replace ${ROOT_DIR}${TARGET_DIR} ${SOURCE} ${TARGET}
+replace ${ROOT_DIR}${TARGET_DIR} $(capitalize ${SOURCE}) $(capitalize ${TARGET})
+replace ${ROOT_DIR}${TARGET_DIR} $(lowercase ${SOURCE}) $(lowercase ${TARGET})
+replace ${ROOT_DIR}${TARGET_DIR} $(pascalcase ${SOURCE}) $(pascalcase ${TARGET})
+replace ${ROOT_DIR}${TARGET_DIR} $(hyphencase ${SOURCE}) $(hyphencase ${TARGET})
+replace ${ROOT_DIR}${TARGET_DIR} $(snakecase ${SOURCE}) $(snakecase ${TARGET})
+replace ${ROOT_DIR}${TARGET_DIR} "$(spacecase ${SOURCE})" "$(spacecase ${TARGET})"
+
+# Browser Tests
+
+ROOT_DIR="apps/artemis_web/test/artemis_web/browser"
+SOURCE_DIR="/$(lowercase ${SOURCE})_page_test.exs"
+TARGET_DIR="/$(lowercase ${TARGET})_page_test.exs"
+
+cp -pr ${ROOT_DIR}${SOURCE_DIR} ${ROOT_DIR}${TARGET_DIR}
+
+replace ${ROOT_DIR}${TARGET_DIR} ${SOURCE} ${TARGET}
+replace ${ROOT_DIR}${TARGET_DIR} $(capitalize ${SOURCE}) $(capitalize ${TARGET})
+replace ${ROOT_DIR}${TARGET_DIR} $(lowercase ${SOURCE}) $(lowercase ${TARGET})
+replace ${ROOT_DIR}${TARGET_DIR} $(pascalcase ${SOURCE}) $(pascalcase ${TARGET})
+replace ${ROOT_DIR}${TARGET_DIR} $(hyphencase ${SOURCE}) $(hyphencase ${TARGET})
+replace ${ROOT_DIR}${TARGET_DIR} $(snakecase ${SOURCE}) $(snakecase ${TARGET})
+replace ${ROOT_DIR}${TARGET_DIR} "$(spacecase ${SOURCE})" "$(spacecase ${TARGET})"
