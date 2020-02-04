@@ -1,5 +1,14 @@
 #!/usr/bin/env bash
 
+which gsed
+
+if [ $? -ne 0 ]; then
+  echo "The GNU version of 'sed' is not installed"
+  echo "To install on OS X use 'brew install gnu-sed'"
+
+  exit 1
+fi
+
 DIRS="apps bin config"
 FILES="DEVELOPMENT.md Dockerfile docker-compose.yml LICENSE.txt README.md mix.exs mix.lock .env .env.demo .env.example .env.travis .dockerignore .travis.yml"
 
@@ -18,17 +27,17 @@ lowercase() {
 }
 
 replace() {
-  find ${DIRS} ${FILES} -type f -not -path '*node_modules*' | xargs sed -i'' -e "s/${1}/${2}/g"
+  find ${DIRS} ${FILES} -type f -not -path '*node_modules*' | xargs gsed -i'' -e "s/${1}/${2}/g"
 }
 
 move() {
   find ${DIRS} -type d | grep "${1}" | while read DIR ; do
-    NEW_DIR=`echo ${DIR} | sed -e "s/${1}/${2}/g"`
+    NEW_DIR=`echo ${DIR} | gsed -e "s/${1}/${2}/g"`
     mv -n "${DIR}/" "${NEW_DIR}"
   done
 
   find ${DIRS} -type f | grep "${1}" | while read FILE ; do
-    NEW_FILE=`echo ${FILE} | sed -e "s/${1}/${2}/g"`
+    NEW_FILE=`echo ${FILE} | gsed -e "s/${1}/${2}/g"`
     mv "${FILE}" "${NEW_FILE}"
   done
 }
