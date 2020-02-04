@@ -12,6 +12,15 @@
 #     git clean -fd && rm -rf apps/artemis && rm -rf apps/artemis_web/lib && rm -rf apps/artemis_web/test && git checkout -- apps/
 #
 
+SED_PATH="/usr/local/opt/gnu-sed/libexec/gnubin/sed"
+
+if [ $(which sed) != "${SED_PATH}" ]; then
+  echo "The GNU version of 'sed' is not installed"
+  echo "To install on OS X use 'brew install gnu-sed'"
+
+  exit 1
+fi
+
 SOURCE=${1}
 TARGET=${2}
 
@@ -32,33 +41,33 @@ lowercase() {
 }
 
 pascalcase() {
-  echo ${1} | sed -r 's/(^|_)([a-z])/\U\2/g'
+  echo ${1} | ${SED_PATH} -r 's/(^|_)([a-z])/\U\2/g'
 }
 
 snakecase() {
-  echo ${1} | sed -r 's/([a-z0-9])([A-Z])/\1_\L\2/g'
+  echo ${1} | ${SED_PATH} -r 's/([a-z0-9])([A-Z])/\1_\L\2/g'
 }
 
 hyphencase() {
-  echo ${1} | sed -r 's/([a-z0-9])([A-Z])/\1_\L\2/g' | tr _ -
+  echo ${1} | ${SED_PATH} -r 's/([a-z0-9])([A-Z])/\1_\L\2/g' | tr _ -
 }
 
 spacecase() {
-  echo ${1} | sed -r 's/([a-z0-9])([A-Z])/\1_\L\2/g' | tr _ " "
+  echo ${1} | ${SED_PATH} -r 's/([a-z0-9])([A-Z])/\1_\L\2/g' | tr _ " "
 }
 
 replace() {
-  find $1 -type f -not -path '*node_modules*' | xargs sed -i'' -e "s/${2}/${3}/g"
+  find $1 -type f -not -path '*node_modules*' | xargs ${SED_PATH} -i'' -e "s/${2}/${3}/g"
 }
 
 rename() {
   find ${1} -type d | grep "${2}" | while read DIR ; do
-    NEW_DIR=`echo ${DIR} | sed -e "s/${2}/${3}/g"`
+    NEW_DIR=`echo ${DIR} | ${SED_PATH} -e "s/${2}/${3}/g"`
     mv "${DIR}/" "${NEW_DIR}"
   done
 
   find ${1} -type f | grep "${2}" | while read FILE ; do
-    NEW_FILE=`echo ${FILE} | sed -e "s/${2}/${3}/g"`
+    NEW_FILE=`echo ${FILE} | ${SED_PATH} -e "s/${2}/${3}/g"`
     mv "${FILE}" "${NEW_FILE}"
   done
 }
