@@ -24,7 +24,7 @@ General Patterns:
 - Phoenix Web Endpoint
 - Docker Support
 - Unit Testing
-- Browser-based Feature Testing
+- Browser-based Testing
 
 UI Patterns:
 
@@ -35,13 +35,15 @@ UI Patterns:
 - Table Sorting
 - Table Filtering
 
-Planned:
+## Live Demo
 
-- Node Clustering
+View a live demo at [https://artemis-platform.com/](https://artemis-platform.com/).
 
-## Demo
+![image](https://github.com/artemis-platform/artemis_platform/blob/master/docs/artemis-platform-screenshot-roles.png)
 
-A container-based demo environment is available. Assuming [docker](https://www.docker.com/) and [docker compose](https://docs.docker.com/compose/) is installed:
+## Local Demo
+
+A docker based demo environment is available to run locally. Assuming [docker](https://www.docker.com/) and [docker compose](https://docs.docker.com/compose/) is installed:
 
 ```bash
 bin/demo/build # Build the demo environment
@@ -49,6 +51,8 @@ bin/demo/up # Start the demo environment
 bin/demo/stop # Stop the demo environment
 bin/demo/remove # Remove the demo environment
 ```
+
+Once built and started, the demo environment is available at: http://localhost:4077
 
 ## Development
 
@@ -61,7 +65,3 @@ To build a new application using Artemis, see the [`DEVELOPMENT.md`](DEVELOPMENT
 > ### [Artemis Dashboard](https://github.com/artemis-platform/artemis_dashboard)
 
 Artemis Dashboard is an example of a complete application (including UI and design) built on top of Artemis Platform.
-
-> ### [Artemis Teams](https://github.com/artemis-platform/artemis_teams)
-
-Collaborative Team-Based Tools written in Elixir and Phoenix.
