@@ -60,6 +60,8 @@ To build a new application using Artemis, see the [`DEVELOPMENT.md`](DEVELOPMENT
 
 ## Looking for More?
 
+[![Artemis Dashboard Home](https://github.com/artemis-platform/artemis_dashboard/blob/master/docs/artemis-dashboard-home.png)](https://artemis-dashboard.com/)
+
 > ### [Artemis Dashboard](https://github.com/artemis-platform/artemis_dashboard)
 
 Artemis Dashboard is an example of a complete application (including UI and design) built on top of Artemis Platform.
