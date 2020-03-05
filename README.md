@@ -9,6 +9,8 @@ Artemis Platform contains enterprise ready patterns for web applications in Elix
 - A starting point for a new web application
 - A pattern reference for an existing web application
 
+View a live demo at [https://artemis-platform.com/](https://artemis-platform.com/).
+
 ## Patterns
 
 General Patterns:
@@ -35,15 +37,11 @@ UI Patterns:
 - Table Sorting
 - Table Filtering
 
-## Live Demo
+## Demo
 
 View a live demo at [https://artemis-platform.com/](https://artemis-platform.com/).
 
-![image](https://github.com/artemis-platform/artemis_platform/blob/master/docs/artemis-platform-screenshot-roles.png)
-
-## Local Demo
-
-A docker based demo environment is available to run locally. Assuming [docker](https://www.docker.com/) and [docker compose](https://docs.docker.com/compose/) is installed:
+Or spin up a demo locally. Assuming [docker](https://www.docker.com/) and [docker compose](https://docs.docker.com/compose/) is installed:
 
 ```bash
 bin/demo/build # Build the demo environment
