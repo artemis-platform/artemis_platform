@@ -144,12 +144,16 @@ defmodule Artemis.CacheInstance do
   @doc """
   Clear all cache data
   """
-  def reset(module), do: stop(module)
+  def reset(module) do
+    GenServer.call(get_cache_server_name(module), :reset)
+  end
 
   @doc """
   Stop the cache GenServer and the linked Cachex process
   """
-  def stop(module), do: GenServer.stop(get_cache_server_name(module))
+  def stop(module) do
+    GenServer.call(get_cache_server_name(module), :stop)
+  end
 
   # Instance Callbacks
 
@@ -179,6 +183,10 @@ defmodule Artemis.CacheInstance do
 
     {:reply, entry, state}
   end
+
+  def handle_call(:reset, _from, state), do: reset_cache(state)
+
+  def handle_call(:stop, _from, state), do: stop_cache(state)
 
   @impl true
   def handle_info(%{event: event}, state) do
@@ -265,4 +273,22 @@ defmodule Artemis.CacheInstance do
   end
 
   defp convert_expiration_option(options), do: options
+
+  defp reset_cache(state, event \\ %{}) do
+    cachex_instance_name = get_cachex_instance_name(state.module)
+
+    {:ok, _} = Cachex.reset(cachex_instance_name)
+
+    :ok = CacheEvent.broadcast("cache:reset", state.module, event)
+
+    Logger.debug("#{state.cachex_instance_name}: Cache reset by event #{event}")
+
+    {:noreply, :state}
+  end
+
+  defp stop_cache(state) do
+    :ok = CacheEvent.broadcast("cache:stopped", state.module)
+
+    {:stop, :normal, state}
+  end
 end
