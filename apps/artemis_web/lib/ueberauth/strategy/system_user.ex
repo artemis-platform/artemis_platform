@@ -39,7 +39,12 @@ defmodule Ueberauth.Strategy.SystemUser do
   end
 
   def extra(conn) do
-    struct(Extra, raw_info: conn.params)
+    raw_info = %{
+      params: conn.params,
+      state: conn.params["state"]
+    }
+
+    struct(Extra, raw_info: raw_info)
   end
 
   defp option(conn, name) do
