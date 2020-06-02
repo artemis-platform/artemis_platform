@@ -45,10 +45,12 @@ defmodule ArtemisWeb.AuthController do
          {:ok, _} <- Event.broadcast(session, "session:created:web", user) do
       Logger.debug("Log In with Auth Provider Session: " <> inspect(session))
 
+      redirect = Artemis.Helpers.deep_get(data, [:extra, :raw_info, :state]) || "/"
+
       conn
       |> sign_in(user)
       |> put_flash(:info, "Successfully logged in")
-      |> redirect(to: "/")
+      |> redirect(to: redirect)
     else
       error ->
         Logger.debug("Log In With Provider Error: " <> inspect(error))
