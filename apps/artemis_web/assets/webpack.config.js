@@ -16,7 +16,10 @@ module.exports = (env, options) => {
       ]
     },
     entry: {
-      'app': glob.sync('./vendor/**/*.js').concat(['./js/app.js'])
+      // NOTE: Changed the default order to load `app.js` before `./vendor/*`
+      // files. This ensures node modules defined in `app.js` and made globally
+      // available can be used by vendor files.
+      'app': ['./js/app.js'].concat(glob.sync('./vendor/**/*.js'))
     },
     output: {
       filename: '[name].js',
