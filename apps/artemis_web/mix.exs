@@ -51,7 +51,7 @@ defmodule ArtemisWeb.MixProject do
       {:oauth2, "~> 0.9"},
       {:nimble_csv, "~> 0.5"},
       {:scrivener_html, git: "https://github.com/artemis-platform/scrivener_html.git", branch: "master"},
-      {:timex, "~> 3.0"},
+      {:timex, "~> 3.6"},
       {:ueberauth, "~> 0.6"},
       {:ueberauth_github, "~> 0.7"},
       {:artemis, in_umbrella: true},
