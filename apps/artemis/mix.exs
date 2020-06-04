@@ -41,7 +41,7 @@ defmodule Artemis.MixProject do
       {:scrivener_ecto, "~> 2.0"},
       {:jason, "~> 1.0"},
       {:assoc, "~> 0.1"},
-      {:config_tuples, "~> 0.2.0"},
+      {:config_tuples, "~> 0.4.2"},
       {:cachex, "~> 3.1"},
       {:hashids, "~> 2.0"},
       {:timex, "~> 3.6"},

@@ -37,8 +37,5 @@ RUN if [ "${MIX_ENV}" = "prod" ]; then \
   cp bin/docker-prod/entrypoint /app/entrypoint && \
   bin/docker-prod/build-release && \
   mkdir -p /app/release && \
-  cp _build/${MIX_ENV}/rel/artemis/releases/*/artemis.tar.gz /app/release && \
-  cd /app/release && \
-  tar -xzf artemis.tar.gz && \
-  rm artemis.tar.gz; \
+  cp -pr _build/${MIX_ENV}/rel/artemis /app/release/artemis; \
 fi

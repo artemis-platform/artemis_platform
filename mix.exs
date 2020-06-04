@@ -6,7 +6,23 @@ defmodule Artemis.Umbrella.MixProject do
       apps_path: "apps",
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+      releases: [
+        artemis: [
+          config_providers: [{ConfigTuples.Provider, ""}],
+          version: "0.1.0",
+          include_executables_for: [:unix],
+          applications: [
+            artemis: :permanent,
+            artemis_api: :permanent,
+            artemis_log: :permanent,
+            artemis_pubsub: :permanent,
+            artemis_web: :permanent,
+            release_manager: :load,
+            runtime_tools: :permanent
+          ]
+        ]
+      ]
     ]
   end
 
@@ -24,8 +40,8 @@ defmodule Artemis.Umbrella.MixProject do
   # and cannot be accessed from applications inside the apps folder
   defp deps do
     [
-      {:distillery, "~> 2.0"},
-      {:config_tuples, "~> 0.2.0"}
+      {:distillery, "~> 2.1"},
+      {:config_tuples, "~> 0.4.2"}
     ]
   end
 
