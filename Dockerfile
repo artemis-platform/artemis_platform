@@ -9,13 +9,13 @@ SHELL ["/bin/bash", "-c"]
 RUN apt-get update && \
     apt-get install -y apt-utils build-essential inotify-tools postgresql-client
 
-RUN curl -SL https://deb.nodesource.com/setup_10.x | bash - && \
+RUN curl -SL https://deb.nodesource.com/setup_12.x | bash - && \
     apt-get install -y nodejs && \
     npm --global install yarn
 
 RUN mix local.hex --force && \
     mix local.rebar --force && \
-    mix archive.install --force hex phx_new 1.4.1
+    mix archive.install --force hex phx_new 1.5.3
 
 WORKDIR /app
 COPY . /app/source
