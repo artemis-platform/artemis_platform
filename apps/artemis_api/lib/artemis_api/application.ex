@@ -5,6 +5,7 @@ defmodule ArtemisApi.Application do
     import Supervisor.Spec
 
     children = [
+      # {Phoenix.PubSub, name: ArtemisPubSub},
       supervisor(ArtemisApi.Endpoint, [])
     ]
 

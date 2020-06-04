@@ -8,6 +8,7 @@ defmodule ArtemisWeb.Application do
   def start(_type, _args) do
     # List all child processes to be supervised
     children = [
+      # {Phoenix.PubSub, name: ArtemisPubSub},
       # Start the endpoint when the application starts
       ArtemisWeb.Endpoint
       # Starts a worker by calling: ArtemisWeb.Worker.start_link(arg)

@@ -17,7 +17,8 @@ defmodule ArtemisWeb.ConnCase do
 
   using do
     quote do
-      use Phoenix.ConnTest
+      import Plug.Conn
+      import Phoenix.ConnTest
 
       import ArtemisWeb.ConnHelpers
 
