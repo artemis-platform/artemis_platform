@@ -21,10 +21,10 @@ addons:
 services:
   - xvfb
 
-cache:
-  directories:
-    - _build
-    - deps
+# cache:
+#   directories:
+#     - _build
+#     - deps
 
 env:
   global:
