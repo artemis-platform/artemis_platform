@@ -1,4 +1,4 @@
-FROM elixir:1.8.1
+FROM elixir:1.10.3
 
 ARG MIX_ENV=prod
 
