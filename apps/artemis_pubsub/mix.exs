@@ -25,8 +25,8 @@ defmodule ArtemisPubSub.Mixfile do
 
   defp deps do
     [
-      {:phoenix, "~> 1.3"},
-      {:phoenix_pubsub, "~> 1.0"},
+      {:phoenix, "~> 1.5"},
+      {:phoenix_pubsub, "~> 2.0"},
       {:jason, "~> 1.0"}
     ]
   end

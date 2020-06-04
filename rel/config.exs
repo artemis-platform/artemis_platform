@@ -1,3 +1,6 @@
+# NOTE: Deprecated in favor of `mix release` in Elixir >= 1.9 which is
+# configured in `mix.exs`: https://hexdocs.pm/mix/Mix.Tasks.Release.html
+
 # Import all plugins from `rel/plugins`
 # They can then be used by adding `plugin MyPlugin` to
 # either an environment, or release definition, where

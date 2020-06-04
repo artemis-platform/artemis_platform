@@ -30,7 +30,7 @@ defmodule ArtemisLog.MixProject do
 
   defp deps do
     [
-      {:ecto_sql, "~> 3.0"},
+      {:ecto_sql, "~> 3.4"},
       {:postgrex, ">= 0.0.0"},
       {:jason, "~> 1.0"},
       {:scrivener_ecto, "~> 2.0"},

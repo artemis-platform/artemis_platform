@@ -28,4 +28,6 @@ config :artemis, :users,
 
 config :artemis, :interval_worker, default_log_limit: System.get_env("ARTEMIS_INTERVAL_WORKER_DEFAULT_LOG_LIMIT")
 
+config :config_tuples, distillery: false
+
 import_config "#{Mix.env()}.exs"

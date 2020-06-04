@@ -36,15 +36,15 @@ defmodule Artemis.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:ecto_sql, "~> 3.0"},
+      {:ecto_sql, "~> 3.4"},
       {:postgrex, ">= 0.0.0"},
       {:scrivener_ecto, "~> 2.0"},
       {:jason, "~> 1.0"},
       {:assoc, "~> 0.1"},
-      {:config_tuples, "~> 0.2.0"},
+      {:config_tuples, "~> 0.4.2"},
       {:cachex, "~> 3.1"},
       {:hashids, "~> 2.0"},
-      {:timex, "~> 3.0"},
+      {:timex, "~> 3.6"},
       {:ex_machina, "~> 2.2"},
       {:faker, "~> 0.11"},
       {:licensir, "~> 0.4", only: :dev, runtime: false},

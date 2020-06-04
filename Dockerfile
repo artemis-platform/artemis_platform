@@ -1,4 +1,4 @@
-FROM elixir:1.8.1
+FROM elixir:1.10.3
 
 ARG MIX_ENV=prod
 
@@ -9,13 +9,13 @@ SHELL ["/bin/bash", "-c"]
 RUN apt-get update && \
     apt-get install -y apt-utils build-essential inotify-tools postgresql-client
 
-RUN curl -SL https://deb.nodesource.com/setup_10.x | bash - && \
+RUN curl -SL https://deb.nodesource.com/setup_12.x | bash - && \
     apt-get install -y nodejs && \
     npm --global install yarn
 
 RUN mix local.hex --force && \
     mix local.rebar --force && \
-    mix archive.install --force hex phx_new 1.4.1
+    mix archive.install --force hex phx_new 1.5.3
 
 WORKDIR /app
 COPY . /app/source
@@ -37,8 +37,5 @@ RUN if [ "${MIX_ENV}" = "prod" ]; then \
   cp bin/docker-prod/entrypoint /app/entrypoint && \
   bin/docker-prod/build-release && \
   mkdir -p /app/release && \
-  cp _build/${MIX_ENV}/rel/artemis/releases/*/artemis.tar.gz /app/release && \
-  cd /app/release && \
-  tar -xzf artemis.tar.gz && \
-  rm artemis.tar.gz; \
+  cp -pr _build/${MIX_ENV}/rel/artemis /app/release/artemis; \
 fi

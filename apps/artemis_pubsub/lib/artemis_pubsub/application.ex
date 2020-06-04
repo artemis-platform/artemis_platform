@@ -5,7 +5,8 @@ defmodule ArtemisPubSub.Application do
     import Supervisor.Spec, warn: false
 
     children = [
-      supervisor(Phoenix.PubSub.PG2, [ArtemisPubSub, []]),
+      {Phoenix.PubSub, name: ArtemisPubSub},
+      # supervisor(Phoenix.PubSub.PG2, [ArtemisPubSub, []]),
       supervisor(ArtemisPubSub.Presence, [])
     ]
 

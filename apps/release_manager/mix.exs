@@ -29,7 +29,7 @@ defmodule ReleaseManager.Mixfile do
 
   defp deps do
     [
-      {:ecto_sql, "~> 3.0"},
+      {:ecto_sql, "~> 3.4"},
       {:postgrex, ">= 0.0.0"}
     ]
   end
