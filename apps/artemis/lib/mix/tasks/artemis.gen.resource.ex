@@ -479,16 +479,7 @@ defmodule Mix.Tasks.Artemis.Gen.Resource do
       Open the phoenix router `apps/#{config.app_web}/lib/#{config.app_web}/router.ex`,
       and add a new entry:
 
-          # #{config.cases.target.single.spacecase}
-
-          post "/#{root}/bulk-actions", #{controller}, :index_bulk_actions
-          get "/#{root}/event-logs", #{controller}, :index_event_log_list
-          get "/#{root}/event-logs/:id", #{controller}, :index_event_log_details
-
-          resources "/#{root}", #{controller} do
-            get "/event-logs", #{controller}, :show_event_log_list, as: :event_log
-            get "/event-logs/:id", #{controller}, :show_event_log_details, as: :event_log
-          end
+          resources "/#{root}", #{controller}
 
       Note: depending on the resource the actual routes may be different. Use the
       source resource as a reference.
