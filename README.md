@@ -16,6 +16,7 @@ View a live demo at [https://artemis-platform.com/](https://artemis-platform.com
 General Patterns:
 
 - Authentication with OAuth2
+- Resource Template Generator
 - Role-Based Access Control [⬈ Documentation](https://github.com/artemis-platform/artemis_platform/wiki/Role-Based-Access-Control) [⬈ Discussion](https://github.com/artemis-platform/artemis_platform/issues/12)
 - Full Text Search [⬈ Documentation](https://github.com/artemis-platform/artemis_platform/wiki/Full-Text-Search) [⬈ Discussion](https://github.com/artemis-platform/artemis_platform/issues/13)
 - Event Based Pub/Sub
