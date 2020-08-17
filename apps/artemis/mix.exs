@@ -45,6 +45,7 @@ defmodule Artemis.MixProject do
       {:cachex, "~> 3.1"},
       {:hashids, "~> 2.0"},
       {:timex, "~> 3.6"},
+      {:progress_bar, "> 0.0.0"},
       {:ex_machina, "~> 2.2"},
       {:faker, "~> 0.11"},
       {:licensir, "~> 0.4", only: :dev, runtime: false},
