@@ -238,21 +238,25 @@ defmodule Mix.Tasks.Artemis.Gen.Resource do
           print(green("✓") ++ [" ", "Completed step #{step}"])
           print(@divider)
 
-          case continue_to_next_step?(current_index) do
+          next_step? = length(@steps) != current_index
+
+          case next_step? && continue_to_next_step?(current_index) do
             true ->
               print(@divider)
               current_index + 1
 
             false ->
-              print(@divider)
+              line_break()
+              print(green("✓ All Steps Completed"))
+              line_break()
               exit_task(0)
           end
       end
     end)
   end
 
-  defp continue_to_next_step?(current_index) do
-    next_step = Enum.at(@steps, current_index + 1)
+  defp continue_to_next_step?(index) do
+    next_step = Enum.at(@steps, index)
 
     response =
       "Continue to next step #{next_step}?"
@@ -308,6 +312,8 @@ defmodule Mix.Tasks.Artemis.Gen.Resource do
 
     test_path = execute("ls #{test_dir}/*_create_#{config.cases.target.plural.snakecase_lower}.exs")
 
+    target_path = if test_dir?, do: test_path, else: priv_path
+
     source_path =
       cond do
         test_dir? -> execute("ls #{test_dir}/*_create_#{config.cases.source.single.snakecase_lower}*")
@@ -316,7 +322,7 @@ defmodule Mix.Tasks.Artemis.Gen.Resource do
       end
 
     print("""
-      Open the database migration file `#{test_path || priv_path}`, adding
+      Open the database migration file `#{target_path}`, adding
       fields, associations and indexes.
 
       Use the source resource migration file `#{source_path}` as an example.

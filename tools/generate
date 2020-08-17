@@ -12,6 +12,10 @@
 #     git clean -fd && rm -rf apps/artemis && rm -rf apps/artemis_web/lib && rm -rf apps/artemis_web/test && git checkout -- apps/
 #
 
+echo "WARNING: Deprecated"
+echo "Use \`$ mix artemis.gen.resource\` instead"
+exit 1
+
 which gsed
 
 if [ $? -ne 0 ]; then
