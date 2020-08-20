@@ -83,6 +83,16 @@ defmodule Artemis.ContextCache do
       def call_with_cache(arg1, arg2, arg3, arg4, arg5), do: fetch_cached([arg1, arg2, arg3, arg4, arg5])
 
       @doc """
+      Generic wrapper function to add caching around `call`
+      """
+      def call_and_update_cache(), do: update_cache([])
+      def call_and_update_cache(arg1), do: update_cache([arg1])
+      def call_and_update_cache(arg1, arg2), do: update_cache([arg1, arg2])
+      def call_and_update_cache(arg1, arg2, arg3), do: update_cache([arg1, arg2, arg3])
+      def call_and_update_cache(arg1, arg2, arg3, arg4), do: update_cache([arg1, arg2, arg3, arg4])
+      def call_and_update_cache(arg1, arg2, arg3, arg4, arg5), do: update_cache([arg1, arg2, arg3, arg4, arg5])
+
+      @doc """
       Clear all values from cache. Returns successfully if cache is not started.
       """
       def reset_cache() do
@@ -93,6 +103,18 @@ defmodule Artemis.ContextCache do
       end
 
       # Helpers
+
+      defp update_cache(args) do
+        {:ok, _} = create_cache()
+
+        result = apply(__MODULE__, :call, args)
+
+        key = get_cache_key(args)
+
+        Artemis.CacheInstance.put(__MODULE__, key, result)
+      rescue
+        error in MatchError -> handle_match_error(args, error)
+      end
 
       defp fetch_cached(args) do
         {:ok, _} = create_cache()

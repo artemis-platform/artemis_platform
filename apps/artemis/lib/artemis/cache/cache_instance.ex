@@ -5,6 +5,8 @@ defmodule Artemis.CacheInstance do
 
   require Logger
 
+  alias Artemis.CacheEvent
+
   defmodule CacheEntry do
     defstruct [:data, :inserted_at, :key]
   end
@@ -64,6 +66,8 @@ defmodule Artemis.CacheInstance do
     stats: true
   ]
 
+  @fetch_timeout :timer.seconds(120)
+
   # Server Callbacks
 
   def start_link(options) do
@@ -107,7 +111,7 @@ defmodule Artemis.CacheInstance do
       nil ->
         Logger.debug("#{get_cachex_instance_name(module)}: cache miss")
 
-        GenServer.call(get_cache_server_name(module), {:fetch, key, getter})
+        GenServer.call(get_cache_server_name(module), {:fetch, key, getter}, @fetch_timeout)
 
       value ->
         Logger.debug("#{get_cachex_instance_name(module)}: cache hit")
@@ -144,19 +148,25 @@ defmodule Artemis.CacheInstance do
   @doc """
   Clear all cache data
   """
-  def reset(module), do: stop(module)
+  def reset(module) do
+    stop(module)
+
+    :ok = CacheEvent.broadcast("cache:reset", module)
+  end
 
   @doc """
   Stop the cache GenServer and the linked Cachex process
   """
-  def stop(module), do: GenServer.stop(get_cache_server_name(module))
+  def stop(module) do
+    GenServer.stop(get_cache_server_name(module))
+
+    :ok = CacheEvent.broadcast("cache:stopped", module)
+  end
 
   # Instance Callbacks
 
   @impl true
   def init(initial_state) do
-    :ok = subscribe_to_events(initial_state)
-
     cachex_options = create_cachex_options(initial_state)
 
     {:ok, cachex_instance_pid} = create_cachex_instance(initial_state, cachex_options)
@@ -165,6 +175,10 @@ defmodule Artemis.CacheInstance do
       initial_state
       |> Map.put(:cachex_instance_pid, cachex_instance_pid)
       |> Map.put(:cachex_options, cachex_options)
+
+    subscribe_to_events(initial_state)
+
+    :ok = CacheEvent.broadcast("cache:started", initial_state.module)
 
     {:ok, state}
   end
@@ -181,17 +195,7 @@ defmodule Artemis.CacheInstance do
   end
 
   @impl true
-  def handle_info(%{event: event}, state) do
-    case Enum.member?(state.cache_reset_on_events, event) do
-      true ->
-        Logger.debug("#{state.cachex_instance_name}: Cache reset by event #{event}")
-
-        {:stop, :normal, state}
-
-      false ->
-        {:noreply, state}
-    end
-  end
+  def handle_info(%{event: event, payload: payload}, state), do: process_event(event, payload, state)
 
   # Cachex Helpers
 
@@ -236,13 +240,24 @@ defmodule Artemis.CacheInstance do
     end
   end
 
-  # Helpers
+  # Helpers - Events
 
-  defp subscribe_to_events(_state) do
+  defp subscribe_to_events(%{cache_reset_on_events: events}) when length(events) > 0 do
     topic = Artemis.Event.get_broadcast_topic()
 
-    ArtemisPubSub.subscribe(topic)
+    :ok = ArtemisPubSub.subscribe(topic)
   end
+
+  defp subscribe_to_events(_state), do: :skipped
+
+  defp process_event(event, payload, state) do
+    case Enum.member?(state.cache_reset_on_events, event) do
+      true -> reset_cache(state, payload)
+      false -> {:noreply, state}
+    end
+  end
+
+  # Helpers
 
   defp create_cachex_options(state) do
     passed_options = convert_expiration_option(state.cachex_options)
@@ -265,4 +280,12 @@ defmodule Artemis.CacheInstance do
   end
 
   defp convert_expiration_option(options), do: options
+
+  defp reset_cache(state, event) do
+    :ok = CacheEvent.broadcast("cache:reset", state.module, event)
+
+    Logger.debug("#{state.cachex_instance_name}: Cache reset by event #{event}")
+
+    {:stop, :normal, state}
+  end
 end
