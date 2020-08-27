@@ -14,7 +14,7 @@ defmodule Mix.Tasks.Artemis.Gen.Resource do
     "artemis_log"
   ]
 
-  @divider "…………………………………………………………………………………………………………………………………"
+  @divider "……………………………………………………………………………………………………………………………………………………………………………………………………………………"
 
   @steps [
     "Database Configuration",
@@ -48,9 +48,25 @@ defmodule Mix.Tasks.Artemis.Gen.Resource do
 
   defp print_welcome_message() do
     print("""
-    The `artemis.gen.resource` tool generates a new resource, using an
-    existing resource's files as a template.
+
+    ## Welcome!
+
+    The `artemis.gen.resource` tool generates a new resource, using an existing
+    resource's files as a template.
+
+    ## Usage
+
+    The process is broken down into individual steps. Run this in a separate
+    terminal screen and review changes after each step before proceeding to
+    the next.
+
+    Some code cannot be generated directly by the tool. In those cases an
+    action step is shown:
     """)
+
+    print(["    ", yellow("Action: "), "An example of a required user action", "\n"])
+
+    prompt(["Ready to get started?", " ", gray("Press enter to continue")])
   end
 
   defp get_config(args) do
@@ -74,20 +90,32 @@ defmodule Mix.Tasks.Artemis.Gen.Resource do
   end
 
   defp get_initial_user_options(config) do
-    app = choose("App?", @apps, default: "artemis")
+    line_break()
+    print("## Configuration")
+    line_break()
+
+    app = choose("1. App?", @apps, default: "artemis")
+    line_break()
 
     existing_resource_prompt = [
-      "Name of existing resource to use as a template? ",
+      "2. Name of existing resource to use as a template? ",
       gray("for example `Feature`")
     ]
 
     source_single = prompt(existing_resource_prompt, required: true)
-    source_plural = prompt("Plural form of existing resource?", default: source_single <> "s", required: true)
+    line_break()
 
-    target_single = prompt("Name of new resource?", required: true)
-    target_plural = prompt("Plural form of new resource?", default: target_single <> "s", required: true)
+    source_plural = prompt("3. Plural form of existing resource?", default: source_single <> "s", required: true)
+    line_break()
 
-    step = choose("Start on which step?", @steps, default: hd(@steps))
+    target_single = prompt("4. Name of new resource?", required: true)
+    line_break()
+
+    target_plural = prompt("5. Plural form of new resource?", default: target_single <> "s", required: true)
+    line_break()
+
+    step = choose("6. Start on which step?", @steps, default: hd(@steps))
+    line_break()
 
     user_options = %{
       app: app,
@@ -97,6 +125,12 @@ defmodule Mix.Tasks.Artemis.Gen.Resource do
       target_plural: target_plural,
       step: step
     }
+
+    print(["Configuration complete:\n\n", inspect(user_options, pretty: true)])
+    line_break()
+
+    prompt(["Ready to get execute the next step?", " ", gray("Press enter to continue")])
+    line_break()
 
     config
     |> Map.put(:app, app)
@@ -228,26 +262,35 @@ defmodule Mix.Tasks.Artemis.Gen.Resource do
       cond do
         current_index > get_step_index(step) ->
           print("Skipped step #{step}")
-          print(@divider)
 
           current_index
 
         current_index == get_step_index(step) ->
-          print("Executing step #{step}")
-          execute_step(step, config)
-          print(green("✓") ++ [" ", "Completed step #{step}"])
           print(@divider)
+          print("Executing step #{step}")
+          print(@divider)
+
+          execute_step(step, config)
+
+          line_break()
+          print(green("✓") ++ [" ", "Completed step #{step}"])
+          line_break()
 
           next_step? = length(@steps) != current_index
 
-          case next_step? && continue_to_next_step?(current_index) do
-            true ->
-              print(@divider)
+          cond do
+            next_step? == false ->
+              line_break()
+              print(green("✓ Steps Completed"))
+              line_break()
+              exit_task(0)
+
+            next_step? && continue_to_next_step?(current_index) ->
               current_index + 1
 
-            false ->
+            true ->
               line_break()
-              print(green("✓ All Steps Completed"))
+              print(green("✓ Exit"))
               line_break()
               exit_task(0)
           end
@@ -283,10 +326,6 @@ defmodule Mix.Tasks.Artemis.Gen.Resource do
   end
 
   defp execute_step("Database Configuration", config) do
-    line_break()
-    action("Create database configuration")
-    line_break()
-
     priv_dir = "apps/#{config.app}/priv/repo/migrations"
     priv_dir? = File.exists?(priv_dir)
 
@@ -343,10 +382,9 @@ defmodule Mix.Tasks.Artemis.Gen.Resource do
 
   defp execute_step("Test Factory", config) do
     line_break()
-    action("Create test factory")
-    line_break()
+    action("""
+    Create test factory
 
-    print("""
       Open `apps/#{config.app}/test/support/factories.ex` and create an ExMachina test factory:
 
           def #{config.cases.target.single.snakecase_lower}_factory do
@@ -410,10 +448,9 @@ defmodule Mix.Tasks.Artemis.Gen.Resource do
       end
 
     line_break()
-    action("Create permissions")
-    line_break()
+    action("""
+    Create permissions
 
-    print("""
       Open `apps/artemis/lib/artemis/repo/generate_data.ex`, which is used to
       seed data into the database. Any changes here are added when the
       application is redeployed.
@@ -428,10 +465,9 @@ defmodule Mix.Tasks.Artemis.Gen.Resource do
     """)
 
     line_break()
-    action("Add permissions to roles")
-    line_break()
+    action("""
+    Add permissions to roles
 
-    print("""
       In the same `apps/artemis/lib/artemis/repo/generate_data.ex` file, find
       the section where permissions are added to roles.
 
@@ -445,10 +481,9 @@ defmodule Mix.Tasks.Artemis.Gen.Resource do
     """)
 
     line_break()
-    action("Update local development database")
-    line_break()
+    action("""
+    Update local development database
 
-    print("""
       Update the local development database with the latest permissions. From
       the command line execute:
 
@@ -472,10 +507,9 @@ defmodule Mix.Tasks.Artemis.Gen.Resource do
       end
 
     line_break()
-    action("Create routes")
-    line_break()
+    action("""
+    Create Routes
 
-    print("""
       Open the phoenix router `apps/#{config.app_web}/lib/#{config.app_web}/router.ex`,
       and add a new entry:
 
@@ -560,10 +594,9 @@ defmodule Mix.Tasks.Artemis.Gen.Resource do
       end
 
     line_break()
-    action("Add to navigation")
-    line_break()
+    action("""
+    Add to navigation
 
-    print("""
       Open the navigation config `apps/#{config.app_web}/lib/#{config.app_web}/config/navigation.ex`,
       and add a new entry:
 
