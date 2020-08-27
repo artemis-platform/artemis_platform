@@ -378,10 +378,20 @@ defmodule Mix.Tasks.Artemis.Gen.Resource do
     execute_with_all_cases(config, fn source, target ->
       replace("#{target_directory}", source, target)
     end)
+
+    line_break()
+
+    action("""
+    Update Schema
+
+      Open the schema file `#{target_directory}` and replace fields with the
+      correct values.
+    """)
   end
 
   defp execute_step("Test Factory", config) do
     line_break()
+
     action("""
     Create test factory
 
@@ -407,6 +417,20 @@ defmodule Mix.Tasks.Artemis.Gen.Resource do
     execute_with_all_cases(config, fn source, target ->
       replace("#{target_directory}", source, target)
     end)
+
+    line_break()
+
+    action("""
+    Update and Execute Schema Tests
+
+      Open the schema test file `#{target_directory}`. Review, update, and add
+      test cases accordingly.
+
+      Execute and verify tests are passing:
+
+          $ cd apps/#{config.app}
+          $ mix test test/#{config.app}/schemas/#{config.cases.target.single.snakecase_lower}_test.exs
+    """)
   end
 
   defp execute_step("Contexts", config) do
@@ -437,6 +461,20 @@ defmodule Mix.Tasks.Artemis.Gen.Resource do
     execute_with_all_cases(config, fn source, target ->
       replace("#{target_directory}", source, target)
     end)
+
+    line_break()
+
+    action("""
+    Update and Execute Context Tests
+
+      Open the context tests in `#{target_directory}`. Review, update, and add
+      test cases accordingly.
+
+      Then execute the tests:
+
+          $ cd apps/#{config.app}
+          $ mix test test/#{config.app}/contexts/#{config.cases.target.single.snakecase_lower}
+    """)
   end
 
   defp execute_step("Permissions", config) do
@@ -448,6 +486,7 @@ defmodule Mix.Tasks.Artemis.Gen.Resource do
       end
 
     line_break()
+
     action("""
     Create permissions
 
@@ -465,6 +504,7 @@ defmodule Mix.Tasks.Artemis.Gen.Resource do
     """)
 
     line_break()
+
     action("""
     Add permissions to roles
 
@@ -481,6 +521,7 @@ defmodule Mix.Tasks.Artemis.Gen.Resource do
     """)
 
     line_break()
+
     action("""
     Update local development database
 
@@ -507,6 +548,7 @@ defmodule Mix.Tasks.Artemis.Gen.Resource do
       end
 
     line_break()
+
     action("""
     Create Routes
 
@@ -561,8 +603,8 @@ defmodule Mix.Tasks.Artemis.Gen.Resource do
 
   defp execute_step("Controller Tests", config) do
     root_directory = "apps/#{config.app_web}/test/#{config.app_web}/controllers"
-    source_directory = "#{root_directory}/#{config.cases.source.single.snakecase_lower}_controller_test.ex"
-    target_directory = "#{root_directory}/#{config.cases.target.single.snakecase_lower}_controller_test.ex"
+    source_directory = "#{root_directory}/#{config.cases.source.single.snakecase_lower}_controller_test.exs"
+    target_directory = "#{root_directory}/#{config.cases.target.single.snakecase_lower}_controller_test.exs"
 
     copy("#{source_directory}", "#{target_directory}")
 
@@ -572,18 +614,46 @@ defmodule Mix.Tasks.Artemis.Gen.Resource do
     execute_with_all_cases(config, fn source, target ->
       replace("#{target_directory}", source, target)
     end)
+
+    line_break()
+
+    action("""
+    Update and Execute Controller Tests
+
+      Open the controller test file at `#{target_directory}`. Review, update, and add
+      test cases accordingly.
+
+      Then execute the tests:
+
+          $ cd apps/#{config.app_web}
+          $ mix test test/#{config.app_web}/controllers/#{config.cases.target.single.snakecase_lower}_controller_test.exs"
+    """)
   end
 
   defp execute_step("Browser Tests", config) do
     root_directory = "apps/#{config.app_web}/test/#{config.app_web}/browser"
-    source_directory = "#{root_directory}/#{config.cases.source.single.snakecase_lower}_page_test.ex"
-    target_directory = "#{root_directory}/#{config.cases.target.single.snakecase_lower}_page_test.ex"
+    source_directory = "#{root_directory}/#{config.cases.source.single.snakecase_lower}_page_test.exs"
+    target_directory = "#{root_directory}/#{config.cases.target.single.snakecase_lower}_page_test.exs"
 
     copy("#{source_directory}", "#{target_directory}")
 
     execute_with_all_cases(config, fn source, target ->
       replace("#{target_directory}", source, target)
     end)
+
+    line_break()
+
+    action("""
+    Update and Execute Browser Tests
+
+      Open the browser test file at `#{target_directory}`. Review, update, and add
+      test cases accordingly.
+
+      Then execute the tests:
+
+          $ cd apps/#{config.app_web}
+          $ mix test --include browser test/#{config.app_web}/browser/#{config.cases.target.single.snakecase_lower}_page_test.exs"
+    """)
   end
 
   defp execute_step("Navigation", config) do
@@ -594,6 +664,7 @@ defmodule Mix.Tasks.Artemis.Gen.Resource do
       end
 
     line_break()
+
     action("""
     Add to navigation
 
