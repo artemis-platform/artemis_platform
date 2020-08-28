@@ -75,6 +75,8 @@ defmodule Mix.TaskHelpers.Prompts do
   """
   def action(message) do
     print([yellow("Action: "), message])
+
+    prompt(["Action completed?", " ", gray("Press enter to continue")])
   end
 
   @doc """
