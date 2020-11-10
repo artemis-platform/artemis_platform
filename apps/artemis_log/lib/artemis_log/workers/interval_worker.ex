@@ -16,9 +16,9 @@ defmodule ArtemisLog.IntervalWorker do
 
     :name - Required. Name of the server.
     :enabled - Optional. If set to false, starts in paused state.
-    :interval - Optional. Interval between calls.
+    :interval - Optional. Integer or Atom. Interval between calls.
     :log_limit - Optional. Number of log entries to keep.
-    :delayed_start - Optional. Integer. Time to wait for initial call.
+    :delayed_start - Optional. Integer or Atom. Time to wait for initial call.
 
   For example:
 
@@ -88,7 +88,29 @@ defmodule ArtemisLog.IntervalWorker do
 
       def get_options(), do: unquote(options)
 
-      def get_option(key, default \\ nil), do: Keyword.get(get_options(), key, default)
+      def get_option(key, default \\ nil)
+
+      def get_option(:delayed_start, default) do
+        interval = Keyword.get(get_options(), :delayed_start, default)
+
+        cond do
+          interval == :next_full_minute -> ArtemisLog.Helpers.Time.get_milliseconds_to_next_minute() + :timer.minutes(1)
+          interval == :next_minute -> ArtemisLog.Helpers.Time.get_milliseconds_to_next_minute()
+          true -> interval
+        end
+      end
+
+      def get_option(:interval, default) do
+        fallback = default || @default_interval
+        interval = Keyword.get(get_options(), :interval, fallback)
+
+        cond do
+          interval == :next_minute -> ArtemisLog.Helpers.Time.get_milliseconds_to_next_minute()
+          true -> interval
+        end
+      end
+
+      def get_option(key, default), do: Keyword.get(get_options(), key, default)
 
       def get_result(name \\ nil), do: GenServer.call(get_name(name), :result)
 
