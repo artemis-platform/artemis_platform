@@ -19,7 +19,7 @@ defmodule Mix.TaskHelpers.Files do
   """
   def replace(path, source, target) do
     execute(
-      "find #{path} -type f -not -path '*node_modules*' | xargs /usr/bin/sed -i '' -e \"s/#{source}/#{target}/g\""
+      "find #{path} -type f -not -path '*node_modules*' | xargs -n 1 /usr/bin/sed -i '' -e \"s/#{source}/#{target}/g\""
     )
   end
 

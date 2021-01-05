@@ -64,7 +64,7 @@ defmodule Mix.Tasks.Artemis.Gen.Resource do
     action step is shown:
     """)
 
-    print(["    ", yellow("Action: "), "An example of a required user action", "\n"])
+    print(["    ", yellow("Action Required: "), "An example of a required user action", "\n"])
 
     prompt(["Ready to get started?", " ", gray("Press enter to continue")])
   end
@@ -625,6 +625,7 @@ defmodule Mix.Tasks.Artemis.Gen.Resource do
 
       Then execute the tests:
 
+          $ bin/local/reset-tests
           $ cd apps/#{config.app_web}
           $ mix test test/#{config.app_web}/controllers/#{config.cases.target.single.snakecase_lower}_controller_test.exs"
     """)

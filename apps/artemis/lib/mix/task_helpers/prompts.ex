@@ -74,7 +74,7 @@ defmodule Mix.TaskHelpers.Prompts do
   Print a user action callout
   """
   def action(message) do
-    print([yellow("Action: "), message])
+    print([yellow("Action Required: "), message])
 
     prompt(["Action completed?", " ", gray("Press enter to continue")])
   end
