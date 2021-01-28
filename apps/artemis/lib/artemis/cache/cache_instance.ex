@@ -192,7 +192,9 @@ defmodule Artemis.CacheInstance do
     {:reply, entry, state}
   end
 
-  def handle_call(:reset, _from, state), do: reset_cache(state)
+  def handle_call(:reset, _from, state) do
+    {:reply, :ok, reset_cache(state)}
+  end
 
   @impl true
   def handle_info(%{event: event, payload: payload}, state), do: process_event(event, payload, state)
@@ -252,7 +254,7 @@ defmodule Artemis.CacheInstance do
 
   defp process_event(event, payload, state) do
     case Enum.member?(state.cache_reset_on_events, event) do
-      true -> reset_cache(state, payload)
+      true -> {:noreply, reset_cache(state, payload)}
       false -> {:noreply, state}
     end
   end
@@ -284,12 +286,12 @@ defmodule Artemis.CacheInstance do
   defp reset_cache(state, event \\ %{}) do
     cachex_instance_name = get_cachex_instance_name(state.module)
 
-    {:ok, _} = Cachex.reset(cachex_instance_name)
+    {:ok, _} = Cachex.clear(cachex_instance_name)
 
     :ok = CacheEvent.broadcast("cache:reset", state.module, event)
 
     Logger.debug("#{state.cachex_instance_name}: Cache reset by event #{event}")
 
-    {:noreply, :state}
+    state
   end
 end

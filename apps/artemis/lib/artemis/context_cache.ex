@@ -6,7 +6,6 @@ defmodule Artemis.ContextCache do
 
   Takes the following options:
 
-    :cache_reset_on_cloudant_changes - Optional. List. Cloudant events that reset cache
     :cache_reset_on_events - Optional. List. Events that reset cache.
     :cachex_options - Optional. List. Options to pas to cachex instance
     :cache_key - Optional. Atom or Function. See section about Cache Keys.
