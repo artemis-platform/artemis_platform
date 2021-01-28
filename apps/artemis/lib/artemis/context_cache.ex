@@ -2,6 +2,17 @@ defmodule Artemis.ContextCache do
   @moduledoc """
   Extends Context modules with cache functions
 
+  ## Options
+
+  Takes the following options:
+
+    :cache_reset_on_cloudant_changes - Optional. List. Cloudant events that reset cache
+    :cache_reset_on_events - Optional. List. Events that reset cache.
+    :cachex_options - Optional. List. Options to pas to cachex instance
+    :cache_key - Optional. Atom or Function. See section about Cache Keys.
+    :rescue - Optional. Boolean. When set to true, rescues from exceptions in
+      the `call()` function and returns a generic `{:error, _} tuple
+
   ## Cache Keys
 
   A single cache instance can store many values under different keys. By
@@ -72,6 +83,8 @@ defmodule Artemis.ContextCache do
       alias Artemis.CacheInstance
       alias Artemis.Repo
 
+      @default_rescue_option true
+
       @doc """
       Generic wrapper function to add caching around `call`
       """
@@ -107,8 +120,7 @@ defmodule Artemis.ContextCache do
       defp update_cache(args) do
         {:ok, _} = create_cache()
 
-        result = apply(__MODULE__, :call, args)
-
+        result = execute_call(args)
         key = get_cache_key(args)
 
         Artemis.CacheInstance.put(__MODULE__, key, result)
@@ -119,15 +131,26 @@ defmodule Artemis.ContextCache do
       defp fetch_cached(args) do
         {:ok, _} = create_cache()
 
-        getter = fn ->
-          apply(__MODULE__, :call, args)
-        end
-
+        getter = fn -> execute_call(args) end
         key = get_cache_key(args)
 
         Artemis.CacheInstance.fetch(__MODULE__, key, getter)
       rescue
         error in MatchError -> handle_match_error(args, error)
+      end
+
+      defp execute_call(args) do
+        apply(__MODULE__, :call, args)
+      rescue
+        error ->
+          case Keyword.get(unquote(options), :rescue, @default_rescue_option) do
+            true ->
+              Artemis.Helpers.rescue_log(__STACKTRACE__, __MODULE__, error)
+              {:error, "Error fetching cache data."}
+
+            false ->
+              reraise(error, __STACKTRACE__)
+          end
       end
 
       defp handle_match_error(args, %MatchError{term: {:error, {:already_started, _}}}) do
