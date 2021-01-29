@@ -124,7 +124,7 @@ defmodule Artemis.ContextCache do
 
         Artemis.CacheInstance.put(__MODULE__, key, result)
       rescue
-        error in MatchError -> handle_match_error(args, error)
+        error in MatchError -> handle_match_error(error, args, &update_cache/1)
       end
 
       defp fetch_cached(args) do
@@ -135,7 +135,7 @@ defmodule Artemis.ContextCache do
 
         Artemis.CacheInstance.fetch(__MODULE__, key, getter)
       rescue
-        error in MatchError -> handle_match_error(args, error)
+        error in MatchError -> handle_match_error(error, args, &fetch_cached/1)
       end
 
       defp execute_call(args) do
@@ -152,7 +152,7 @@ defmodule Artemis.ContextCache do
           end
       end
 
-      defp handle_match_error(args, %MatchError{term: {:error, {:already_started, _}}}) do
+      defp handle_match_error(%MatchError{term: {:error, {:already_started, _}}}, args, callback) do
         # The CacheInstance contains two linked processes, a cache GenServer and a
         # Cachex instance. The GenServer starts a linked Cachex instance on initialization.
         #
@@ -165,10 +165,10 @@ defmodule Artemis.ContextCache do
         # Since a Cachex instance is now running, resending the request to the
         # GenServer will succeed.
         #
-        fetch_cached(args)
+        callback.(args)
       end
 
-      defp handle_match_error(args, _error) do
+      defp handle_match_error(_error, args) do
         # The CacheInstance contains two linked processes, a cache GenServer and a
         # Cachex instance. When a CacheInstance is reset, the cache GenServer is
         # stopped. Because they are linked, shortly after the Cachex instance is also
@@ -225,7 +225,7 @@ defmodule Artemis.ContextCache do
       defp get_user_permissions(args) do
         args
         |> get_user_arg()
-        |> Repo.preload([:permissions])
+        |> Artemis.Repo.preload([:permissions])
         |> Map.get(:permissions)
         |> Enum.map(& &1.slug)
         |> Enum.sort()
