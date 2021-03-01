@@ -11,7 +11,7 @@ export MIX_ENV=prod
 # Enables dynamic environmental variables within distillery releases using
 # the ConfigTuples plugin.
 #
-sed -r -i "" -e "s/System.get_env[(]([\"a-zA-Z_]+)[)]/{:system, \1}/g" apps/**/config/*.exs config/*.exs
+sed -r -i -e "s/System.get_env[(]([\"a-zA-Z_]+)[)]/{:system, \1}/g" apps/**/config/*.exs config/*.exs
 
 # Build Release
 MIX_ENV=${MIX_ENV} mix release artemis
