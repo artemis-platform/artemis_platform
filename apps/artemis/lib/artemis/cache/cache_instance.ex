@@ -66,7 +66,7 @@ defmodule Artemis.CacheInstance do
     stats: true
   ]
 
-  @fetch_timeout :timer.seconds(120)
+  @fetch_timeout :timer.minutes(5)
 
   # Server Callbacks
 
@@ -134,7 +134,7 @@ defmodule Artemis.CacheInstance do
 
   def get_cachex_instance_name(module), do: String.to_atom("#{module}.CachexInstance")
 
-  def get_cachex_options(module), do: GenServer.call(get_cache_server_name(module), :cachex_options)
+  def get_cachex_options(module), do: GenServer.call(get_cache_server_name(module), :cachex_options, @fetch_timeout)
 
   def get_name(module), do: get_cache_server_name(module)
 
@@ -149,9 +149,7 @@ defmodule Artemis.CacheInstance do
   Clear all cache data
   """
   def reset(module) do
-    stop(module)
-
-    :ok = CacheEvent.broadcast("cache:reset", module)
+    GenServer.call(get_cache_server_name(module), :reset)
   end
 
   @doc """
@@ -192,6 +190,10 @@ defmodule Artemis.CacheInstance do
     entry = fetch_from_cache(state.module, key, getter)
 
     {:reply, entry, state}
+  end
+
+  def handle_call(:reset, _from, state) do
+    {:reply, :ok, reset_cache(state)}
   end
 
   @impl true
@@ -252,7 +254,7 @@ defmodule Artemis.CacheInstance do
 
   defp process_event(event, payload, state) do
     case Enum.member?(state.cache_reset_on_events, event) do
-      true -> reset_cache(state, payload)
+      true -> {:noreply, reset_cache(state, payload)}
       false -> {:noreply, state}
     end
   end
@@ -281,11 +283,15 @@ defmodule Artemis.CacheInstance do
 
   defp convert_expiration_option(options), do: options
 
-  defp reset_cache(state, event) do
+  defp reset_cache(state, event \\ %{}) do
+    cachex_instance_name = get_cachex_instance_name(state.module)
+
+    {:ok, _} = Cachex.clear(cachex_instance_name)
+
     :ok = CacheEvent.broadcast("cache:reset", state.module, event)
 
     Logger.debug("#{state.cachex_instance_name}: Cache reset by event #{event}")
 
-    {:stop, :normal, state}
+    state
   end
 end

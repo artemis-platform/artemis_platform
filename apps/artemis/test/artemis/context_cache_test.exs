@@ -7,6 +7,15 @@ defmodule Artemis.ContextCacheTest do
     def call(_params \\ %{}, _user), do: true
   end
 
+  defmodule CacheResetContext do
+    use Artemis.ContextCache,
+      cache_reset_on_events: [
+        "test:event"
+      ]
+
+    def call(_params \\ %{}, _user), do: true
+  end
+
   defmodule ComplexContext do
     use Artemis.ContextCache,
       cache_key: :complex
@@ -73,6 +82,41 @@ defmodule Artemis.ContextCacheTest do
 
       assert is_atom(key)
       assert key == :custom_cache_key
+    end
+  end
+
+  describe "reset cache" do
+    test "manually" do
+      user = Mock.system_user()
+      first_result = CacheResetContext.call_with_cache(user)
+      second_result = CacheResetContext.call_with_cache(user)
+
+      CacheResetContext.reset_cache()
+      :timer.sleep(1_000)
+
+      third_result = CacheResetContext.call_with_cache(user)
+
+      assert first_result.inserted_at == second_result.inserted_at
+      assert first_result.inserted_at != third_result.inserted_at
+    end
+
+    test "by event listener" do
+      user = Mock.system_user()
+      first_result = CacheResetContext.call_with_cache(user)
+      second_result = CacheResetContext.call_with_cache(user)
+
+      event_payload = %{
+        test: "event-payload",
+        type: "event"
+      }
+
+      Artemis.Event.broadcast(event_payload, "test:event", user)
+      :timer.sleep(1_000)
+
+      third_result = CacheResetContext.call_with_cache(user)
+
+      assert first_result.inserted_at == second_result.inserted_at
+      assert first_result.inserted_at != third_result.inserted_at
     end
   end
 end
