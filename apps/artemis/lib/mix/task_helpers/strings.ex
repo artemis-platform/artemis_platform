@@ -83,4 +83,24 @@ defmodule Mix.TaskHelpers.Strings do
     |> Enum.map(&String.capitalize/1)
     |> Enum.join("")
   end
+
+  @doc """
+  Returns true if value is a single word
+  """
+  def single_word?(value) do
+    count =
+      value
+      |> snakecase()
+      |> String.split("_")
+      |> length()
+
+    count == 1
+  end
+
+  @doc """
+  Returns true if value contains multiple words
+  """
+  def multi_word?(value) do
+    !single_word?(value)
+  end
 end

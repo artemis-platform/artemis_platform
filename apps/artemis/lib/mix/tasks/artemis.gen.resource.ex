@@ -195,15 +195,26 @@ defmodule Mix.Tasks.Artemis.Gen.Resource do
     source_single_dashcase = dashcase(source_single_snakecase_lower)
     target_single_dashcase = dashcase(target_single_snakecase_lower)
 
-    case_order = [
-      :spacecase,
-      :modulecase,
-      :dashcase,
-      :snakecase_lower,
-      :snakecase_upper,
-      :spacecase_lower,
-      :spacecase_upper
-    ]
+    case_order =
+      case single_word?(source_single_spacecase) && multi_word?(target_single_spacecase) do
+        true ->
+          [
+            :modulecase,
+            :snakecase_lower,
+            :snakecase_upper
+          ]
+
+        false ->
+          [
+            :spacecase,
+            :modulecase,
+            :dashcase,
+            :snakecase_lower,
+            :snakecase_upper,
+            :spacecase_lower,
+            :spacecase_upper
+          ]
+      end
 
     cases = %{
       source: %{
