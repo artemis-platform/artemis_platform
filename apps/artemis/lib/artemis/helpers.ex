@@ -1,4 +1,6 @@
 defmodule Artemis.Helpers do
+  require Logger
+
   @doc """
   Generate a random string
   """
@@ -396,5 +398,167 @@ defmodule Artemis.Helpers do
       end)
 
     Map.merge(simple, nested)
+  end
+
+  @doc """
+  Print entire value without truncation
+  """
+  def print(value) do
+    IO.inspect(value, limit: :infinity, printable_limit: :infinity)
+  end
+
+  @doc """
+  Benchmark execution time
+
+  Options:
+
+      log_level -> when not set, uses default value set in an env variable
+
+  Example:
+
+      Artemis.Helpers.benchmark("Sleep Performance", fn ->
+        :timer.sleep(5_000)
+      end, log_level: :info)
+  """
+  def benchmark(callback), do: benchmark(nil, callback)
+
+  def benchmark(callback, options) when is_list(options), do: benchmark(nil, callback, options)
+
+  def benchmark(key, callback, options \\ []) do
+    start_time = Timex.now()
+    result = callback.()
+    end_time = Timex.now()
+    duration = Timex.diff(end_time, start_time, :milliseconds)
+
+    default_log_level = Artemis.Helpers.AppConfig.fetch!(:artemis, :benchmark, :default_log_level)
+    options = Keyword.put_new(options, :log_level, default_log_level)
+
+    message = [
+      type: "Benchmark",
+      key: key,
+      duration: "#{duration}ms"
+    ]
+
+    log(message, options)
+
+    result
+  end
+
+  @doc """
+  Send values to Logger
+  """
+  def log(values, options \\ [])
+
+  def log(values, options) when is_list(values) do
+    message = format_log_message(values)
+
+    log(message, options)
+  end
+
+  def log(message, options) do
+    log_level = get_log_level(options)
+
+    Logger.log(log_level, message)
+  end
+
+  defp format_log_message(values) do
+    values
+    |> Enum.map(fn {key, value} ->
+      case is_nil(value) do
+        true -> nil
+        false -> "[#{key}: #{value}]"
+      end
+    end)
+    |> Enum.reject(&is_nil/1)
+    |> Enum.join(" ")
+  end
+
+  defp get_log_level(options) do
+    default_log_level = :info
+
+    log_level =
+      options
+      |> Keyword.get(:log_level, Keyword.get(options, :level))
+      |> Kernel.||(default_log_level)
+      |> Artemis.Helpers.to_string()
+
+    case log_level do
+      "emergency" -> :emergency
+      "alert" -> :alert
+      "critical" -> :critical
+      "error" -> :error
+      "warning" -> :warning
+      "notice" -> :notice
+      "info" -> :info
+      _ -> :debug
+    end
+  end
+
+  @doc """
+  Log application start
+  """
+  def log_application_start(name) do
+    type = "ApplicationStart"
+
+    log(type: type, key: name, start: Timex.now())
+  end
+
+  @doc """
+  Log rescued errors
+  """
+  def rescue_log(stacktrace \\ nil, caller, error) do
+    default_values = [
+      caller: serialize_caller(caller),
+      error: Map.get(error, :__struct__),
+      message: Map.get(error, :message, inspect(error)),
+      stacktrace: serialize_stacktrace(stacktrace)
+    ]
+
+    log_message = format_log_message(default_values)
+
+    Logger.error(log_message)
+  end
+
+  defp serialize_caller(caller) when is_map(caller), do: Map.get(caller, :__struct__)
+  defp serialize_caller(caller), do: caller
+
+  defp serialize_stacktrace(nil), do: nil
+
+  defp serialize_stacktrace(stacktrace) do
+    stracktrace =
+      stacktrace
+      |> Enum.map(&inspect(&1))
+      |> Enum.join("\n    ")
+
+    "\n    " <> stracktrace
+  end
+
+  @doc """
+  Send values to Error
+  """
+  def error(values) when is_list(values) do
+    message = format_log_message(values)
+
+    Logger.error(message)
+  end
+
+  def error(message), do: Logger.error(message: message)
+
+  @doc """
+  Convert an Ecto Query into SQL
+
+  Example:
+
+      Customer
+      |> distinct_query(params, default: false)
+      |> order_query(params)
+      |> Artemis.Helpers.print_to_sql(Artemis.Repo)
+      |> Repo.all()
+
+  """
+  def print_to_sql(query, repo) do
+    IO.inspect(Ecto.Adapters.SQL.to_sql(:all, repo, query))
+
+    query
   end
 end

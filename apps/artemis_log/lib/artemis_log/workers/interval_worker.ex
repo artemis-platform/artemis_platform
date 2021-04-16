@@ -276,7 +276,18 @@ defmodule ArtemisLog.IntervalWorker do
         start = Timex.format!(entry.started_at, "{h24}:{m}:{s}{ss}")
         duration = entry.duration / 1000
 
-        Logger.info("#{module} ran at #{start} for #{duration}ms")
+        message = [
+          type: "IntervalWorker",
+          key: module,
+          start: start,
+          duration: "#{duration}ms"
+        ]
+
+        options = [
+          log_level: Artemis.Helpers.AppConfig.fetch!(:artemis, :interval_worker, :default_log_level)
+        ]
+
+        Artemis.Helpers.log(message, options)
       end
 
       defp get_log_limit() do
