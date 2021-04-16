@@ -45,7 +45,13 @@ defmodule ArtemisWeb.AuthController do
          {:ok, _} <- Event.broadcast(session, "session:created:web", user) do
       Logger.debug("Log In with Auth Provider Session: " <> inspect(session))
 
-      redirect = Artemis.Helpers.deep_get(data, [:extra, :raw_info, :state]) || "/"
+      state_query_param = Artemis.Helpers.deep_get(data, [:extra, :raw_info, :state])
+
+      redirect =
+        case Artemis.Helpers.present?(state_query_param) do
+          true -> state_query_param
+          false -> "/"
+        end
 
       conn
       |> sign_in(user)
