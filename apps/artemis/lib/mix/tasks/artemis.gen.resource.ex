@@ -7,6 +7,8 @@ defmodule Mix.Tasks.Artemis.Gen.Resource do
   import Mix.TaskHelpers.Prompts
   import Mix.TaskHelpers.Strings
 
+  alias Mix.TaskHelpers.Files.AssertError
+
   @app_web "artemis_web"
 
   @apps [
@@ -379,10 +381,12 @@ defmodule Mix.Tasks.Artemis.Gen.Resource do
     """)
   end
 
-  defp execute_step("Schema", config) do
+  defp execute_step("Schema" = step, config) do
     root_directory = "apps/#{config.app}/lib/#{config.app}/schemas"
     source_directory = "#{root_directory}/#{config.cases.source.single.snakecase_lower}.ex"
     target_directory = "#{root_directory}/#{config.cases.target.single.snakecase_lower}.ex"
+
+    assert_path_exists(source_directory)
 
     copy("#{source_directory}", "#{target_directory}")
 
@@ -398,6 +402,8 @@ defmodule Mix.Tasks.Artemis.Gen.Resource do
       Open the schema file `#{target_directory}` and replace fields with the
       correct values.
     """)
+  rescue
+    error in AssertError -> execute_step_error(error.message, step, config)
   end
 
   defp execute_step("Test Factory", config) do
@@ -418,10 +424,12 @@ defmodule Mix.Tasks.Artemis.Gen.Resource do
     """)
   end
 
-  defp execute_step("Schema Tests", config) do
+  defp execute_step("Schema Tests" = step, config) do
     root_directory = "apps/#{config.app}/test/#{config.app}/schemas"
     source_directory = "#{root_directory}/#{config.cases.source.single.snakecase_lower}_test.exs"
     target_directory = "#{root_directory}/#{config.cases.target.single.snakecase_lower}_test.exs"
+
+    assert_path_exists(source_directory)
 
     copy("#{source_directory}", "#{target_directory}")
 
@@ -442,12 +450,16 @@ defmodule Mix.Tasks.Artemis.Gen.Resource do
           $ cd apps/#{config.app}
           $ mix test test/#{config.app}/schemas/#{config.cases.target.single.snakecase_lower}_test.exs
     """)
+  rescue
+    error in AssertError -> execute_step_error(error.message, step, config)
   end
 
-  defp execute_step("Contexts", config) do
+  defp execute_step("Contexts" = step, config) do
     root_directory = "apps/#{config.app}/lib/#{config.app}/contexts"
     source_directory = "#{root_directory}/#{config.cases.source.single.snakecase_lower}"
     target_directory = "#{root_directory}/#{config.cases.target.single.snakecase_lower}"
+
+    assert_path_exists(source_directory)
 
     copy("#{source_directory}", "#{target_directory}")
 
@@ -457,12 +469,16 @@ defmodule Mix.Tasks.Artemis.Gen.Resource do
     execute_with_all_cases(config, fn source, target ->
       replace("#{target_directory}", source, target)
     end)
+  rescue
+    error in AssertError -> execute_step_error(error.message, step, config)
   end
 
-  defp execute_step("Context Tests", config) do
+  defp execute_step("Context Tests" = step, config) do
     root_directory = "apps/#{config.app}/test/#{config.app}/contexts"
     source_directory = "#{root_directory}/#{config.cases.source.single.snakecase_lower}"
     target_directory = "#{root_directory}/#{config.cases.target.single.snakecase_lower}"
+
+    assert_path_exists(source_directory)
 
     copy("#{source_directory}", "#{target_directory}")
 
@@ -486,6 +502,8 @@ defmodule Mix.Tasks.Artemis.Gen.Resource do
           $ cd apps/#{config.app}
           $ mix test test/#{config.app}/contexts/#{config.cases.target.single.snakecase_lower}
     """)
+  rescue
+    error in AssertError -> execute_step_error(error.message, step, config)
   end
 
   defp execute_step("Permissions", config) do
@@ -573,34 +591,44 @@ defmodule Mix.Tasks.Artemis.Gen.Resource do
     """)
   end
 
-  defp execute_step("Controller", config) do
+  defp execute_step("Controller" = step, config) do
     root_directory = "apps/#{config.app_web}/lib/#{config.app_web}/controllers"
     source_directory = "#{root_directory}/#{config.cases.source.single.snakecase_lower}_controller.ex"
     target_directory = "#{root_directory}/#{config.cases.target.single.snakecase_lower}_controller.ex"
 
+    assert_path_exists(source_directory)
+
     copy("#{source_directory}", "#{target_directory}")
 
     execute_with_all_cases(config, fn source, target ->
       replace("#{target_directory}", source, target)
     end)
+  rescue
+    error in AssertError -> execute_step_error(error.message, step, config)
   end
 
-  defp execute_step("View", config) do
+  defp execute_step("View" = step, config) do
     root_directory = "apps/#{config.app_web}/lib/#{config.app_web}/views"
     source_directory = "#{root_directory}/#{config.cases.source.single.snakecase_lower}_view.ex"
     target_directory = "#{root_directory}/#{config.cases.target.single.snakecase_lower}_view.ex"
 
+    assert_path_exists(source_directory)
+
     copy("#{source_directory}", "#{target_directory}")
 
     execute_with_all_cases(config, fn source, target ->
       replace("#{target_directory}", source, target)
     end)
+  rescue
+    error in AssertError -> execute_step_error(error.message, step, config)
   end
 
-  defp execute_step("Templates", config) do
+  defp execute_step("Templates" = step, config) do
     root_directory = "apps/#{config.app_web}/lib/#{config.app_web}/templates"
     source_directory = "#{root_directory}/#{config.cases.source.single.snakecase_lower}"
     target_directory = "#{root_directory}/#{config.cases.target.single.snakecase_lower}"
+
+    assert_path_exists(source_directory)
 
     copy("#{source_directory}/", "#{target_directory}/")
 
@@ -610,12 +638,16 @@ defmodule Mix.Tasks.Artemis.Gen.Resource do
     execute_with_all_cases(config, fn source, target ->
       replace("#{target_directory}/*", source, target)
     end)
+  rescue
+    error in AssertError -> execute_step_error(error.message, step, config)
   end
 
-  defp execute_step("Controller Tests", config) do
+  defp execute_step("Controller Tests" = step, config) do
     root_directory = "apps/#{config.app_web}/test/#{config.app_web}/controllers"
     source_directory = "#{root_directory}/#{config.cases.source.single.snakecase_lower}_controller_test.exs"
     target_directory = "#{root_directory}/#{config.cases.target.single.snakecase_lower}_controller_test.exs"
+
+    assert_path_exists(source_directory)
 
     copy("#{source_directory}", "#{target_directory}")
 
@@ -640,12 +672,16 @@ defmodule Mix.Tasks.Artemis.Gen.Resource do
           $ cd apps/#{config.app_web}
           $ mix test test/#{config.app_web}/controllers/#{config.cases.target.single.snakecase_lower}_controller_test.exs"
     """)
+  rescue
+    error in AssertError -> execute_step_error(error.message, step, config)
   end
 
-  defp execute_step("Browser Tests", config) do
+  defp execute_step("Browser Tests" = step, config) do
     root_directory = "apps/#{config.app_web}/test/#{config.app_web}/browser"
     source_directory = "#{root_directory}/#{config.cases.source.single.snakecase_lower}_page_test.exs"
     target_directory = "#{root_directory}/#{config.cases.target.single.snakecase_lower}_page_test.exs"
+
+    assert_path_exists(source_directory)
 
     copy("#{source_directory}", "#{target_directory}")
 
@@ -666,6 +702,8 @@ defmodule Mix.Tasks.Artemis.Gen.Resource do
           $ cd apps/#{config.app_web}
           $ mix test --include browser test/#{config.app_web}/browser/#{config.cases.target.single.snakecase_lower}_page_test.exs"
     """)
+  rescue
+    error in AssertError -> execute_step_error(error.message, step, config)
   end
 
   defp execute_step("Navigation", config) do
@@ -703,5 +741,28 @@ defmodule Mix.Tasks.Artemis.Gen.Resource do
 
   defp execute_step(step, _config) do
     print("#{step} step is not implemented yet")
+  end
+
+  defp execute_step_error(message, step, config) do
+    error_message(message)
+    line_break()
+
+    print("Either manually resolve the error then repeat the step, ignore the error, or exit.")
+    line_break()
+
+    response =
+      "Repeat step #{step}?"
+      |> choose(["repeat", "ignore", "exit"], default: "repeat")
+      |> Kernel.||("")
+      |> lowercase()
+
+    repeat? = Enum.member?(["r", "repeat", ""], response)
+    ignore? = Enum.member?(["i", "ignore"], response)
+
+    cond do
+      repeat? -> execute_step(step, config)
+      ignore? -> true
+      true -> exit_task(0)
+    end
   end
 end
