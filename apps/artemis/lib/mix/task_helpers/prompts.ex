@@ -80,17 +80,24 @@ defmodule Mix.TaskHelpers.Prompts do
   end
 
   @doc """
-  Print value to shell with error code and red ANSI color output
+  Print an error
   """
-  def error(value, code \\ 1)
-
-  def error(value, code) when is_map(value) do
-    value
-    |> inspect()
-    |> error(code)
+  def error_message(message) do
+    print([red("Error: "), message])
   end
 
-  def error(value, code) do
+  @doc """
+  Print value to shell and exit with error code and red ANSI color output
+  """
+  def error_message_and_exit(value, code \\ 1)
+
+  def error_message_and_exit(value, code) when is_map(value) do
+    value
+    |> inspect()
+    |> error_message_and_exit(code)
+  end
+
+  def error_message_and_exit(value, code) do
     Mix.shell().error(value)
 
     exit({:shutdown, code})

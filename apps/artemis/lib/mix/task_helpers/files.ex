@@ -1,6 +1,10 @@
 defmodule Mix.TaskHelpers.Files do
   import Mix.TaskHelpers.Commands
 
+  defmodule AssertError do
+    defexception message: "Context Error"
+  end
+
   @moduledoc """
   Functions for managing files and file contents.
 
@@ -8,6 +12,16 @@ defmodule Mix.TaskHelpers.Files do
 
   [loki](https://github.com/khusnetdinov/loki)
   """
+
+  @doc """
+  Assert the given path exists
+  """
+  def assert_path_exists(path) do
+    case execute("test -r #{path} && echo success") do
+      "success" -> true
+      _ -> raise(AssertError, "The required path `#{path}` not found")
+    end
+  end
 
   @doc """
   Copy files and directories
