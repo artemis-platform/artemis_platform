@@ -16,6 +16,9 @@ defmodule Mix.Tasks.Artemis.Gen.Resource do
     "artemis_log"
   ]
 
+  @config_dir "tmp"
+  @config_filename "artemis.gen.resource.config"
+
   @divider "……………………………………………………………………………………………………………………………………………………………………………………………………………………"
 
   @steps [
@@ -43,7 +46,8 @@ defmodule Mix.Tasks.Artemis.Gen.Resource do
 
     if config.verbose?, do: print(config)
 
-    execute_steps(config)
+    write_config_file(config)
+    start_execution(config)
   end
 
   # Config
@@ -51,12 +55,16 @@ defmodule Mix.Tasks.Artemis.Gen.Resource do
   defp print_welcome_message() do
     print("""
 
+    #{@divider}
     ## Welcome!
+    #{@divider}
 
     The `artemis.gen.resource` tool generates a new resource, using an existing
     resource's files as a template.
 
+    #{@divider}
     ## Usage
+    #{@divider}
 
     The process is broken down into individual steps. Run this in a separate
     terminal screen and review changes after each step before proceeding to
@@ -72,10 +80,19 @@ defmodule Mix.Tasks.Artemis.Gen.Resource do
   end
 
   defp get_config(args) do
-    %{}
-    |> parse_args(args)
-    |> get_initial_user_options()
-    |> add_cases()
+    config = parse_args(%{}, args)
+
+    case load_last_config() do
+      nil ->
+        delete_config_file()
+
+        config
+        |> get_initial_user_options()
+        |> add_cases()
+
+      last_config ->
+        Map.merge(last_config, config)
+    end
   end
 
   defp parse_args(config, args) do
@@ -91,10 +108,48 @@ defmodule Mix.Tasks.Artemis.Gen.Resource do
     |> Map.put(:verbose?, verbose?)
   end
 
+  defp load_last_config() do
+    if config_file?() do
+      load_last_config_prompt()
+    end
+  end
+
+  defp load_last_config_prompt() do
+    config_file = read_config_file()
+
+    line_break()
+
+    print("""
+    #{@divider}
+    ## Previous Configuration
+    #{@divider}
+    """)
+
+    print([yellow("Action Required: "), "Previous config found: "])
+    line_break()
+    print(inspect(config_file.user_options, pretty: true))
+    line_break()
+
+    response =
+      "Use the last config?"
+      |> choose(["yes", "no"], default: "yes")
+      |> Kernel.||("")
+      |> lowercase()
+
+    case Enum.member?(["y", "ye", "yes"], response) do
+      true -> config_file
+      false -> nil
+    end
+  end
+
   defp get_initial_user_options(config) do
     line_break()
-    print("## Configuration")
-    line_break()
+
+    print("""
+    #{@divider}
+    ## New Configuration
+    #{@divider}
+    """)
 
     app = choose("1. App?", @apps, default: "artemis")
     line_break()
@@ -116,27 +171,22 @@ defmodule Mix.Tasks.Artemis.Gen.Resource do
     target_plural = prompt("5. Plural form of new resource?", default: target_single <> "s", required: true)
     line_break()
 
-    step = choose("6. Start on which step?", @steps, default: hd(@steps))
-    line_break()
-
     user_options = %{
       app: app,
       source_single: source_single,
       source_plural: source_plural,
       target_single: target_single,
-      target_plural: target_plural,
-      step: step
+      target_plural: target_plural
     }
 
-    print(["Configuration complete:\n\n", inspect(user_options, pretty: true)])
+    print(["New configuration complete:\n\n", inspect(user_options, pretty: true)])
     line_break()
 
-    prompt(["Ready to get execute the next step?", " ", gray("Press enter to continue")])
+    prompt(["Ready to start execution?", " ", gray("Press enter to continue")])
     line_break()
 
     config
     |> Map.put(:app, app)
-    |> Map.put(:step, step)
     |> Map.put(:user_options, user_options)
   end
 
@@ -266,7 +316,52 @@ defmodule Mix.Tasks.Artemis.Gen.Resource do
     |> Map.put(:cases, cases)
   end
 
+  defp get_config_file_path(), do: "#{@config_dir}/#{@config_filename}"
+
+  defp config_file?(), do: File.exists?(get_config_file_path())
+
+  defp read_config_file() do
+    case config_file?() do
+      true ->
+        get_config_file_path()
+        |> File.read!()
+        |> :erlang.binary_to_term()
+
+      false ->
+        nil
+    end
+  end
+
+  defp write_config_file(config) do
+    config_path = get_config_file_path()
+    encoded = :erlang.term_to_binary(config)
+
+    execute("mkdir -p #{@config_dir}")
+
+    File.write(config_path, encoded)
+  end
+
+  defp delete_config_file() do
+    execute("rm #{get_config_file_path()}")
+  end
+
   # Steps
+
+  defp start_execution(config) do
+    line_break()
+
+    print("""
+    #{@divider}
+    ## Execution
+    #{@divider}
+    """)
+
+    step = choose("Start on which step?", @steps, default: hd(@steps))
+
+    config
+    |> Map.put(:step, step)
+    |> execute_steps()
+  end
 
   defp execute_steps(config) do
     starting_index = get_step_index(config.step)
