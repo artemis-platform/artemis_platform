@@ -4,21 +4,56 @@ set -a
 source .env
 set +a
 
-if [[ $1 = "formatter" ]]; then
-  mix format --check-formatted && exit 0
-fi
+ATTEMPTS=0
+FAILURES=0
 
-attempts=0
+track_failure() {
+  FAILURES=$[$FAILURES + 1]
+}
 
-until [ $attempts -ge 5 ]
+execute_tests_command() {
+  APP=$1
+  ADDITIONAL_FLAGS=$2
+
+  mix cmd --app ${APP} mix test --color ${ADDITIONAL_FLAGS} ${SPECIFIC_TEST_PATH} || track_failure
+}
+
+execute_tests() {
+  ADDITIONAL_FLAGS=$1
+  FAILURES=0
+
+  for directory in apps/*; do
+    APP=$(echo $directory | awk -F '/' '{print $2}')
+
+    execute_tests_command ${APP} ${ADDITIONAL_FLAGS}
+  done
+
+  [ $FAILURES -eq 0 ]
+}
+
+until [ $ATTEMPTS -ge 5 ]
 do
-  if [ $attempts -eq 0 ]; then
-    xvfb-run -e /dev/stdout -a mix test $@ && exit 0
+  if [[ $1 = "formatter" ]]; then
+    mix format --check-formatted && exit 0
+
+    echo "Error formatting code:"
+
+    mix format
+    git add .
+    git diff --cached
+
+    echo "Run `mix format` to fix"
   else
-    xvfb-run -e /dev/stdout -a mix test --failed $@ && exit 0
+    if [ $ATTEMPTS -eq 0 ]; then
+      echo "==== Executing tests"
+      execute_tests && exit 0
+    else
+      echo "==== Retrying failed tests"
+      execute_tests --failed && exit 0
+    fi
   fi
 
-  attempts=$[$attempts + 1]
+  ATTEMPTS=$[$ATTEMPTS + 1]
 done
 
 exit 1

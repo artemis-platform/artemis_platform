@@ -5,15 +5,60 @@ source .env
 set +a
 
 if [ ! -z "$1" ]; then
-  APP="--app $1"
+  SPECIFIC_APP="$1"
 fi
 
 if [ ! -z "$2" ]; then
-  TEST_PATH="$2"
+  SPECIFIC_TEST_PATH="$2"
 fi
 
 MIX_ENV=test
+FAILURES=0
+
+track_failure() {
+  FAILURES=$[$FAILURES + 1]
+}
+
+execute_tests_command() {
+  APP=$1
+  ADDITIONAL_FLAGS=$2
+
+  mix cmd --app ${APP} mix test --color ${ADDITIONAL_FLAGS} ${SPECIFIC_TEST_PATH} || track_failure
+}
+
+execute_tests() {
+  ADDITIONAL_FLAGS=$1
+
+  if [ ! -z "${SPECIFIC_APP}" ]; then
+    execute_tests_command ${SPECIFIC_APP} ${ADDITIONAL_FLAGS}
+  else
+    for directory in apps/*; do
+      APP=$(echo $directory | awk -F '/' '{print $2}')
+
+      execute_tests_command ${APP} ${ADDITIONAL_FLAGS}
+    done
+  fi
+}
+
+# Global Setup
 
 mix ecto.create --quiet
 mix ecto.migrate
-mix cmd ${APP} mix test --color ${TEST_PATH} || mix test --color --failed ${TEST_PATH}
+
+# Iterate through apps and execute test suite
+
+echo "==== Executing tests"
+execute_tests
+
+# Retry failed test suites
+
+if [ $FAILURES -gt 0 ] && [ -z "${SPECIFIC_TEST_PATH}" ]; then
+  FAILURES=0
+
+  echo "==== Retrying failed tests"
+  execute_tests --failed
+fi
+
+# Exit
+
+[ $FAILURES -eq 0 ]
