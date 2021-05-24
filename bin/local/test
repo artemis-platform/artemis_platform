@@ -13,21 +13,28 @@ if [ ! -z "$2" ]; then
 fi
 
 MIX_ENV=test
-FAILURES=0
+FAILURE_APPS=""
+FAILURE_COUNT=0
+SUCCESS_APPS=""
 
 track_failure() {
-  FAILURES=$[$FAILURES + 1]
+  FAILURE_APPS+="${1} "
+  FAILURE_COUNT=$[$FAILURE_COUNT + 1]
+}
+
+track_success() {
+  SUCCESS_APPS+="${1} "
 }
 
 execute_tests_command() {
   APP=$1
   ADDITIONAL_FLAGS=$2
 
-  mix cmd --app ${APP} mix test --color ${ADDITIONAL_FLAGS} ${SPECIFIC_TEST_PATH} || track_failure
+  mix cmd --app ${APP} mix test --color ${ADDITIONAL_FLAGS} ${SPECIFIC_TEST_PATH} && track_success ${APP} || track_failure ${APP}
 }
 
 execute_tests() {
-  ADDITIONAL_FLAGS=$1
+  ADDITIONAL_FLAGS="${@}"
 
   if [ ! -z "${SPECIFIC_APP}" ]; then
     execute_tests_command ${SPECIFIC_APP} ${ADDITIONAL_FLAGS}
@@ -52,13 +59,26 @@ execute_tests
 
 # Retry failed test suites
 
-if [ $FAILURES -gt 0 ] && [ -z "${SPECIFIC_TEST_PATH}" ]; then
-  FAILURES=0
+if [ $FAILURE_COUNT -gt 0 ] && [ -z "${SPECIFIC_TEST_PATH}" ]; then
+  echo ""
+  echo "==== FIRST RUN SUMMARY ===="
+  echo "Success in: ${SUCCESS_APPS}"
+  echo "Failures in: ${FAILURE_APPS}"
+  echo "==========================="
 
-  echo "==== Retrying failed tests"
-  execute_tests --failed
+  FAILURE_APPS=""
+  FAILURE_COUNT=0
+  SUCCESS_APPS=""
+
+  execute_tests --failed --exclude cloudant_setup
 fi
+
+echo ""
+echo "==== FINAL SUMMARY ===="
+echo "Success in: ${SUCCESS_APPS}"
+echo "Failures in: ${FAILURE_APPS}"
+echo "======================="
 
 # Exit
 
-[ $FAILURES -eq 0 ]
+[ $FAILURE_COUNT -eq 0 ]
